@@ -1,0 +1,9 @@
+/node_modules/
+/storymanager/db.sqlite3
+Pipfile*
+webpack.config.js
+.babelrc
+.idea
+.idea/*
+.DS_Store
+package*
