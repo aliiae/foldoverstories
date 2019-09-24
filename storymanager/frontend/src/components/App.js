@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter, BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import Header from "./layout/Header";
 import Login from "./accounts/Login";
@@ -29,18 +29,19 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <AlertProvider template={AlertTemplate} {...alertOptions}>
-          <Router>
+          <HashRouter>
             <Fragment>
               <Header/>
               <Alerts/>
               <div className="container">
-                <Switch/>
+                <Switch>
                 <PrivateRoute exact path="/" component={Editor}/>
                 <Route exact path="/register" component={Register}/>
                 <Route exact path="/login" component={Login}/>
+                </Switch>
               </div>
             </Fragment>
-          </Router>
+          </HashRouter>
         </AlertProvider>
       </Provider>
     )

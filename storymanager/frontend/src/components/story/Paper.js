@@ -16,7 +16,6 @@ export class Paper extends React.Component {
     render() {
         return (
             <Fragment>
-                <h2>Paper</h2>
                 {this.props.visible_text ? (
                         <p>...{this.props.visible_text}</p>) :
                     (<p className="lead">Start your story!</p>)}

@@ -1,13 +1,13 @@
 from rest_framework import viewsets, permissions
 
-from .serializers import RoomTextsSerializer
+from .serializers import TextsSerializer
 
 
-class RoomTextsViewSet(viewsets.ModelViewSet):
+class TextsViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    serializer_class = RoomTextsSerializer
+    serializer_class = TextsSerializer
 
     def get_queryset(self):
         return self.request.user.texts.all()
