@@ -19,4 +19,5 @@ urlpatterns = [
     path('', include('frontend.urls')),
     path('', include('room_users.urls')),
     path('', include('room_texts.urls')),
+    path('', include('accounts.urls')),
 ]

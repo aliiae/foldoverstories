@@ -1,7 +1,7 @@
 import React from 'react';
 
 export class Header extends React.Component {
-    title = "Amazing Stories";
+    title = "Paper Stories";
 
     render() {
         return (

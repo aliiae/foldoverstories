@@ -3,12 +3,14 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {addText} from '../../actions/story';
 
+const HIDDEN_PERCENTAGE = 0.8;
+
 export class Button extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             text: "",
-            author_id: "ae"
+            author_id: "ae" // TODO: cookie here
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -21,7 +23,7 @@ export class Button extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         const {text, author_id} = this.state;
-        const indexVisibleStartsAt = Math.floor(text.length) * 0.8;
+        const indexVisibleStartsAt = Math.floor(text.length) * HIDDEN_PERCENTAGE;
         const post = {
             hidden_text: text.slice(0, indexVisibleStartsAt),
             visible_text: text.slice(indexVisibleStartsAt),
