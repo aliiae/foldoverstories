@@ -1,6 +1,9 @@
 import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Header from "./layout/Header";
+import Login from "./accounts/Login";
+import Register from "./accounts/Register";
 import Alerts from './layout/Alerts';
 import Editor from "./story/Editor";
 import {Provider as AlertProvider} from 'react-alert';
@@ -9,26 +12,31 @@ import {Provider} from 'react-redux';
 import store from '../store';
 
 const alertOptions = {
-    timeout: 3000,
-    position: 'top center'
+  timeout: 3000,
+  position: 'top center'
 };
 
 class App extends React.Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <Fragment>
-                        <Header/>
-                        <Alerts/>
-                        <div className="container">
-                            <Editor/>
-                        </div>
-                    </Fragment>
-                </AlertProvider>
-            </Provider>
-        )
-    }
+  render() {
+    return (
+      <Provider store={store}>
+        <AlertProvider template={AlertTemplate} {...alertOptions}>
+          <Router>
+            <Fragment>
+              <Header/>
+              <Alerts/>
+              <div className="container">
+                <Switch/>
+                <Route exact path="/" component={Editor}/>
+                <Route exact path="/register" component={Register}/>
+                <Route exact path="/login" component={Login}/>
+              </div>
+            </Fragment>
+          </Router>
+        </AlertProvider>
+      </Provider>
+    )
+  }
 }
 
 ReactDOM.render(<App/>, document.getElementById('app'));
