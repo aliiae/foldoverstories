@@ -5,6 +5,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
+  CLEAR_ROOMS,
   REGISTER_SUCCESS, REGISTER_FAIL
 } from '../actions/types'
 

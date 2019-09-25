@@ -3,10 +3,12 @@ import story from './story';
 import errors from './errors';
 import messages from './messages';
 import auth from './auth';
+import room from "./room";
 
 export default combineReducers({
-    story,
-    errors,
-    messages,
-    auth
+  story,
+  room,
+  errors,
+  messages,
+  auth
 });

@@ -5,7 +5,7 @@ import {
   USER_LOADING,
   AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL,
   LOGOUT_SUCCESS,
-  REGISTER_FAIL, REGISTER_SUCCESS
+  REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS
 } from "./types";
 
 export const loadUser = () => (dispatch, getState) => {
@@ -30,7 +30,7 @@ export const login = (username, password) => dispatch => {
       "Content-Type": "application/json"
     }
   };
-  const body = JSON.stringify({ username, password });
+  const body = JSON.stringify({username, password});
   axios
     .post("/api/auth/login", body, config)
     .then(res => {
@@ -41,9 +41,7 @@ export const login = (username, password) => dispatch => {
     })
     .catch(err => {
       dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({
-        type: LOGIN_FAIL
-      });
+      dispatch({type: LOGIN_FAIL});
     });
 };
 
@@ -51,9 +49,8 @@ export const login = (username, password) => dispatch => {
 export const logout = () => (dispatch, getState) => {
   axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
     .then(res => {
-      dispatch({
-        type: LOGOUT_SUCCESS,
-      });
+      dispatch({type: CLEAR_ROOMS,});
+      dispatch({type: LOGOUT_SUCCESS,});
     }).catch(err => {
     dispatch(returnErrors(err.response.data, err.response.status));
   });
@@ -74,9 +71,7 @@ export const register = ({username, password}) => dispatch => {
       });
     }).catch(err => {
     dispatch(returnErrors(err.response.data, err.response.status));
-    dispatch({
-      type: REGISTER_FAIL
-    });
+    dispatch({type: REGISTER_FAIL});
   });
 };
 

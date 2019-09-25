@@ -1,11 +1,12 @@
 import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter, BrowserRouter, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 
 import Header from "./layout/Header";
 import Login from "./accounts/Login";
 import Register from "./accounts/Register";
 import PrivateRoute from "./common/PrivateRoute";
+import Landing from "./landing/Landing";
 import Alerts from './layout/Alerts';
 import Editor from "./story/Editor";
 
@@ -35,7 +36,8 @@ class App extends React.Component {
               <Alerts/>
               <div className="container">
                 <Switch>
-                <PrivateRoute exact path="/" component={Editor}/>
+                <Route exact path="/" component={Landing}/>
+                <PrivateRoute exact path="/story" component={Editor}/>
                 <Route exact path="/register" component={Register}/>
                 <Route exact path="/login" component={Login}/>
                 </Switch>

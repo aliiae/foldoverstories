@@ -10,10 +10,10 @@ class RoomsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = RoomsSerializer
     lookup_field = 'room_title'
-    queryset = Rooms.objects.all()
+#     queryset = Rooms.objects.all()
 
-    # def get_queryset(self):
-    #     return self.request.user.rooms.all()
+    def get_queryset(self):
+        return self.request.user.room.all()
 
     def perform_create(self, serializer):
         room = serializer.save()
