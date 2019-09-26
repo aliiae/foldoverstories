@@ -34,7 +34,7 @@ class RoomDashboard extends React.Component {
             <tr>
               <th>Story</th>
               <th>Authors</th>
-              <th>Date</th>
+              <th>Last Updated</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +45,7 @@ class RoomDashboard extends React.Component {
                 </td>
                 <td>{room.users.map((user) => <span key={user.id}>{user.username}</span>)}</td>
                 {}
-                <td>{formatDate(room.created_at)}</td>
+                <td>{formatDate(room.modified_at)}</td>
               </tr>
             ))}
           </tbody>

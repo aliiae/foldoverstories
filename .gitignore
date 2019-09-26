@@ -6,4 +6,7 @@ webpack.config.js
 .idea
 .idea/*
 .DS_Store
+.eslintrc
 package*
+/storymanager/rooms/migrations/*
+/storymanager/texts/migrations/*

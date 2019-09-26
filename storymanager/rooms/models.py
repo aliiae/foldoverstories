@@ -37,3 +37,4 @@ class Rooms(models.Model):
     room_title = models.CharField(max_length=100, unique=True, default=attempt_random_adj_noun_pair)
     users = models.ManyToManyField(User, related_name="room", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)

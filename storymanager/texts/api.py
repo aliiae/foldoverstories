@@ -10,7 +10,7 @@ class TextsViewSet(viewsets.ModelViewSet):
     serializer_class = TextsSerializer
 
     def get_queryset(self):
-        return self.request.user.texts.all()
+        return self.request.user.texts.filter(room_title__room_title='same_frog')
 
     def perform_create(self, serializer: TextsSerializer):
         serializer.save(author=self.request.user)

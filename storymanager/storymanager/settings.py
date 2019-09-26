@@ -37,12 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'knox',
+    'accounts',
     'rooms',
     'texts',
     'rest_framework',
     'frontend',
-    'knox',
-    'accounts'
 ]
 
 REST_FRAMEWORK = {
