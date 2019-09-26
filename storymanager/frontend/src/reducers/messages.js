@@ -1,14 +1,15 @@
-import {CREATE_MESSAGE, GET_MESSAGES} from "../actions/types";
+import { CREATE_MESSAGE, GET_MESSAGES } from '../actions/types';
 
 const initialState = {};
 
 export default function (state = initialState, action) {
-    switch (action.type) {
-        case GET_MESSAGES:
-            return action.payload;
-        case CREATE_MESSAGE:
-            return (state = action.payload);
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case GET_MESSAGES:
+      return action.payload;
+    case CREATE_MESSAGE:
+      // eslint-disable-next-line no-return-assign,no-param-reassign
+      return (state = action.payload);
+    default:
+      return state;
+  }
 }

@@ -12,5 +12,5 @@ class TextsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.texts.all()
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: TextsSerializer):
         serializer.save(author=self.request.user)

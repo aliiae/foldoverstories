@@ -1,16 +1,17 @@
-import React, {Fragment} from 'react';
-import {withAlert} from 'react-alert';
-import {connect} from 'react-redux';
+import React from 'react';
+import { withAlert } from 'react-alert';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-export class Alerts extends React.Component {
-  static propTypes = {
-    error: PropTypes.object.isRequired,
-    message: PropTypes.object.isRequired
-  };
+const propTypes = {
+  error: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
+  alert: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
+  message: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
+};
 
+export class Alerts extends React.Component {
   componentDidUpdate(prevProps) {
-    const {error, alert, message} = this.props;
+    const { error, alert, message } = this.props;
     if (error !== prevProps.error) {
       if (error.msg.visible_text) {
         alert.error(`Please select what text will be visible: ${error.msg.visible_text.join()}`);
@@ -46,13 +47,15 @@ export class Alerts extends React.Component {
 
   render() {
     return (
-      <Fragment/>
-    )
+      <></>
+    );
   }
 }
 
-const mapStateToProps = state => ({
+Alerts.propTypes = propTypes;
+
+const mapStateToProps = (state) => ({
   error: state.errors,
-  message: state.messages
+  message: state.messages,
 });
 export default connect(mapStateToProps)(withAlert()(Alerts));

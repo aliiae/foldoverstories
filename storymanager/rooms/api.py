@@ -15,6 +15,6 @@ class RoomsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.room.all()
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: RoomsSerializer):
         room = serializer.save()
         room.users.add(self.request.user)
