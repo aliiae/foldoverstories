@@ -13,6 +13,7 @@ const initialState = {
   isAuthenticated: null,
   isLoading: false,
   user: null,
+  username: '',
 };
 
 export default function (state = initialState, action) {

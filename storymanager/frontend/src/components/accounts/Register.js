@@ -99,7 +99,7 @@ export class Register extends React.Component {
               <button type="submit" className="btn btn-primary">Register</button>
             </div>
             <p>
-              Already have an account?
+              Already have an account?&nbsp;
               <Link to="/login">Login</Link>
             </p>
           </form>

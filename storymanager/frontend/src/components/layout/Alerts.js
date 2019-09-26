@@ -4,9 +4,28 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  error: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
-  alert: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
-  message: PropTypes.PropTypes.objectOf(PropTypes.object).isRequired,
+  error: PropTypes.shape(
+    {
+      status: PropTypes.number,
+      msg: PropTypes.oneOfType(
+        [
+          PropTypes.string,
+          PropTypes.objectOf(PropTypes.object),
+        ],
+      ),
+    },
+  ),
+  alert: PropTypes.shape({
+    alerts: PropTypes.arrayOf(PropTypes.object),
+    error: PropTypes.func.isRequired,
+    success: PropTypes.func.isRequired,
+  }),
+  message: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
+const defaultProps = {
+  error: { status: null, msg: {} },
+  alert: { alerts: [] },
 };
 
 export class Alerts extends React.Component {
@@ -53,6 +72,7 @@ export class Alerts extends React.Component {
 }
 
 Alerts.propTypes = propTypes;
+Alerts.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   error: state.errors,

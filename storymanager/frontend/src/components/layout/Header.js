@@ -5,8 +5,20 @@ import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
 
 const propTypes = {
-  auth: PropTypes.objectOf(PropTypes.object).isRequired,
+  auth: PropTypes.shape(
+    {
+      isAuthenticated: PropTypes.boolean,
+      token: PropTypes.string,
+      user: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        username: PropTypes.string.isRequired,
+      }),
+    },
+  ),
   logoutConnect: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  auth: { isAuthenticated: false, token: '', user: {} },
 };
 
 export class Header extends React.Component {
@@ -48,7 +60,7 @@ export class Header extends React.Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="container">
-          <a className="navbar-brand" href="/">{this.title}</a>
+          <Link className="navbar-brand" href="/">{this.title}</Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -73,6 +85,7 @@ export class Header extends React.Component {
 }
 
 Header.propTypes = propTypes;
+Header.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

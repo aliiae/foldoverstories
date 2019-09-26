@@ -1,5 +1,4 @@
 from rest_framework import viewsets, permissions
-from rooms.models import Rooms
 
 from .serializers import RoomsSerializer
 
@@ -9,8 +8,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = RoomsSerializer
-    lookup_field = 'room_title'
-#     queryset = Rooms.objects.all()
+    lookup_field = 'roomTitle'
 
     def get_queryset(self):
         return self.request.user.room.all()

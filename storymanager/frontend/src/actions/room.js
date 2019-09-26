@@ -22,11 +22,12 @@ export const addRoom = (room) => (dispatch, getState) => {
         type: ADD_ROOM_SUCCESS,
         payload: res.data,
       });
+      dispatch(getRooms());
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: ADD_ROOM_FAIL,
-        payload: err.response.status,
+        payload: err.response,
       });
     });
 };
