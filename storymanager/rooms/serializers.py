@@ -11,6 +11,7 @@ class RoomUsersSerializer(serializers.ModelSerializer):
 
 class RoomsSerializer(serializers.ModelSerializer):
     users = RoomUsersSerializer(read_only=True, many=True)
+
     class Meta:
         model = Rooms
         fields = '__all__'

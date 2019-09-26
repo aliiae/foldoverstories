@@ -60,7 +60,7 @@ export class Header extends React.Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="container">
-          <Link className="navbar-brand" href="/">{this.title}</Link>
+          <Link className="navbar-brand" to="/">{this.title}</Link>
           <button
             className="navbar-toggler"
             type="button"

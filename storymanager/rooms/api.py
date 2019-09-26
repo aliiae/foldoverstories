@@ -8,10 +8,10 @@ class RoomsViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = RoomsSerializer
-    lookup_field = 'roomTitle'
+    lookup_field = 'room_title'
 
     def get_queryset(self):
-        return self.request.user.room.all()
+        return self.request.user.room.all().order_by('-created_at')
 
     def perform_create(self, serializer: RoomsSerializer):
         room = serializer.save()

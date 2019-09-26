@@ -3,26 +3,29 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addRoom } from '../../actions/room';
-import HumanReadableIdMaker from './HumanReadableIds';
 import RoomDashboard from './RoomDashboard';
 
 const propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+const defaultProps = {
+  isAuthenticated: false,
 };
 
 export class Landing extends React.Component {
   constructor(props) {
     super(props);
-    this.humanReadableIdMaker = new HumanReadableIdMaker();
     this.onClick = this.onClick.bind(this);
   }
 
   onClick(e) {
     e.preventDefault();
-    const { addRoomConnect } = this.props;
-    // const roomTitle = this.humanReadableIdMaker.random().replace(/-[^-]+$/, '');
-    const roomTitle = this.humanReadableIdMaker.random();
-    addRoomConnect({ room_title: roomTitle });
+    const { addRoomConnect, isAuthenticated } = this.props;
+    if (isAuthenticated) {
+      addRoomConnect({});
+    }
   }
 
   render() {
@@ -61,5 +64,10 @@ export class Landing extends React.Component {
 }
 
 Landing.propTypes = propTypes;
+Landing.defaultProps = defaultProps;
 
-export default connect(null, { addRoomConnect: addRoom })(Landing);
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { addRoomConnect: addRoom })(Landing);

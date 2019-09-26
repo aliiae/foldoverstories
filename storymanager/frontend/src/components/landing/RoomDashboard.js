@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getRooms } from '../../actions/room';
 
@@ -23,12 +24,6 @@ class RoomDashboard extends React.Component {
     getRoomsConnect();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.rooms.length !== this.props.rooms.length) {
-
-    }
-  }
-
   render() {
     const { rooms } = this.props;
     if (rooms.length === 0) return '';
@@ -45,7 +40,9 @@ class RoomDashboard extends React.Component {
           <tbody>
             {rooms.map((room) => (
               <tr key={room.id}>
-                <td>{room.room_title}</td>
+                <td>
+                  {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
+                </td>
                 <td>{room.users.map((user) => <span key={user.id}>{user.username}</span>)}</td>
                 {}
                 <td>{formatDate(room.created_at)}</td>
