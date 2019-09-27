@@ -19,12 +19,16 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => (
 );
 
 PrivateRoute.propTypes = {
-  component: PropTypes.instanceOf(React.Component),
-  auth: PropTypes.objectOf(PropTypes.object),
+  component: PropTypes.func,
+  auth: PropTypes.shape({
+    token: PropTypes.string,
+    isAuthenticated: PropTypes.bool,
+    isLoading: PropTypes.bool,
+  }),
 };
 
 PrivateRoute.defaultProps = {
-  component: {},
+  component: () => {},
   auth: {},
 };
 

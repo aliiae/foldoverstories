@@ -6,9 +6,10 @@ import { addText } from '../../actions/story';
 const HIDDEN_TEXT_PERCENTAGE = 0.8;
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
+  roomTitle: PropTypes.string.isRequired,
 };
 
-export class Button extends React.Component {
+class AddTextButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,13 +22,13 @@ export class Button extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     const { text } = this.state;
-    const { addTextConnect } = this.props;
+    const { addTextConnect, roomTitle } = this.props;
     const indexVisibleStartsAt = Math.floor(text.length) * HIDDEN_TEXT_PERCENTAGE;
-    const post = {
+    const textPost = {
       hidden_text: text.slice(0, indexVisibleStartsAt),
       visible_text: text.slice(indexVisibleStartsAt),
     };
-    addTextConnect(post);
+    addTextConnect(textPost, roomTitle);
     this._resetTextArea();
   }
 
@@ -64,6 +65,6 @@ export class Button extends React.Component {
   }
 }
 
-Button.propTypes = propTypes;
+AddTextButton.propTypes = propTypes;
 
-export default connect(null, { addTextConnect: addText })(Button);
+export default connect(null, { addTextConnect: addText })(AddTextButton);

@@ -9,8 +9,8 @@ const propTypes = {
       status: PropTypes.number,
       msg: PropTypes.oneOfType(
         [
-          PropTypes.string,
           PropTypes.objectOf(PropTypes.object),
+          PropTypes.string,
         ],
       ),
     },
@@ -20,7 +20,10 @@ const propTypes = {
     error: PropTypes.func.isRequired,
     success: PropTypes.func.isRequired,
   }),
-  message: PropTypes.objectOf(PropTypes.object).isRequired,
+  message: PropTypes.shape({
+    addText: PropTypes.string,
+    passwordsNotMatch: PropTypes.string,
+  }).isRequired,
 };
 
 const defaultProps = {

@@ -1,12 +1,18 @@
 import React from 'react';
-import Paper from './Paper';
-import Button from './Button';
+import PropTypes from 'prop-types';
+import Paper from './TextDisplay';
+import Button from './AddTextButton';
 
-export default function Editor() {
+export default function Editor(props) {
+  const { match } = props;
   return (
     <>
-      <Paper />
-      <Button />
+      <Paper roomTitle={match.params.id} />
+      <Button roomTitle={match.params.id} />
     </>
   );
 }
+
+Editor.propTypes = {
+  match: PropTypes.objectOf(PropTypes.objectOf).isRequired,
+};

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { Provider } from 'react-redux';
@@ -30,20 +30,20 @@ class App extends React.Component {
       <Provider store={store}>
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <AlertProvider template={AlertTemplate} {...alertOptions}>
-          <HashRouter>
+          <BrowserRouter>
             <>
               <Header />
               <Alerts />
               <div className="container">
                 <Switch>
                   <Route exact path="/" component={Landing} />
-                  <PrivateRoute exact path="/story" component={Editor} />
+                  <PrivateRoute exact path="/story/:id" component={Editor} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
                 </Switch>
               </div>
             </>
-          </HashRouter>
+          </BrowserRouter>
         </AlertProvider>
       </Provider>
     );

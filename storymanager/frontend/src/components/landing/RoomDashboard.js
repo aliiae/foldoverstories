@@ -39,12 +39,13 @@ class RoomDashboard extends React.Component {
           </thead>
           <tbody>
             {rooms.map((room) => (
-              <tr key={room.id}>
+              <tr key={room.room_title}>
                 <td>
                   {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
                 </td>
-                <td>{room.users.map((user) => <span key={user.id}>{user.username}</span>)}</td>
-                {}
+                <td>
+                  {room.users.map((user) => <span key={user.username}>{user.username}</span>)}
+                </td>
                 <td>{formatDate(room.modified_at)}</td>
               </tr>
             ))}

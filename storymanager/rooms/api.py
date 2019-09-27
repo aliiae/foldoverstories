@@ -11,7 +11,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
     lookup_field = 'room_title'
 
     def get_queryset(self):
-        return self.request.user.room.all().order_by('-modified_at')
+        return self.request.user.rooms.all().order_by('-modified_at')
 
     def perform_create(self, serializer: RoomsSerializer):
         room = serializer.save()

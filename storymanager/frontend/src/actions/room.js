@@ -15,22 +15,6 @@ export const getRooms = () => (dispatch, getState) => {
 };
 
 // ADD NEW ROOM
-// export const addRoom = (room) => (dispatch, getState) => {
-//   axios.post('/api/rooms/', room, setupTokenConfig(getState))
-//     .then((res) => {
-//       dispatch({
-//         type: ADD_ROOM_SUCCESS,
-//         payload: res.data,
-//       });
-//       dispatch(getRooms());
-//     }).catch((err) => {
-//       dispatch(returnErrors(err.response.data, err.response.status));
-//       dispatch({
-//         type: ADD_ROOM_FAIL,
-//       });
-//     });
-// };
-
 export const addRoom = (room) => (dispatch, getState) => {
   axios.post('/api/rooms/', room, setupTokenConfig(getState))
     .then((res) => {

@@ -7,8 +7,7 @@ export default function (state = initialState, action) {
     case GET_MESSAGES:
       return action.payload;
     case CREATE_MESSAGE:
-      // eslint-disable-next-line no-return-assign,no-param-reassign
-      return (state = action.payload);
+      return action.payload;
     default:
       return state;
   }
