@@ -1,3 +1,32 @@
 {
-  "extends": "airbnb"
+  "plugins": [
+    "babel"
+  ],
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "airbnb"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "react/jsx-props-no-spreading": 0,
+    "no-underscore-dangle": [
+      2,
+      {
+        "allowAfterThis": true
+      }
+    ],
+    "import/no-named-as-default": 0
+  },
+  "env": {
+    "browser": true
+  }
 }

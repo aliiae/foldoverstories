@@ -4,8 +4,8 @@ import { createMessage, returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
 
 // GET VISIBLE TEXT
-export const getVisibleText = () => (dispatch, getState) => {
-  axios.get('/api/texts/', setupTokenConfig(getState))
+export const getVisibleText = (roomTitle) => (dispatch, getState) => {
+  axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: GET_VISIBLE_TEXT,
@@ -15,8 +15,8 @@ export const getVisibleText = () => (dispatch, getState) => {
 };
 
 // ADD NEW TEXT
-export const addText = (text) => (dispatch, getState) => {
-  axios.post('/api/texts/', text, setupTokenConfig(getState))
+export const addText = (text, roomTitle) => (dispatch, getState) => {
+  axios.post(`/api/texts/${roomTitle}/`, text, setupTokenConfig(getState))
     .then((res) => {
       dispatch(createMessage({ addText: 'Thank you, your text has been added' }));
       dispatch({
