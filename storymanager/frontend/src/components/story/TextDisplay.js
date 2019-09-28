@@ -20,17 +20,16 @@ class TextDisplay extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { visibleText } = this.props;
     return (
-      <>
+      <div className="mt-3">
         {visibleText ? (
-          <p className="visible-text">
+          <p className="visible-text lead">
             &hellip;
             {`${visibleText}`}
           </p>
         ) : (<p className="lead">Start your story!</p>)}
-      </>
+      </div>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { Provider } from 'react-redux';
@@ -37,7 +37,8 @@ class App extends React.Component {
               <div className="container">
                 <Switch>
                   <Route exact path="/" component={Landing} />
-                  <PrivateRoute exact path="/story/:id" component={Editor} />
+                  <Route exact path="/story/:id" component={Editor} />
+                  <Route exact path="/story" component={() => (<Redirect to="/" />)} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
                 </Switch>

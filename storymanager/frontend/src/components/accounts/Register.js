@@ -66,6 +66,7 @@ export class Register extends React.Component {
                   id="username"
                   onChange={this.onChange}
                   value={username}
+                  required
                 />
               </label>
             </div>
@@ -79,6 +80,7 @@ export class Register extends React.Component {
                   id="password"
                   onChange={this.onChange}
                   value={password}
+                  required
                 />
               </label>
             </div>
@@ -92,6 +94,7 @@ export class Register extends React.Component {
                   id="password2"
                   onChange={this.onChange}
                   value={password2}
+                  required
                 />
               </label>
             </div>
@@ -99,7 +102,8 @@ export class Register extends React.Component {
               <button type="submit" className="btn btn-primary">Register</button>
             </div>
             <p>
-              Already have an account?&nbsp;
+              Already have an account?
+              {' '}
               <Link to="/login">Login</Link>
             </p>
           </form>

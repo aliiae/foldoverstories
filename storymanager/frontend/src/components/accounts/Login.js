@@ -75,7 +75,8 @@ export class Login extends React.Component {
               <button type="submit" className="btn btn-primary">Login</button>
             </div>
             <p>
-              Don&apos;t have an account?&nbsp;
+              Don&apos;t have an account?
+              {' '}
               <Link to="/register">Register</Link>
             </p>
           </form>

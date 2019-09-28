@@ -13,9 +13,13 @@ const defaultProps = {
   rooms: [],
 };
 
-const formatDate = (dateISOString) => {
+const formatTimeStamp = (dateISOString) => {
   const date = new Date(dateISOString);
-  return date.toLocaleDateString();
+  // dd/mm/yyyy, hh:mm
+  return `${date.toLocaleDateString()}, ${date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  })}`;
 };
 
 class RoomDashboard extends React.Component {
@@ -27,28 +31,35 @@ class RoomDashboard extends React.Component {
   render() {
     const { rooms } = this.props;
     if (rooms.length === 0) return '';
+    const bookEmoji = <span role="img" aria-label="open book">&#128214;</span>;
+    const writingEmoji = <span role="img" aria-label="writing hand">&#9997;</span>;
     return (
       <>
         <table className="table table-hover">
           <thead>
-            <tr>
-              <th>Story</th>
-              <th>Authors</th>
-              <th>Last Updated</th>
-            </tr>
+          <tr>
+            <th>Story</th>
+            <th>Authors</th>
+            <th>Status</th>
+            <th>Last Updated</th>
+          </tr>
           </thead>
           <tbody>
-            {rooms.map((room) => (
-              <tr key={room.room_title}>
-                <td>
-                  {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
-                </td>
-                <td>
-                  {room.users.map((user) => <span key={user.username}>{user.username}</span>)}
-                </td>
-                <td>{formatDate(room.modified_at)}</td>
-              </tr>
-            ))}
+          {rooms.map((room) => (
+            <tr key={room.room_title}>
+              <td>
+                {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
+              </td>
+              <td>
+                {room.users.map((user) => user.username)
+                  .reduce((prev, curr) => [prev, ', ', curr])}
+              </td>
+              <td>
+                {room.is_finished ? bookEmoji : writingEmoji}
+              </td>
+              <td>{formatTimeStamp(room.modified_at)}</td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </>

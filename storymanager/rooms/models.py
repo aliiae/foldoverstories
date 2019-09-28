@@ -7,7 +7,8 @@ from rooms.utils import ADJECTIVES, NOUNS
 
 
 def random_adj_noun_pair(delimiter: str = '-') -> str:
-    """Creates a random adj-noun pair joined by the specified delimiter.
+    """
+    Creates a random adj-noun pair joined by the specified delimiter.
 
     Sources:
     - Adjectives:
@@ -37,5 +38,6 @@ class Room(models.Model):
     room_title = models.SlugField(unique=True, default=attempt_random_adj_noun_pair,
                                   primary_key=True)
     users = models.ManyToManyField(User, related_name='rooms', blank=True)
+    is_finished = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

@@ -1,24 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 
 const propTypes = {
-  auth: PropTypes.shape(
-    {
-      isAuthenticated: PropTypes.boolean,
-      token: PropTypes.string,
-      user: PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        username: PropTypes.string.isRequired,
-      }),
-    },
-  ),
+  auth: authPropType,
   logoutConnect: PropTypes.func.isRequired,
 };
 const defaultProps = {
-  auth: { isAuthenticated: false, token: '', user: {} },
+  auth: authDefaultProp,
 };
 
 export class Header extends React.Component {
@@ -60,7 +52,7 @@ export class Header extends React.Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="container">
-          <Link className="navbar-brand" to="/">{this.title}</Link>
+          <NavLink className="navbar-brand" exact to="/">{this.title}</NavLink>
           <button
             className="navbar-toggler"
             type="button"

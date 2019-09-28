@@ -3,13 +3,18 @@ import { ADD_TEXT, GET_VISIBLE_TEXT } from './types';
 import { createMessage, returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
 
+const getLastItemOrEmpty = (array) => {
+  if (array.length === 0) return '';
+  return array[array.length - 1];
+};
+
 // GET VISIBLE TEXT
 export const getVisibleText = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: GET_VISIBLE_TEXT,
-        payload: res.data.length > 0 ? res.data[res.data.length - 1].visible_text : '',
+        payload: getLastItemOrEmpty(res.data).visible_text,
       });
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };
