@@ -87,7 +87,7 @@ NOUNS: List[str] = ['addax', 'adder', 'agama', 'agouti', 'albacore', 'albatross'
                     'sturgeon', 'sunfish', 'suslik', 'swallow', 'swallowtail', 'swan', 'swift',
                     'tadpole', 'taipan', 'tamarin', 'tanager', 'tapeworm', 'tapir', 'tarpon',
                     'tarsier', 'teal', 'tellin', 'tenrec', 'termite', 'tern', 'terrapin', 'tetra',
-                    'tick', 'tiger', 'tigon', 'tinamou', 'tit', 'titmouse', 'toad', 'topi',
+                    'tick', 'tiger', 'tigon', 'tinamou', 'titmouse', 'toad', 'topi',
                     'tortoise', 'toucan', 'touraco', 'towhee', 'treefrog', 'treesnake', 'trematode',
                     'triggerfish', 'trogon', 'trout', 'tsetse', 'tuna', 'tunicate', 'turbot',
                     'turkey', 'vicuña', 'viper', 'vireo', 'viscacha', 'vole', 'vulture', 'wagtail',

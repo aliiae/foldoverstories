@@ -40,6 +40,5 @@ class Room(models.Model):
                                   primary_key=True)
     users = models.ManyToManyField(User, related_name='rooms', blank=True)
     is_finished = models.BooleanField(default=False)
-    current_user_index = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

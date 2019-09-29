@@ -27,7 +27,7 @@ class TextDisplay extends React.Component {
       <div className="mt-3">
         <p className="visible-text lead">
           {visibleText ? <span>&hellip;{visibleText}</span>
-            : correctTurn ? 'Start your story!' : 'Waiting for the next author...'}
+            : correctTurn ? 'Start your story!' : ''}
         </p>
       </div>
     );

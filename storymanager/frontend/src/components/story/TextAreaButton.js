@@ -8,12 +8,11 @@ const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool,
-  correctTurn: PropTypes.bool,
+  correctTurn: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
   isAuthenticated: false,
-  correctTurn: true,
 };
 
 class TextAreaButton extends React.Component {

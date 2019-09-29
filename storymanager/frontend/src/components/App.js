@@ -10,7 +10,7 @@ import Login from './accounts/Login';
 import Register from './accounts/Register';
 import PrivateRoute from './common/PrivateRoute';
 import Landing from './landing/Landing';
-import Alerts from './layout/Alerts';
+// import Alerts from './layout/Alerts';
 import Editor from './story/Editor';
 import store from '../store';
 import { loadUser } from '../actions/auth';
@@ -28,24 +28,18 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <AlertProvider template={AlertTemplate} {...alertOptions}>
-          <BrowserRouter>
-            <>
-              <Header />
-              <Alerts />
-              <div className="container">
-                <Switch>
-                  <Route exact path="/" component={Landing} />
-                  <Route exact path="/story/:id" component={Editor} />
-                  <Route exact path="/story" component={() => (<Redirect to="/" />)} />
-                  <Route exact path="/register" component={Register} />
-                  <Route exact path="/login" component={Login} />
-                </Switch>
-              </div>
-            </>
-          </BrowserRouter>
-        </AlertProvider>
+        <BrowserRouter>
+          <Header />
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/story/:id" component={Editor} />
+              <Route exact path="/story" component={() => (<Redirect to="/" />)} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+            </Switch>
+          </div>
+        </BrowserRouter>
       </Provider>
     );
   }
