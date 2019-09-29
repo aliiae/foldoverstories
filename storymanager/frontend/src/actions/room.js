@@ -1,7 +1,10 @@
 import axios from 'axios';
-import { ADD_ROOM_FAIL, ADD_ROOM_SUCCESS, GET_ROOMS } from './types';
+import {
+  ADD_ROOM_FAIL, ADD_ROOM_SUCCESS, ADD_USER_INTO_ROOM, GET_ROOMS,
+} from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
+import { getUsers } from './story';
 
 // GET USER'S ROOMS
 export const getRooms = () => (dispatch, getState) => {
@@ -28,5 +31,19 @@ export const addRoom = (room) => (dispatch, getState) => {
       dispatch({
         type: ADD_ROOM_FAIL,
       });
+    });
+};
+
+// ADD USER INTO ROOM
+export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
+  axios.post(`/api/rooms/${roomTitle}/users/`, null, setupTokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: ADD_USER_INTO_ROOM,
+        payload: res.data,
+      });
+      dispatch(getUsers(roomTitle));
+    }).catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
     });
 };

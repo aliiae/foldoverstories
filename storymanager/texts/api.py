@@ -50,7 +50,7 @@ class TextsViewSet(viewsets.ModelViewSet):
         def index_of(target, items):
             return next(i for i, user in enumerate(items) if user == target)
 
-        users = room.users.all()
+        users = room.users.all().order_by('date_joined')
         if room.texts.count() == 0:
             return self._default_turn_user()
         prev_user = room.texts.last().author

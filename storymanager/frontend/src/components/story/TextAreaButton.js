@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { addText } from '../../actions/story';
+import JoinButton from './JoinButton';
+import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
-  isAuthenticated: PropTypes.bool,
   correctTurn: PropTypes.bool.isRequired,
+  auth: authPropType,
+  usernames: PropTypes.arrayOf(PropTypes.string),
 };
 
 const defaultProps = {
-  isAuthenticated: false,
+  usernames: [],
+  auth: authDefaultProp,
 };
 
 class TextAreaButton extends React.Component {
@@ -59,18 +62,24 @@ class TextAreaButton extends React.Component {
 
   render() {
     const { text, isLastText } = this.state;
-    const { isAuthenticated, correctTurn } = this.props;
-    const invitationToLogin = (
-      <p className="text-center">
-        <Link to="/login">Login</Link>
-        {' '}
-        to add your text!
-      </p>
-    );
+    const {
+      auth, correctTurn, roomTitle, usernames,
+    } = this.props;
+    const { isLoading, isAuthenticated, user } = auth;
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
 
-    const waitingTurn = (
-      <p>Waiting for the next author&hellip;</p>
-    );
+    if (isAuthenticated) {
+      const { username } = user;
+      if (!usernames.includes(username)) {
+        return (<JoinButton roomTitle={roomTitle} />);
+      }
+    } else {
+      return (<JoinButton roomTitle={roomTitle} />);
+    }
+
+    const waitingForTurn = <p>Waiting for the next author&hellip;</p>;
     const placeholder = 'Type your text here. Remember that only the last line will be visible!';
     const submitForm = (
       <form onSubmit={this.onSubmit}>
@@ -107,7 +116,7 @@ class TextAreaButton extends React.Component {
 
     return (
       <>
-        {!isAuthenticated ? invitationToLogin : correctTurn ? submitForm : waitingTurn}
+        {correctTurn ? submitForm : waitingForTurn}
       </>
     );
   }
@@ -117,8 +126,9 @@ TextAreaButton.propTypes = propTypes;
 TextAreaButton.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   correctTurn: state.story.correct_turn,
+  usernames: state.story.usernames,
 });
 
 export default connect(mapStateToProps, { addTextConnect: addText })(TextAreaButton);

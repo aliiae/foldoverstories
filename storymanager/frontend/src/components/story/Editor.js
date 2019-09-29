@@ -20,5 +20,5 @@ export default function Editor({ match }) {
 }
 
 Editor.propTypes = {
-  match: PropTypes.objectOf(PropTypes.objectOf).isRequired,
+  match: PropTypes.objectOf(PropTypes.object).isRequired,
 };

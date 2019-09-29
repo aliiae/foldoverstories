@@ -37,7 +37,7 @@ export class Login extends React.Component {
   render() {
     const { isAuthenticated } = this.props;
     if (isAuthenticated) {
-      return <Redirect to="/story" />;
+      return <Redirect to="/" />;
     }
     const { username, password } = this.state;
     return (

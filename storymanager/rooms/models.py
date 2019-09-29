@@ -38,7 +38,13 @@ def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
 class Room(models.Model):
     room_title = models.SlugField(unique=True, default=attempt_random_adj_noun_pair,
                                   primary_key=True)
-    users = models.ManyToManyField(User, related_name='rooms', blank=True)
+    users = models.ManyToManyField(User, related_name='rooms', blank=True, through='Membership')
     is_finished = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+
+class Membership(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    joined_at = models.DateField(auto_now_add=True)

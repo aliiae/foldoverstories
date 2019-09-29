@@ -23,7 +23,7 @@ export default function (state = initialState, action) {
     case GET_USERS:
       return {
         ...state,
-        usernames: action.payload.users.map((user) => user.username),
+        usernames: action.payload.map((user) => user.username),
       };
     case WRONG_TURN:
       return {

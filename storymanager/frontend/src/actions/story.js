@@ -28,7 +28,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
 };
 
 export const getUsers = (roomTitle) => (dispatch, getState) => {
-  axios.get(`/api/rooms/${roomTitle}/`, setupTokenConfig(getState))
+  axios.get(`/api/rooms/${roomTitle}/users/`, setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: GET_USERS,
