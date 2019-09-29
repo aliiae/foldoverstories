@@ -8,10 +8,12 @@ const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool,
+  correctTurn: PropTypes.bool,
 };
 
 const defaultProps = {
   isAuthenticated: false,
+  correctTurn: true,
 };
 
 class TextAreaButton extends React.Component {
@@ -58,7 +60,7 @@ class TextAreaButton extends React.Component {
 
   render() {
     const { text, isLastText } = this.state;
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, correctTurn } = this.props;
     const invitationToLogin = (
       <p className="text-center">
         <Link to="/login">Login</Link>
@@ -66,13 +68,17 @@ class TextAreaButton extends React.Component {
         to add your text!
       </p>
     );
+
+    const waitingTurn = (
+      <p>Waiting for the next author&hellip;</p>
+    );
     const placeholder = 'Type your text here. Remember that only the last line will be visible!';
     const submitForm = (
       <form onSubmit={this.onSubmit}>
         <div className="form-group">
           <textarea
             className="form-control"
-            rows="3"
+            rows="2"
             placeholder={placeholder}
             value={text}
             onChange={this.onChangeText}
@@ -102,7 +108,7 @@ class TextAreaButton extends React.Component {
 
     return (
       <>
-        {isAuthenticated ? submitForm : invitationToLogin}
+        {!isAuthenticated ? invitationToLogin : correctTurn ? submitForm : waitingTurn}
       </>
     );
   }
@@ -113,6 +119,7 @@ TextAreaButton.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  correctTurn: state.story.correct_turn,
 });
 
 export default connect(mapStateToProps, { addTextConnect: addText })(TextAreaButton);

@@ -7,10 +7,12 @@ const propTypes = {
   visibleText: PropTypes.string,
   getVisibleTextConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
+  correctTurn: PropTypes.bool,
 };
 
 const defaultProps = {
   visibleText: '',
+  correctTurn: true,
 };
 
 class TextDisplay extends React.Component {
@@ -20,15 +22,13 @@ class TextDisplay extends React.Component {
   }
 
   render() {
-    const { visibleText } = this.props;
+    const { visibleText, correctTurn } = this.props;
     return (
       <div className="mt-3">
-        {visibleText ? (
-          <p className="visible-text lead">
-            &hellip;
-            {`${visibleText}`}
-          </p>
-        ) : (<p className="lead">Start your story!</p>)}
+        <p className="visible-text lead">
+          {visibleText ? <span>&hellip;{visibleText}</span>
+            : correctTurn ? 'Start your story!' : 'Waiting for the next author...'}
+        </p>
       </div>
     );
   }
@@ -39,6 +39,7 @@ TextDisplay.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   visibleText: state.story.visible_text,
+  correctTurn: state.story.correct_turn,
 });
 
 export default connect(mapStateToProps, { getVisibleTextConnect: getVisibleText })(TextDisplay);

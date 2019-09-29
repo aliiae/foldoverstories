@@ -26,6 +26,7 @@ def random_adj_noun_pair(delimiter: str = '-') -> str:
 
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
     """Tries to generate a unique adj-noun pair for 5 times, else returns a random integer."""
+    attempts = attempts or 1
     while attempts:
         adj_noun_pair = random_adj_noun_pair('-')
         if not Room.objects.filter(room_title=adj_noun_pair).exists():
@@ -39,5 +40,6 @@ class Room(models.Model):
                                   primary_key=True)
     users = models.ManyToManyField(User, related_name='rooms', blank=True)
     is_finished = models.BooleanField(default=False)
+    current_user_index = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

@@ -1,9 +1,11 @@
 import {
-  ADD_TEXT, GET_VISIBLE_TEXT,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN,
 } from '../actions/types';
 
 const initialState = {
   visible_text: '',
+  usernames: [],
+  correct_turn: true,
 };
 
 export default function (state = initialState, action) {
@@ -17,6 +19,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...action.payload,
+      };
+    case GET_USERS:
+      return {
+        ...state,
+        usernames: action.payload.users.map((user) => user.username),
+      };
+    case WRONG_TURN:
+      return {
+        ...state,
+        correct_turn: false,
       };
     default:
       return state;
