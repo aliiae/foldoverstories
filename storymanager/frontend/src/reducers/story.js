@@ -6,7 +6,7 @@ const initialState = {
   visible_text: '',
   users: [],
   correct_turn: true,
-  room: {},
+  room: null,
 };
 
 export default function (state = initialState, action) {

@@ -85,6 +85,8 @@ export const register = ({ username, password }) => (dispatch) => {
       });
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({ type: REGISTER_FAIL });
+      dispatch({
+        type: REGISTER_FAIL, payload: err.response.data,
+      });
     });
 };

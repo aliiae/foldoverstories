@@ -5,50 +5,38 @@ import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { addRoom } from '../../actions/room';
 
-const propTypes = {
-  addRoomConnect: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
-  roomTitle: PropTypes.string,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
-};
-
-const defaultProps = {
-  isAuthenticated: false,
-  roomTitle: '',
-};
-
-
-class StartButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick(e) {
+function StartButton(props) {
+  const {
+    addRoomConnect, isAuthenticated, history, roomTitle,
+  } = props;
+  const onClick = (e) => {
     e.preventDefault();
-    const { addRoomConnect, isAuthenticated, history } = this.props;
     if (isAuthenticated) {
       addRoomConnect({});
     } else {
       history.push('/login');
     }
-  }
-
-  render() {
-    const { roomTitle, isAuthenticated } = this.props;
-    return (
-      <>
-        <Button variant="primary" size="lg" type="button" onClick={this.onClick}>
-          Start a new story
-        </Button>
-        {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
-      </>
-    );
-  }
+  };
+  return (
+    <>
+      <Button variant="primary" size="lg" type="button" onClick={onClick}>
+        Start a new story
+      </Button>
+      {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
+    </>
+  );
 }
 
-StartButton.propTypes = propTypes;
-StartButton.defaultProps = defaultProps;
+StartButton.propTypes = {
+  addRoomConnect: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+  roomTitle: PropTypes.string,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+StartButton.defaultProps = {
+  isAuthenticated: false,
+  roomTitle: '',
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 import { addText } from '../../actions/story';
 import JoinButton from './JoinButton';
@@ -20,22 +22,20 @@ const defaultProps = {
   auth: authDefaultProp,
 };
 
-class TextAreaButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
-      isLastText: false,
-    };
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChangeText = this.onChangeText.bind(this);
-    this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
-  }
+function TextAreaButton(props) {
+  const [text, setText] = useState('');
+  const [isLastText, setIsLastText] = useState(false);
+  const {
+    addTextConnect, roomTitle, auth, usernames, correctTurn,
+  } = props;
 
-  onSubmit(e) {
+  const resetInputFields = () => {
+    setText('');
+    setIsLastText(false);
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    const { text, isLastText } = this.state;
-    const { addTextConnect, roomTitle } = this.props;
     const lastNewLineIndex = text.lastIndexOf('\n');
     const textPost = {
       hidden_text: text.slice(0, lastNewLineIndex),
@@ -43,85 +43,64 @@ class TextAreaButton extends React.Component {
       is_last: isLastText,
     };
     addTextConnect(textPost, roomTitle);
-    this._resetInputFields();
+    resetInputFields();
+  };
+
+  const onChangeText = (e) => {
+    setText(e.target.value);
+  };
+
+  const onChangeCheckbox = (e) => {
+    setIsLastText(e.target.checked);
+  };
+
+  if (auth === null) {
+    return <LoadingSpinner />;
+  }
+  const { isLoading, isAuthenticated, user } = auth;
+  if (isLoading || isAuthenticated === null) {
+    return <LoadingSpinner />;
+  }
+  if (!isAuthenticated || !usernames.includes(user.username)) {
+    return (<JoinButton roomTitle={roomTitle} />);
   }
 
-  onChangeText(e) {
-    this.setState({
-      text: e.target.value,
-    });
-  }
+  const waitingForTurn = <p>Waiting for the next author&hellip;</p>;
+  const placeholder = 'Type your text here. Remember that only the last line will be visible!';
+  const submitForm = (
+    <Form onSubmit={onSubmit}>
+      <Form.Group controlId="formEnterText">
+        <Form.Control
+          as="textarea"
+          rows="2"
+          placeholder={placeholder}
+          value={text}
+          onChange={onChangeText}
+          name="text"
+          style={{ resize: 'none' }}
+        />
+      </Form.Group>
+      <Form.Row>
+        <Button type="submit" variant="success" size="sm" className="mt-3">
+          Submit
+        </Button>
+        <Form.Check
+          // inline
+          label="This is my last input in this story"
+          type="checkbox"
+          onChange={onChangeCheckbox}
+          checked={isLastText}
+          name="isLastText"
+        />
+      </Form.Row>
+    </Form>
+  );
 
-  onChangeCheckbox(e) {
-    this.setState({
-      isLastText: e.target.checked,
-    });
-  }
-
-  _resetInputFields() {
-    this.setState({ text: '', isLastText: false });
-  }
-
-  render() {
-    const { text, isLastText } = this.state;
-    const {
-      auth, correctTurn, roomTitle, usernames,
-    } = this.props;
-    const { isLoading, isAuthenticated, user } = auth;
-    if (isLoading) {
-      return <LoadingSpinner />;
-    }
-
-    if (isAuthenticated) {
-      const { username } = user;
-      if (!usernames.includes(username)) {
-        return (<JoinButton roomTitle={roomTitle} />);
-      }
-    } else {
-      return (<JoinButton roomTitle={roomTitle} />);
-    }
-
-    const waitingForTurn = <p>Waiting for the next author&hellip;</p>;
-    const placeholder = 'Type your text here. Remember that only the last line will be visible!';
-    const submitForm = (
-      <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <textarea
-            className="form-control"
-            rows="2"
-            placeholder={placeholder}
-            value={text}
-            onChange={this.onChangeText}
-            name="text"
-            style={{ resize: 'none' }}
-          />
-          <button type="submit" className="btn btn-success btn-sm mt-3">
-            Submit
-          </button>
-          <div className="form-check" style={{ display: 'inline-block' }}>
-            <label className="form-check-label" htmlFor="isLastTextCheckbox">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="isLastTextCheckbox"
-                value="isLastText"
-                onChange={this.onChangeCheckbox}
-                checked={isLastText}
-                name="isLastText"
-              />
-              This is my last input in this story
-            </label>
-          </div>
-        </div>
-      </form>
-    );
-
-    return (
-      <>
-        {correctTurn ? submitForm : waitingForTurn}
-      </>
-    );
-  }
+  return (
+    <>
+      {correctTurn ? submitForm : waitingForTurn}
+    </>
+  );
 }
 
 TextAreaButton.propTypes = propTypes;

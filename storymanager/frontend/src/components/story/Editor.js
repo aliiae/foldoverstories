@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { connect } from 'react-redux';
 
 import FinishedTextViewer from './FinishedTextViewer';
@@ -23,10 +25,9 @@ function Editor(props) {
   if (userIsLoading) {
     return <LoadingSpinner />;
   }
-
   return (
-    <div className="row justify-content-center">
-      <div className="col-md-7">
+    <Row className="justify-content-center">
+      <Col md={7}>
         {roomIsFinished ? (<FinishedTextViewer roomTitle={roomTitle} />)
           : (
             <>
@@ -34,11 +35,11 @@ function Editor(props) {
               <TextAreaButton roomTitle={roomTitle} />
             </>
           )}
-      </div>
-      <div className="col-md-3">
+      </Col>
+      <Col md={3}>
         <RoomUsers roomTitle={roomTitle} />
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 }
 

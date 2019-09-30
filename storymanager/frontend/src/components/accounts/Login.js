@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { login } from '../../actions/auth';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+
+import { login } from '../../actions/auth';
 
 function Login(props) {
   const [form, setValues] = useState({
@@ -45,6 +46,7 @@ function Login(props) {
                 name="username"
                 onChange={onChange}
                 value={form.username}
+                required
               />
             </Form.Group>
             <Form.Group controlId="fromLoginPassword">
@@ -55,6 +57,7 @@ function Login(props) {
                 name="password"
                 onChange={onChange}
                 value={form.password}
+                required
               />
             </Form.Group>
             <Button variant="primary" type="submit">Login</Button>

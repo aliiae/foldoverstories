@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
+import Card from 'react-bootstrap/Card';
+
 import { getUsers } from '../../actions/story';
 
 const propTypes = {
@@ -26,11 +28,9 @@ class RoomUsers extends React.Component {
   render() {
     const { users } = this.props;
     return (
-      <div className="card mt-3">
-        <div className="card-header">
-          Authors
-        </div>
-        <div className="card-body">
+      <Card className="mt-3">
+        <Card.Header>Authors</Card.Header>
+        <Card.Body>
           <ul className="list-unstyled card-text">
             {users.map((u) => (
               <li key={u.username}>
@@ -41,8 +41,8 @@ class RoomUsers extends React.Component {
               </li>
             ))}
           </ul>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     );
   }
 }
