@@ -2,13 +2,14 @@ import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 import { addRoom } from '../../actions/room';
 
 const propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 const defaultProps = {
@@ -37,13 +38,9 @@ class StartButton extends React.Component {
     const { roomTitle, isAuthenticated } = this.props;
     return (
       <>
-        <button
-          type="button"
-          className="btn btn-primary btn-lg"
-          onClick={this.onClick}
-        >
+        <Button variant="primary" size="lg" type="button" onClick={this.onClick}>
           Start a new story
-        </button>
+        </Button>
         {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
       </>
     );

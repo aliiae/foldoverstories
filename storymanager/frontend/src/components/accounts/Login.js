@@ -1,93 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-const propTypes = {
-  loginConnect: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
-};
-const defaultProps = {
-  isAuthenticated: false,
-};
+function Login(props) {
+  const [form, setValues] = useState({
+    username: '',
+    password: '',
+  });
 
-export class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-    };
+  const { loginConnect, isAuthenticated } = props;
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
   }
 
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    const { loginConnect } = this.props;
-    const { username, password } = this.state;
+    const { username, password } = form;
     loginConnect(username, password);
   };
 
-  onChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+  const onChange = (e) => {
+    setValues({ ...form, [e.target.name]: e.target.value });
   };
 
-  render() {
-    const { isAuthenticated } = this.props;
-    if (isAuthenticated) {
-      return <Redirect to="/" />;
-    }
-    const { username, password } = this.state;
-    return (
-      <div className="col-md-6 m-auto">
-        <div className="card card-body mt-5">
-          <h1 className="text-center">Login</h1>
-          <form onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">
-                Username
-                <input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  id="username"
-                  onChange={this.onChange}
-                  value={username}
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">
-                Password
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  id="password"
-                  onChange={this.onChange}
-                  value={password}
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">Login</button>
-            </div>
-            <p>
+  return (
+    <Col md={6} className="m-auto">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            <h1 className="text-center">Login</h1>
+          </Card.Title>
+          <Form onSubmit={onSubmit}>
+            <Form.Group controlId="fromLoginUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Username"
+                name="username"
+                onChange={onChange}
+                value={form.username}
+              />
+            </Form.Group>
+            <Form.Group controlId="fromLoginPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                onChange={onChange}
+                value={form.password}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">Login</Button>
+            <Form.Text>
               Don&apos;t have an account?
               {' '}
               <Link to="/register">Register</Link>
-            </p>
-          </form>
-        </div>
-      </div>
-    );
-  }
+            </Form.Text>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
 }
 
-Login.propTypes = propTypes;
-Login.defaultProps = defaultProps;
+Login.propTypes = {
+  loginConnect: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+Login.defaultProps = {
+  isAuthenticated: false,
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,

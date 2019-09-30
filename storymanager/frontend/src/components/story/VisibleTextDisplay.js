@@ -23,11 +23,16 @@ class VisibleTextDisplay extends React.Component {
 
   render() {
     const { visibleText, correctTurn } = this.props;
+    if (!visibleText) {
+      return correctTurn ? 'Start your story!' : '';
+    }
     return (
       <div className="mt-3">
         <p className="visible-text lead">
-          {visibleText ? <span>&hellip;{visibleText}</span>
-            : correctTurn ? 'Start your story!' : ''}
+          <span>
+            &hellip;
+            {visibleText}
+          </span>
         </p>
       </div>
     );

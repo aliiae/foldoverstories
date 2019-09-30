@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import { addText } from '../../actions/story';
 import JoinButton from './JoinButton';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
@@ -67,7 +69,7 @@ class TextAreaButton extends React.Component {
     } = this.props;
     const { isLoading, isAuthenticated, user } = auth;
     if (isLoading) {
-      return <p>Loading...</p>;
+      return <LoadingSpinner />;
     }
 
     if (isAuthenticated) {
@@ -128,7 +130,7 @@ TextAreaButton.defaultProps = defaultProps;
 const mapStateToProps = (state) => ({
   auth: state.auth,
   correctTurn: state.story.correct_turn,
-  usernames: state.story.users.map(user => user.username),
+  usernames: state.story.users.map((user) => user.username),
 });
 
 export default connect(mapStateToProps, { addTextConnect: addText })(TextAreaButton);

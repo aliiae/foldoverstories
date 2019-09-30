@@ -1,124 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+
 import { register } from '../../actions/auth';
-import { createMessage } from '../../actions/messages';
 
-const propTypes = {
-  isAuthenticated: PropTypes.bool,
-  registerConnect: PropTypes.func.isRequired,
-  createMessageConnect: PropTypes.func.isRequired,
-};
-const defaultProps = {
-  isAuthenticated: false,
-};
-
-export class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      password2: '',
-    };
+function Register(props) {
+  const [form, setValues] = useState({
+    username: '',
+    password: '',
+    password2: '',
+  });
+  const { registerConnect, isAuthenticated } = props;
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
   }
 
-  onSubmit = (e) => {
+  // TODO: invalid-feedback for invalid or not matching passwords, taken usernames
+  const onSubmit = (e) => {
     e.preventDefault();
-    const { username, password, password2 } = this.state;
-    const { createMessageConnect, registerConnect } = this.props;
-    if (password !== password2) {
-      createMessageConnect({ passwordsNotMatch: 'Passwords do not match' });
+    if (form.password !== form.password2) {
+      alert('Passwords do not match');
     } else {
-      const newUser = {
-        username,
-        password,
-      };
-      registerConnect(newUser);
+      const { username, password } = form;
+      registerConnect({ username, password });
     }
   };
 
-  onChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+  const onChange = (e) => {
+    setValues({ ...form, [e.target.name]: e.target.value, });
   };
 
-  render() {
-    const { isAuthenticated } = this.props;
-    if (isAuthenticated) {
-      return <Redirect to="/" />;
-    }
-    const { username, password, password2 } = this.state;
-    return (
-      <div className="col-md-6 m-auto">
-        <div className="card card-body mt-5">
-          <h1 className="text-center">Register</h1>
-          <form onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <label htmlFor="username">
-                Username
-                <input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  id="username"
-                  onChange={this.onChange}
-                  value={username}
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">
-                Password
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  id="password"
-                  onChange={this.onChange}
-                  value={password}
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password2">
-                Confirm Password
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password2"
-                  id="password2"
-                  onChange={this.onChange}
-                  value={password2}
-                  required
-                />
-              </label>
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary">Register</button>
-            </div>
-            <p>
+  return (
+    <Col md={6} className="m-auto">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            <h1 className="text-center">Register</h1>
+          </Card.Title>
+          <Form onSubmit={onSubmit}>
+            <Form.Group controlId="fromRegisterUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Username"
+                name="username"
+                onChange={onChange}
+                value={form.username}
+              />
+            </Form.Group>
+            <Form.Group controlId="fromRegisterPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                onChange={onChange}
+                value={form.password}
+              />
+            </Form.Group>
+            <Form.Group controlId="fromRegisterConfirmPassword">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm Password"
+                name="password2"
+                onChange={onChange}
+                value={form.password2}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">Register</Button>
+            <Form.Text>
               Already have an account?
               {' '}
               <Link to="/login">Login</Link>
-            </p>
-          </form>
-        </div>
-      </div>
-    );
-  }
+            </Form.Text>
+          </Form>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
 }
 
-Register.propTypes = propTypes;
-Register.defaultProps = defaultProps;
+Register.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  registerConnect: PropTypes.func.isRequired,
+};
+Register.defaultProps = {
+  isAuthenticated: false,
+};
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps,
-  { registerConnect: register, createMessageConnect: createMessage })(Register);
+  { registerConnect: register })(Register);
