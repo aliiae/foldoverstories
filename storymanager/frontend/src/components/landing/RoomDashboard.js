@@ -37,12 +37,12 @@ class RoomDashboard extends React.Component {
       <>
         <table className="table table-hover">
           <thead>
-          <tr>
-            <th>Story</th>
-            <th>Authors</th>
-            <th>Status</th>
-            <th>Last Updated</th>
-          </tr>
+            <tr>
+              <th>Story</th>
+              <th>Authors</th>
+              <th>Status</th>
+              <th>Last Updated</th>
+            </tr>
           </thead>
           <tbody>
           {rooms.map((room) => (

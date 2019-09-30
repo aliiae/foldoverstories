@@ -16,4 +16,7 @@ class Text(models.Model):
 
     def save(self, *args, **kwargs):
         super(Text, self).save(*args, **kwargs)
-        self.room.save()  # to update the room's modified_at timestamp
+        self.room.save()  # to also update the room's "modified_at" timestamp
+
+    class Meta:
+        ordering = ('created_at',)

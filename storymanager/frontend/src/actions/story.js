@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { getRooms } from './room';
 import {
   ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN,
 } from './types';
-import { createMessage, returnErrors } from './messages';
+import { returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
 
 const getLastItemOrEmpty = (array) => {
@@ -14,9 +15,13 @@ const getLastItemOrEmpty = (array) => {
 export const getVisibleText = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
+      const lastItem = getLastItemOrEmpty(res.data);
       dispatch({
         type: GET_VISIBLE_TEXT,
-        payload: getLastItemOrEmpty(res.data).visible_text,
+        payload: {
+          visible_text: lastItem.visible_text,
+          room: lastItem.room,
+        },
       });
     }).catch((err) => {
       if (err.response.data.detail === 'Incorrect turn') {
@@ -27,6 +32,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
     });
 };
 
+// GET ROOM'S USERS
 export const getUsers = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/rooms/${roomTitle}/users/`, setupTokenConfig(getState))
     .then((res) => {
@@ -41,11 +47,11 @@ export const getUsers = (roomTitle) => (dispatch, getState) => {
 export const addText = (text, roomTitle) => (dispatch, getState) => {
   axios.post(`/api/texts/${roomTitle}/`, text, setupTokenConfig(getState))
     .then((res) => {
-      dispatch(createMessage({ addText: 'Thank you, your text has been added' }));
       dispatch({
         type: ADD_TEXT,
         payload: res.data,
       });
       dispatch(getUsers(roomTitle));
+      // dispatch(getRooms());
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

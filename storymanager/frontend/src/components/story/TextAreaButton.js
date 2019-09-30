@@ -128,7 +128,7 @@ TextAreaButton.defaultProps = defaultProps;
 const mapStateToProps = (state) => ({
   auth: state.auth,
   correctTurn: state.story.correct_turn,
-  usernames: state.story.usernames,
+  usernames: state.story.users.map(user => user.username),
 });
 
 export default connect(mapStateToProps, { addTextConnect: addText })(TextAreaButton);

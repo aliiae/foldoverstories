@@ -15,7 +15,7 @@ const defaultProps = {
   correctTurn: true,
 };
 
-class TextDisplay extends React.Component {
+class VisibleTextDisplay extends React.Component {
   componentDidMount() {
     const { getVisibleTextConnect, roomTitle } = this.props;
     getVisibleTextConnect(roomTitle);
@@ -34,12 +34,13 @@ class TextDisplay extends React.Component {
   }
 }
 
-TextDisplay.propTypes = propTypes;
-TextDisplay.defaultProps = defaultProps;
+VisibleTextDisplay.propTypes = propTypes;
+VisibleTextDisplay.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   visibleText: state.story.visible_text,
   correctTurn: state.story.correct_turn,
 });
 
-export default connect(mapStateToProps, { getVisibleTextConnect: getVisibleText })(TextDisplay);
+export default connect(mapStateToProps,
+  { getVisibleTextConnect: getVisibleText })(VisibleTextDisplay);

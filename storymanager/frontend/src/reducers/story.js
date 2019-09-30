@@ -4,17 +4,14 @@ import {
 
 const initialState = {
   visible_text: '',
-  usernames: [],
+  users: [],
   correct_turn: true,
+  room: {},
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_VISIBLE_TEXT:
-      return {
-        ...state,
-        visible_text: action.payload,
-      };
     case ADD_TEXT:
       return {
         ...state,
@@ -23,7 +20,7 @@ export default function (state = initialState, action) {
     case GET_USERS:
       return {
         ...state,
-        usernames: action.payload.map((user) => user.username),
+        users: action.payload,
       };
     case WRONG_TURN:
       return {

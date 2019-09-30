@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  ADD_ROOM_FAIL, ADD_ROOM_SUCCESS, ADD_USER_INTO_ROOM, GET_ROOMS,
+  ADD_ROOM_FAIL, ADD_ROOM_SUCCESS, ADD_USER_INTO_ROOM, GET_ROOMS, READ_ROOM_TEXTS, GET_ROOM_STATUS,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
@@ -31,6 +31,21 @@ export const addRoom = (room) => (dispatch, getState) => {
       dispatch({
         type: ADD_ROOM_FAIL,
       });
+   });
+};
+
+// GET ROOM STATUS
+export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
+  axios.get(`/api/rooms/${roomTitle}/`, setupTokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: GET_ROOM_STATUS,
+        payload: {
+          is_finished: res.data.is_finished,
+        },
+      });
+    }).catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 
@@ -46,4 +61,16 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
+};
+
+// READ (GET) ROOM TEXTS
+export const readRoomTexts = (roomTitle) => (dispatch, getState) => {
+  axios.get(`/api/rooms/${roomTitle}/read/`, setupTokenConfig(getState))
+    .then((res) => {
+      console.log(res.data);
+      dispatch({
+        type: READ_ROOM_TEXTS,
+        payload: res.data,
+      });
+    }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

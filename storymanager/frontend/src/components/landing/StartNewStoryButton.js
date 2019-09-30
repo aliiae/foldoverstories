@@ -8,6 +8,7 @@ const propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
+  history: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
@@ -24,9 +25,11 @@ class StartButton extends React.Component {
 
   onClick(e) {
     e.preventDefault();
-    const { addRoomConnect, isAuthenticated } = this.props;
+    const { addRoomConnect, isAuthenticated, history } = this.props;
     if (isAuthenticated) {
       addRoomConnect({});
+    } else {
+      history.push('/login');
     }
   }
 

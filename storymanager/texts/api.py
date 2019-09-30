@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 
-from rooms.models import Room
+from rooms.models import Room, Membership
 from texts.models import Text
 from .serializers import TextsSerializer
 
@@ -30,14 +30,26 @@ class TextsViewSet(viewsets.ModelViewSet):
         # TODO: add timeout
         room_title = self.kwargs['room_title']
         room = get_object_or_404(Room, room_title=room_title)
-
+        if room.is_finished:
+            raise PermissionDenied(detail='Story is finished')
+        user_membership = None
         is_new_user = self.request.user not in room.users.all()
         if is_new_user:
-            room.users.add(self.request.user)  # TODO: 'Join' functionality in UI and API
+            room.users.add(self.request.user)
+        else:
+            user_membership = Membership.objects.get(room=room, user=self.request.user)
+            if user_membership.has_stopped:
+                raise PermissionDenied(detail='User has finished')
+
         current_turn_user = self._get_current_turn_user(room)
         if self.request.user != current_turn_user:
             raise PermissionDenied(detail='Incorrect turn')
-
+        user_entered_their_last_text = self.request.data['is_last']
+        if user_entered_their_last_text and user_membership:
+            user_membership.has_stopped = True
+            user_membership.save()
+            if all(m.has_stopped for m in Membership.objects.filter(room=room)):
+                room.is_finished = True
         room.save()
         serializer.save(author=self.request.user, room=room)
 
