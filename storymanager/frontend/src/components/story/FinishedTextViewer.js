@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { readRoomTexts } from '../../actions/room';
 
-function FullTextReader(props) {
-  const { readRoomTextsConnect, roomTitle } = props;
+function FinishedTextViewer(props) {
+  const { readRoomTextsConnect, roomTitle, texts } = props;
 
   useEffect(() => {
     readRoomTextsConnect(roomTitle);
-  }, [props.roomTitle]);
+  }, [roomTitle]);
 
   return (
     <div className="mt-3">
       <p className="full-text">
-        {
-        props.texts.map((text) => text.full_text)
-        }
+        {texts.map((text) => <span>{text.full_text}</span>)}
       </p>
     </div>
   );
 }
 
-FullTextReader.propTypes = {
+FinishedTextViewer.propTypes = {
   roomTitle: PropTypes.string.isRequired,
   readRoomTextsConnect: PropTypes.func.isRequired,
   texts: PropTypes.arrayOf(PropTypes.shape({
@@ -30,7 +28,7 @@ FullTextReader.propTypes = {
   })),
 };
 
-FullTextReader.defaultProps = {
+FinishedTextViewer.defaultProps = {
   texts: [],
 };
 
@@ -40,4 +38,4 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps,
-  { readRoomTextsConnect: readRoomTexts })(FullTextReader);
+  { readRoomTextsConnect: readRoomTexts })(FinishedTextViewer);

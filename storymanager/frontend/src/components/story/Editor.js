@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import FullTextReader from './FullTextReader';
+import FinishedTextViewer from './FinishedTextViewer';
 import VisibleTextDisplay from './VisibleTextDisplay';
 import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
 import { getRoomStatus } from '../../actions/room';
 
 function Editor(props) {
-  const { getRoomStatusConnect } = props;
-  const roomTitle = props.match.params.id;
+  const { getRoomStatusConnect, match, roomIsFinished } = props;
+  const roomTitle = match.params.id;
 
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} | Paper Stories`;
-  }, [props.match.params.id, props.roomIsFinished]);
+  }, [match.params.id, roomIsFinished]);
 
   return (
     <div className="row justify-content-center">
       <div className="col-md-7">
         {
-          props.roomIsFinished ? (<FullTextReader roomTitle={roomTitle} />)
+          roomIsFinished ? (<FinishedTextViewer roomTitle={roomTitle} />)
             : (
               <>
                 <VisibleTextDisplay roomTitle={roomTitle} />
@@ -51,7 +51,7 @@ Editor.propTypes = {
 
 Editor.defaultProps = {
   roomIsFinished: false,
-}
+};
 
 const mapStateToProps = (state) => ({
   roomIsFinished: state.room.is_finished,
