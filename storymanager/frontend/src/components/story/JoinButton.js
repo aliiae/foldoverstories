@@ -4,31 +4,23 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { addUserIntoRoom } from '../../actions/room';
 
-class JoinButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    const { addUserIntoRoomConnect, roomTitle } = this.props;
+function JoinButton(props) {
+  const { addUserIntoRoomConnect, roomTitle, isAuthenticated } = props;
+  const onClick = () => {
     addUserIntoRoomConnect(roomTitle);
-  }
+  };
 
-  render() {
-    const { isAuthenticated, roomTitle } = this.props;
-    return (
-      <>
-        <Link
-          className="btn btn-warning btn-sm mt-3"
-          onClick={this.onClick}
-          to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
-        >
-          Join
-        </Link>
-      </>
-    );
-  }
+  return (
+    <>
+      <Link
+        className="btn btn-warning btn-sm mt-3"
+        onClick={onClick}
+        to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
+      >
+        Join
+      </Link>
+    </>
+  );
 }
 
 JoinButton.propTypes = {

@@ -35,9 +35,11 @@ class RoomUsers extends React.Component {
             {users.map((u) => (
               <li key={u.username}>
                 {`${u.username} `}
-                (
-                <Pluralize singular="text" count={u.texts_count} zero="no texts yet" />
-                )
+                <span className="text-muted">
+                  (
+                  <Pluralize singular="text" count={u.texts_count} zero="no texts yet" />
+                  )
+                </span>
               </li>
             ))}
           </ul>

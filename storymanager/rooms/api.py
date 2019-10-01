@@ -33,7 +33,9 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         if request.user.is_authenticated:
             room.users.add(request.user)
             room.save()
-            return Response({'room_title': room_title, 'user': request.user})
+            return Response(
+                {'status': 'OK', 'room_title': room_title, 'user': request.user.username}
+            )
         else:
             raise PermissionDenied(detail='User needs to login first')
 

@@ -31,7 +31,7 @@ export const addRoom = (room) => (dispatch, getState) => {
       dispatch({
         type: ADD_ROOM_FAIL,
       });
-   });
+    });
 };
 
 // GET ROOM STATUS

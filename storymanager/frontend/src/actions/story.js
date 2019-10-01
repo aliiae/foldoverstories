@@ -21,6 +21,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
         payload: {
           visible_text: lastItem.visible_text,
           room: lastItem.room,
+          correct_turn: true,
         },
       });
     }).catch((err) => {

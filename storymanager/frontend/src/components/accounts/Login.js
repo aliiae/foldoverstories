@@ -15,7 +15,7 @@ function Login(props) {
     password: '',
   });
 
-  const { loginConnect, isAuthenticated } = props;
+  const { loginConnect, isAuthenticated, history } = props;
   if (isAuthenticated) {
     return <Redirect to="/" />;
   }
@@ -24,6 +24,7 @@ function Login(props) {
     e.preventDefault();
     const { username, password } = form;
     loginConnect(username, password);
+    history.goBack();
   };
 
   const onChange = (e) => {
@@ -76,6 +77,7 @@ function Login(props) {
 Login.propTypes = {
   loginConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  history: PropTypes.object.isRequired,
 };
 Login.defaultProps = {
   isAuthenticated: false,

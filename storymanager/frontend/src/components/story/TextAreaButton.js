@@ -3,11 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import { addText } from '../../actions/story';
 import JoinButton from './JoinButton';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LoadingSpinner from '../common/LoadingSpinner';
+
+// TODO: remove user from room when clicked the 'leave room' button
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
@@ -80,19 +84,26 @@ function TextAreaButton(props) {
           style={{ resize: 'none' }}
         />
       </Form.Group>
-      <Form.Row>
-        <Button type="submit" variant="success" size="sm" className="mt-3">
-          Submit
-        </Button>
-        <Form.Check
-          // inline
-          label="This is my last input in this story"
-          type="checkbox"
-          onChange={onChangeCheckbox}
-          checked={isLastText}
-          name="isLastText"
-        />
-      </Form.Row>
+      <Row style={{ display: 'flex', 'justify-content': 'space-between' }}>
+        <Col>
+          <Button type="submit" variant="success" size="sm" className="mt-3">
+            Submit
+          </Button>
+          <Form.Check
+            inline
+            label="This is my last input in this story"
+            type="checkbox"
+            onChange={onChangeCheckbox}
+            checked={isLastText}
+            name="isLastText"
+          />
+        </Col>
+        <Col className="text-right">
+          <Button type="button" variant="danger" size="sm" className="mt-3">
+            Leave this story
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 

@@ -30,10 +30,10 @@ function Editor(props) {
       <Col md={7}>
         {roomIsFinished ? (<FinishedTextViewer roomTitle={roomTitle} />)
           : (
-            <>
-              <VisibleTextDisplay roomTitle={roomTitle} />
+            <div className="mt-3">
+              <Row><VisibleTextDisplay roomTitle={roomTitle} /></Row>
               <TextAreaButton roomTitle={roomTitle} />
-            </>
+            </div>
           )}
       </Col>
       <Col md={3}>

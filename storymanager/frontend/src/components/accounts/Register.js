@@ -12,7 +12,7 @@ import { string, object as yupObject, ref as yupRef } from 'yup';
 import { register } from '../../actions/auth';
 
 function Register(props) {
-  const { registerConnect, isAuthenticated, error } = props;
+  const { registerConnect, isAuthenticated } = props;
   if (isAuthenticated) {
     return <Redirect to="/" />;
   }
@@ -31,7 +31,6 @@ function Register(props) {
   });
   const formik = (
     <Formik
-      enableReinitialize
       initialValues={{
         username: '',
         password: '',
@@ -41,7 +40,7 @@ function Register(props) {
       onSubmit={onSubmit}
       render={(
         {
-          errors, handleChange, handleSubmit, values, status, touched,
+          errors, handleChange, handleSubmit, values, status,
         },
       ) => (
         <Form noValidate onSubmit={handleSubmit}>
@@ -53,17 +52,12 @@ function Register(props) {
               name="username"
               value={values.username}
               onChange={handleChange}
-              isInvalid={(!!touched.username && !!errors.username)
-              || (!!status && !!status.username)}
+              isInvalid={!!errors.username || (!!status && !!status.username)}
             />
             <Form.Control.Feedback type="invalid">
               {errors.username}
+              {status && status.username ? status.username : ''}
             </Form.Control.Feedback>
-            {status && status.username ? (
-              <div className="invalid-feedback">
-                {status.username}
-              </div>
-            ) : ''}
           </Form.Group>
           <Form.Group>
             <Form.Label>Password</Form.Label>
@@ -73,7 +67,7 @@ function Register(props) {
               name="password"
               value={values.password}
               onChange={handleChange}
-              isInvalid={touched.password && errors.password}
+              isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">
               {errors.password}
@@ -87,7 +81,7 @@ function Register(props) {
               name="password2"
               value={values.password2}
               onChange={handleChange}
-              isInvalid={touched.password2 && errors.password2}
+              isInvalid={!!errors.password2}
             />
             <Form.Control.Feedback type="invalid">
               {errors.password2}
