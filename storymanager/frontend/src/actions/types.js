@@ -5,6 +5,7 @@ export const CLEAR_ROOMS = 'CLEAR_ROOMS';
 export const ADD_USER_INTO_ROOM = 'ADD_USER_INTO_ROOM';
 export const READ_ROOM_TEXTS = 'READ_ROOM_TEXTS';
 export const GET_ROOM_STATUS = 'GET_ROOM_STATUS';
+export const LEAVE_ROOM = 'LEAVE_ROOM';
 
 export const GET_VISIBLE_TEXT = 'GET_VISIBLE_TEXT';
 export const ADD_TEXT = 'ADD_TEXT';

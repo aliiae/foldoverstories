@@ -1,6 +1,12 @@
 import axios from 'axios';
 import {
-  ADD_ROOM_FAIL, ADD_ROOM_SUCCESS, ADD_USER_INTO_ROOM, GET_ROOMS, READ_ROOM_TEXTS, GET_ROOM_STATUS,
+  ADD_ROOM_FAIL,
+  ADD_ROOM_SUCCESS,
+  ADD_USER_INTO_ROOM,
+  GET_ROOMS,
+  READ_ROOM_TEXTS,
+  GET_ROOM_STATUS,
+  LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
@@ -42,6 +48,7 @@ export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
         type: GET_ROOM_STATUS,
         payload: {
           is_finished: res.data.is_finished,
+          user_left_room: res.data.user_left_room,
         },
       });
     }).catch((err) => {
@@ -72,5 +79,17 @@ export const readRoomTexts = (roomTitle) => (dispatch, getState) => {
         type: READ_ROOM_TEXTS,
         payload: res.data,
       });
+    }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
+};
+
+// LEAVE ROOM
+export const leaveRoom = (roomTitle) => (dispatch, getState) => {
+  axios.post(`/api/rooms/${roomTitle}/leave/`, {}, setupTokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: LEAVE_ROOM,
+        payload: res.data,
+      });
+      dispatch(getUsers(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

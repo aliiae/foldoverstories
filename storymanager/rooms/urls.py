@@ -1,7 +1,7 @@
 from django.urls import re_path
 from rest_framework import routers
 
-from .api import RoomsViewSet, RoomUsersAPI, RoomReadViewSet
+from .api import RoomsViewSet, RoomUsersAPI, RoomReadViewSet, LeaveRoomAPI
 
 router = routers.DefaultRouter()
 router.register('api/rooms', RoomsViewSet, 'rooms')
@@ -10,5 +10,5 @@ router.register(r'api/rooms/(?P<room_title>.+)/read', RoomReadViewSet, 'room_rea
 urlpatterns = router.urls
 urlpatterns += [
     re_path(r'api/rooms/(?P<room_title>.+)/users', RoomUsersAPI.as_view(), name='room_users'),
-    # re_path(r'api/rooms/(?P<room_title>.+)/finish', RoomUsersAPI.as_view(), name='room_users')
+    re_path(r'api/rooms/(?P<room_title>.+)/leave', LeaveRoomAPI.as_view(), name='leave_room')
 ]

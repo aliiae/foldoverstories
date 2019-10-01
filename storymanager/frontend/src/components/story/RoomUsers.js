@@ -35,10 +35,15 @@ class RoomUsers extends React.Component {
             {users.map((u) => (
               <li key={u.username}>
                 {`${u.username} `}
-                <span className="text-muted">
+                <span className="text-muted small">
                   (
-                  <Pluralize singular="text" count={u.texts_count} zero="no texts yet" />
-                  )
+                  <Pluralize
+                    singular="contribution"
+                    count={u.texts_count}
+                    zero="no contributions"
+                  />
+                  {' '}
+                  to the story)
                 </span>
               </li>
             ))}

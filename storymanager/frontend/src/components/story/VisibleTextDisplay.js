@@ -8,11 +8,13 @@ const propTypes = {
   getVisibleTextConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   correctTurn: PropTypes.bool,
+  userFinished: PropTypes.bool,
 };
 
 const defaultProps = {
   visibleText: '',
   correctTurn: true,
+  userFinished: false,
 };
 
 class VisibleTextDisplay extends React.Component {
@@ -22,19 +24,20 @@ class VisibleTextDisplay extends React.Component {
   }
 
   render() {
-    const { visibleText, correctTurn } = this.props;
+    const { visibleText, correctTurn, userFinished } = this.props;
+    if (userFinished) {
+      return '';
+    }
     if (!visibleText) {
       return correctTurn ? 'Start your story!' : '';
     }
     return (
-      <div className="mt-3">
-        <p className="visible-text lead">
-          <span>
-            &hellip;
-            {visibleText}
-          </span>
-        </p>
-      </div>
+      <p className="visible-text lead">
+        <span className="visible-text">
+          &hellip;
+          {visibleText}
+        </span>
+      </p>
     );
   }
 }
@@ -45,6 +48,7 @@ VisibleTextDisplay.defaultProps = defaultProps;
 const mapStateToProps = (state) => ({
   visibleText: state.story.visible_text,
   correctTurn: state.story.correct_turn,
+  userFinished: state.room.user_left_room,
 });
 
 export default connect(mapStateToProps,

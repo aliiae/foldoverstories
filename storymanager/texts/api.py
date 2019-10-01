@@ -20,14 +20,16 @@ class TextsViewSet(viewsets.ModelViewSet):
         is_new_user = self.request.user not in room.users.all()
         if is_new_user:  # new users can view anything
             return Text.objects.filter(room__room_title=room_title)
-
+        user_membership = Membership.objects.get(room=room, user=self.request.user)
+        if user_membership.has_stopped:  # user has previously left the room, cannot view anymore
+            raise PermissionDenied(detail='Left room')
         current_turn_user = self._get_current_turn_user(room)
         if self.request.user != current_turn_user:  # existing users can view only during their turn
-            raise PermissionDenied(detail='Incorrect turn')
+            raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         return Text.objects.filter(room__room_title=room_title)
 
     def perform_create(self, serializer: TextsSerializer):
-        # TODO: add timeout
+        # TODO: add timeout?
         room_title = self.kwargs['room_title']
         room = get_object_or_404(Room, room_title=room_title)
         if room.is_finished:
@@ -43,13 +45,7 @@ class TextsViewSet(viewsets.ModelViewSet):
 
         current_turn_user = self._get_current_turn_user(room)
         if self.request.user != current_turn_user:
-            raise PermissionDenied(detail='Incorrect turn')
-        user_entered_their_last_text = self.request.data['is_last']
-        if user_entered_their_last_text and user_membership:
-            user_membership.has_stopped = True
-            user_membership.save()
-            if all(m.has_stopped for m in Membership.objects.filter(room=room)):
-                room.is_finished = True
+            raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         room.save()
         serializer.save(author=self.request.user, room=room)
 
@@ -69,7 +65,10 @@ class TextsViewSet(viewsets.ModelViewSet):
         prev_user_index = index_of(prev_user, users)
         if prev_user_index is None:
             return self._default_turn_user()
-
         current_turn_user_index = (prev_user_index + 1) % room.users.count()
         current_turn_user = users[current_turn_user_index]
         return current_turn_user
+
+    @staticmethod
+    def _wrong_turn_error_detail(current_turn_user):
+        return {'current_turn_username': current_turn_user.username}

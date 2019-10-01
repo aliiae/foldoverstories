@@ -4,11 +4,11 @@ import {
   ADD_USER_INTO_ROOM,
   CLEAR_ROOMS,
   GET_ROOM_STATUS,
-  GET_ROOMS,
+  GET_ROOMS, LEAVE_ROOM,
   READ_ROOM_TEXTS,
 } from '../actions/types';
 
-const initialState = { rooms: [], texts: [], is_finished: false };
+const initialState = { rooms: [], user_left_room: false, texts: [], is_finished: false };
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -18,6 +18,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ...action.payload,
+      };
+    case LEAVE_ROOM:
+      return {
+        ...state,
+        user_left_room: true,
       };
     case READ_ROOM_TEXTS:
       return {

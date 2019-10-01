@@ -25,8 +25,8 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
         },
       });
     }).catch((err) => {
-      if (err.response.data.detail === 'Incorrect turn') {
-        dispatch({ type: WRONG_TURN });
+      if (err.response.data.current_turn_username) {
+        dispatch({ type: WRONG_TURN, payload: err.response.data.current_turn_username });
       } else {
         dispatch(returnErrors(err.response.data, err.response.status));
       }

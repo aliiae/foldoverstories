@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework.fields import CurrentUserDefault
+
 from texts.models import Text
-from .models import Room
+from .models import Room, Membership
 
 
 class RoomUsersSerializer(serializers.ModelSerializer):
@@ -14,10 +16,16 @@ class RoomUsersSerializer(serializers.ModelSerializer):
 
 class RoomsSerializer(serializers.ModelSerializer):
     users = RoomUsersSerializer(read_only=True, many=True)
+    user_left_room = serializers.SerializerMethodField('did_user_leave_room')
+
+    def did_user_leave_room(self, obj):  # user_left_room
+        from rest_framework.generics import get_object_or_404
+        user_membership = get_object_or_404(Membership, room=obj, user=self.context['request'].user)
+        return user_membership.has_stopped
 
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = ('room_title', 'users', 'is_finished', 'modified_at', 'user_left_room')
 
 
 class RoomReadSerializer(serializers.ModelSerializer):

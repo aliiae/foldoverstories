@@ -7,35 +7,42 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import { addText } from '../../actions/story';
+import { leaveRoom } from '../../actions/room';
 import JoinButton from './JoinButton';
-import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { authDefaultProp, authPropType } from '../common/commonPropTypes';
+import LeftRoomMessage from './LeftRoomMessage';
+import WaitingForTurnMessage from './WaitingForTurnMessage';
 
 // TODO: remove user from room when clicked the 'leave room' button
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
+  leaveRoomConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   correctTurn: PropTypes.bool.isRequired,
+  userFinished: PropTypes.bool,
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
+  currentTurnUsername: PropTypes.string,
 };
 
 const defaultProps = {
   usernames: [],
+  userFinished: false,
   auth: authDefaultProp,
+  currentTurnUsername: null,
 };
 
 function TextAreaButton(props) {
   const [text, setText] = useState('');
-  const [isLastText, setIsLastText] = useState(false);
   const {
-    addTextConnect, roomTitle, auth, usernames, correctTurn,
+    addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
+    currentTurnUsername,
   } = props;
 
   const resetInputFields = () => {
     setText('');
-    setIsLastText(false);
   };
 
   const onSubmit = (e) => {
@@ -44,7 +51,6 @@ function TextAreaButton(props) {
     const textPost = {
       hidden_text: text.slice(0, lastNewLineIndex),
       visible_text: text.slice(lastNewLineIndex + 1),
-      is_last: isLastText,
     };
     addTextConnect(textPost, roomTitle);
     resetInputFields();
@@ -54,8 +60,8 @@ function TextAreaButton(props) {
     setText(e.target.value);
   };
 
-  const onChangeCheckbox = (e) => {
-    setIsLastText(e.target.checked);
+  const onClickLeave = () => {
+    leaveRoomConnect(roomTitle);
   };
 
   if (auth === null) {
@@ -68,8 +74,10 @@ function TextAreaButton(props) {
   if (!isAuthenticated || !usernames.includes(user.username)) {
     return (<JoinButton roomTitle={roomTitle} />);
   }
+  if (userFinished) {
+    return <LeftRoomMessage />;
+  }
 
-  const waitingForTurn = <p>Waiting for the next author&hellip;</p>;
   const placeholder = 'Type your text here. Remember that only the last line will be visible!';
   const submitForm = (
     <Form onSubmit={onSubmit}>
@@ -84,22 +92,14 @@ function TextAreaButton(props) {
           style={{ resize: 'none' }}
         />
       </Form.Group>
-      <Row style={{ display: 'flex', 'justify-content': 'space-between' }}>
+      <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Col>
-          <Button type="submit" variant="success" size="sm" className="mt-3">
+          <Button type="submit" variant="success" size="sm">
             Submit
           </Button>
-          <Form.Check
-            inline
-            label="This is my last input in this story"
-            type="checkbox"
-            onChange={onChangeCheckbox}
-            checked={isLastText}
-            name="isLastText"
-          />
         </Col>
         <Col className="text-right">
-          <Button type="button" variant="danger" size="sm" className="mt-3">
+          <Button type="button" variant="danger" size="sm" onClick={onClickLeave}>
             Leave this story
           </Button>
         </Col>
@@ -109,7 +109,8 @@ function TextAreaButton(props) {
 
   return (
     <>
-      {correctTurn ? submitForm : waitingForTurn}
+      {correctTurn ? submitForm
+        : <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />}
     </>
   );
 }
@@ -121,6 +122,11 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   correctTurn: state.story.correct_turn,
   usernames: state.story.users.map((user) => user.username),
+  userFinished: state.room.user_left_room,
+  currentTurnUsername: state.story.current_turn_username,
 });
 
-export default connect(mapStateToProps, { addTextConnect: addText })(TextAreaButton);
+export default connect(mapStateToProps,
+  { addTextConnect: addText, leaveRoomConnect: leaveRoom })(
+  TextAreaButton,
+);
