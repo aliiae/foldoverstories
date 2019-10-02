@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Emoji(emoji, label, title) {
+function Emoji({ emoji, label, title }) {
   return (
     <span title={title}>
       <span
@@ -15,9 +15,9 @@ function Emoji(emoji, label, title) {
 }
 
 export default function RoomStatus({ room }) {
-  const bookEmoji = Emoji('📕', 'open book', 'Story is finished');
-  const writingEmoji = Emoji('✍️', 'writing hand', 'Your turn to write!');
-  const hourglassEmoji = Emoji('⏳', 'hourglass', 'Waiting for other authors');
+  const bookEmoji = <Emoji emoji="📕" label="open book" title="Story is finished" />;
+  const writingEmoji = <Emoji emoji="️️✍️" label="writing hand" title="Your turn to write!" />;
+  const hourglassEmoji = <Emoji emoji="⏳" label="hourglass" title="Waiting for other authors" />;
 
   if (room.is_finished) {
     return bookEmoji;

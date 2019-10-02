@@ -1,5 +1,5 @@
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
 } from '../actions/types';
 
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   correct_turn: true,
   room: null,
   current_turn_username: null,
+  last_turn: false,
 };
 
 export default function (state = initialState, action) {
@@ -28,6 +29,11 @@ export default function (state = initialState, action) {
         ...state,
         current_turn_username: action.payload,
         correct_turn: false,
+      };
+    case LAST_TURN: // TODO
+      return {
+        ...state,
+        last_turn: true,
       };
     default:
       return state;

@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 
 import { logout } from '../../actions/auth';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
+import NavLink from 'react-bootstrap/NavLink';
 
 const propTypes = {
   auth: authPropType,

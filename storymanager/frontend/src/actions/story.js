@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { getRooms } from './room';
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './auth';
@@ -27,6 +26,8 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
     }).catch((err) => {
       if (err.response.data.current_turn_username) {
         dispatch({ type: WRONG_TURN, payload: err.response.data.current_turn_username });
+      } else if (err.response.data.last_turn) {
+        dispatch({ type: LAST_TURN });
       } else {
         dispatch(returnErrors(err.response.data, err.response.status));
       }
@@ -53,6 +54,6 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
         payload: res.data,
       });
       dispatch(getUsers(roomTitle));
-      // dispatch(getRooms());
+      dispatch(getVisibleText(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

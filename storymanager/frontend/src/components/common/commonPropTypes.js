@@ -11,4 +11,9 @@ export const authPropType = PropTypes.shape(
   },
 );
 
+export const textsPropType = PropTypes.arrayOf(PropTypes.shape({
+  full_text: PropTypes.string,
+  username: PropTypes.string,
+}));
+
 export const authDefaultProp = { isAuthenticated: false, token: '', user: {} };

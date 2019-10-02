@@ -11,6 +11,7 @@ export const GET_VISIBLE_TEXT = 'GET_VISIBLE_TEXT';
 export const ADD_TEXT = 'ADD_TEXT';
 export const GET_USERS = 'GET_USERS';
 export const WRONG_TURN = 'WRONG_TURN';
+export const LAST_TURN = 'LAST_TURN';
 
 export const GET_ERRORS = 'GET_ERRORS';
 

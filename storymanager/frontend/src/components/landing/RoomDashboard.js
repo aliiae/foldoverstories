@@ -26,21 +26,24 @@ function RoomDashboard(props) {
     <Table hover>
       <thead>
         <tr>
-          <th>Story</th>
-          <th>Authors</th>
-          <th>Status</th>
-          <th>Last Updated</th>
+          <th scope="col">Story</th>
+          <th scope="col">Authors</th>
+          <th scope="col" className="text-center">Status</th>
+          <th scope="col">Last Updated</th>
         </tr>
       </thead>
       <tbody>
         {rooms.map((room) => (
-          <tr key={room.room_title}>
+          <tr
+            key={room.room_title}
+            className={room.user_can_write_now ? 'table-success' : 'table-active'}
+          >
             <td>{<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}</td>
             <td>
               {room.users.map((user) => user.username)
                 .reduce((prev, curr) => [prev, ', ', curr])}
             </td>
-            <td><RoomStatus room={room} /></td>
+            <td className="text-center"><RoomStatus room={room} /></td>
             <td>{formatTimeStamp(room.modified_at)}</td>
           </tr>
         ))}
