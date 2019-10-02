@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { getRooms } from '../../actions/room';
+import RoomStatus from './RoomStatus';
 
 const propTypes = {
   getRoomsConnect: PropTypes.func.isRequired,
@@ -33,8 +34,7 @@ class RoomDashboard extends React.Component {
   render() {
     const { rooms } = this.props;
     if (rooms.length === 0) return '';
-    const bookEmoji = <span role="img" aria-label="open book">&#128214;</span>;
-    const writingEmoji = <span role="img" aria-label="writing hand">&#9997;</span>;
+
     return (
       <Table striped hover>
         <thead>
@@ -53,7 +53,7 @@ class RoomDashboard extends React.Component {
                 {room.users.map((user) => user.username)
                   .reduce((prev, curr) => [prev, ', ', curr])}
               </td>
-              <td>{room.is_finished ? bookEmoji : writingEmoji}</td>
+              <td><RoomStatus room={room} /></td>
               <td>{formatTimeStamp(room.modified_at)}</td>
             </tr>
           ))}

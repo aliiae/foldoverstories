@@ -48,4 +48,5 @@ class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     has_stopped = models.BooleanField(default=False)
+    can_write_now = models.BooleanField(default=True)
     joined_at = models.DateField(auto_now_add=True)

@@ -25,6 +25,7 @@ class TextsViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(detail='Left room')
         current_turn_user = self._get_current_turn_user(room)
         if self.request.user != current_turn_user:  # existing users can view only during their turn
+            user_membership.can_write_now = False
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         return Text.objects.filter(room__room_title=room_title)
 
@@ -34,17 +35,16 @@ class TextsViewSet(viewsets.ModelViewSet):
         room = get_object_or_404(Room, room_title=room_title)
         if room.is_finished:
             raise PermissionDenied(detail='Story is finished')
-        user_membership = None
         is_new_user = self.request.user not in room.users.all()
         if is_new_user:
             room.users.add(self.request.user)
-        else:
-            user_membership = Membership.objects.get(room=room, user=self.request.user)
-            if user_membership.has_stopped:
-                raise PermissionDenied(detail='User has finished')
+        user_membership = Membership.objects.get(room=room, user=self.request.user)
+        if user_membership.has_stopped:
+            raise PermissionDenied(detail='User has finished')
 
         current_turn_user = self._get_current_turn_user(room)
         if self.request.user != current_turn_user:
+            user_membership.can_write_now = False
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         room.save()
         serializer.save(author=self.request.user, room=room)
@@ -61,12 +61,14 @@ class TextsViewSet(viewsets.ModelViewSet):
         users = room.users.all().order_by('date_joined')
         if room.texts.count() == 0:
             return self._default_turn_user()
-        prev_user = room.texts.last().author
-        prev_user_index = index_of(prev_user, users)
-        if prev_user_index is None:
+        prev_turn_user = room.texts.last().author
+        prev_turn_user_index = index_of(prev_turn_user, users)
+        if prev_turn_user_index is None:
             return self._default_turn_user()
-        current_turn_user_index = (prev_user_index + 1) % room.users.count()
+        current_turn_user_index = (prev_turn_user_index + 1) % room.users.count()
         current_turn_user = users[current_turn_user_index]
+        current_turn_membership = Membership.objects.get(room=room, user=current_turn_user)
+        current_turn_membership.can_write_now = True
         return current_turn_user
 
     @staticmethod

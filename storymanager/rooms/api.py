@@ -30,14 +30,11 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
     def post(self, request, *args, **kwargs):
         room_title = self.kwargs['room_title']
         room = get_object_or_404(Room, room_title=room_title)
-        if request.user.is_authenticated:
-            room.users.add(request.user)
-            room.save()
-            return Response(
-                {'status': 'OK', 'room_title': room_title, 'user': request.user.username}
-            )
-        else:
+        if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
+        room.users.add(request.user)
+        room.save()
+        return Response(status=200)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, *kwargs)
@@ -55,16 +52,18 @@ class LeaveRoomAPI(generics.GenericAPIView):
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
 
-        user_membership = Membership.objects.get(room=room, user=self.request.user)
+        room_memberships = Membership.objects.filter(room=room).all()
+        user_membership = room_memberships.get(user=self.request.user)
         if not user_membership:
             raise ValidationError(detail='User has not joined the room')
-        if all(m.has_stopped for m in Membership.objects.filter(room=room)):  # all authors left
-            room.is_finished = True
-            room.save()
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
             return Response(status=204)
         user_membership.has_stopped = True
+        user_membership.can_write_now = False
         user_membership.save()
+        if all(membership.has_stopped for membership in room_memberships):  # all authors left
+            room.is_finished = True
+            room.save()
         return Response(status=200)
 
 
