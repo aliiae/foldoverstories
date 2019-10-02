@@ -61,13 +61,27 @@ class TextsViewSet(viewsets.ModelViewSet):
         users = room.users.all().order_by('date_joined')
         if room.texts.count() == 0:
             return self._default_turn_user()
+        if users.count() == 1:
+            return users[0]
         prev_turn_user = room.texts.last().author
         prev_turn_user_index = index_of(prev_turn_user, users)
         if prev_turn_user_index is None:
             return self._default_turn_user()
-        current_turn_user_index = (prev_turn_user_index + 1) % room.users.count()
+
+        step_in_queue = 1  # skip users who left
+        current_turn_user_index = (prev_turn_user_index + step_in_queue) % users.count()
         current_turn_user = users[current_turn_user_index]
         current_turn_membership = Membership.objects.get(room=room, user=current_turn_user)
+        while current_turn_membership.has_stopped and step_in_queue <= users.count():
+            step_in_queue += 1
+            current_turn_user_index = (prev_turn_user_index + step_in_queue) % users.count()
+            current_turn_user = users[current_turn_user_index]
+            current_turn_membership = Membership.objects.get(room=room, user=current_turn_user)
+        if step_in_queue == users.count():  # everyone finished except for current user
+            if prev_turn_user == current_turn_user == self.request.user and users.count() > 1:
+                room.is_finished = True
+                room.save()
+                return None
         current_turn_membership.can_write_now = True
         return current_turn_user
 

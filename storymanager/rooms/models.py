@@ -2,6 +2,7 @@ import random
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
 
 from rooms.utils import ADJECTIVES, NOUNS
 
@@ -40,8 +41,14 @@ class Room(models.Model):
                                   primary_key=True)
     users = models.ManyToManyField(User, related_name='rooms', blank=True, through='Membership')
     is_finished = models.BooleanField(default=False)
+    finished_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.is_finished:
+            self.finished_at = timezone.now()
+        super(Room, self).save(*args, **kwargs)
 
 
 class Membership(models.Model):

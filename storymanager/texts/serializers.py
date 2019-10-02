@@ -8,7 +8,7 @@ from .models import Text
 class TextsRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ('room_title', 'is_finished',)
+        fields = ('room_title', 'is_finished')
 
 
 class TextsFullSerializer(serializers.ModelSerializer):

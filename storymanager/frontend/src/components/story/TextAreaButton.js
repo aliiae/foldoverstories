@@ -13,6 +13,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
+import LeaveRoomButton from './LeaveRoomButton';
 
 // TODO: remove user from room when clicked the 'leave room' button
 
@@ -98,19 +99,25 @@ function TextAreaButton(props) {
             Submit
           </Button>
         </Col>
-        <Col className="text-right">
-          <Button type="button" variant="danger" size="sm" onClick={onClickLeave}>
-            Leave this story
-          </Button>
+        <Col className="float-right text-right">
+          <LeaveRoomButton onClick={onClickLeave} />
         </Col>
       </Row>
     </Form>
   );
 
+  const waitingMessage = (
+    <>
+      <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
+      <Col className="float-right text-right">
+        <LeaveRoomButton onClick={onClickLeave} />
+      </Col>
+    </>
+  );
+
   return (
     <>
-      {correctTurn ? submitForm
-        : <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />}
+      {correctTurn ? submitForm : waitingMessage}
     </>
   );
 }

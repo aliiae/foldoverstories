@@ -30,7 +30,7 @@ class RoomsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ('room_title', 'users', 'is_finished', 'modified_at',
+        fields = ('room_title', 'users', 'is_finished', 'finished_at', 'modified_at',
                   'user_left_room', 'user_can_write_now')
 
 
@@ -46,4 +46,4 @@ class RoomReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Text
-        fields = ('full_text', 'username',)
+        fields = ('full_text', 'username')

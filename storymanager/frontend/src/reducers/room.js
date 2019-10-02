@@ -8,7 +8,9 @@ import {
   READ_ROOM_TEXTS,
 } from '../actions/types';
 
-const initialState = { rooms: [], user_left_room: false, texts: [], is_finished: false };
+const initialState = {
+  rooms: [], user_left_room: false, texts: [], is_finished: false, finished_at: null,
+};
 
 export default function (state = initialState, action) {
   switch (action.type) {

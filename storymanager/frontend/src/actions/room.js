@@ -49,6 +49,7 @@ export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
         payload: {
           is_finished: res.data.is_finished,
           user_left_room: res.data.user_left_room,
+          finished_at: res.data.finished_at,
         },
       });
     }).catch((err) => {
@@ -74,7 +75,6 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
 export const readRoomTexts = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/rooms/${roomTitle}/read/`, setupTokenConfig(getState))
     .then((res) => {
-      console.log(res.data);
       dispatch({
         type: READ_ROOM_TEXTS,
         payload: res.data,
