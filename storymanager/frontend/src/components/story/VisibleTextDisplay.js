@@ -28,14 +28,16 @@ class VisibleTextDisplay extends React.Component {
     if (userFinished) {
       return '';
     }
-    if (!visibleText) {
-      return correctTurn ? 'Start your story!' : '';
-    }
     return (
       <p className="visible-text lead">
         <span className="visible-text">
-          &hellip;
-          {visibleText}
+          {visibleText ? (
+            <span>
+              &hellip;
+              {visibleText}
+            </span>
+          )
+            : <span className="text-muted">Start your story!</span>}
         </span>
       </p>
     );

@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Tabs from 'react-bootstrap/Tabs';
+import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
 import { readRoomTexts } from '../../actions/room';
 import { formatTimeStampDateOnly } from '../common/dateFormatters';
 import ShareButtons from './ShareButtons';
 import { textsPropType } from '../common/commonPropTypes';
-import Nav from 'react-bootstrap/Nav';
 
 function TextTabs({ texts, usernames, finishedAt }) {
   return (
@@ -29,9 +28,11 @@ function TextTabs({ texts, usernames, finishedAt }) {
       <div>
         <Tab.Content>
           <Tab.Pane eventKey="full">
-            <p className="full-text">
-              {texts.map((text, i) => <span key={`${text.username}_${i}`}>{text.full_text}</span>)}
-            </p>
+            <div className="paper p-2">
+              <p className="full-text">
+                {texts.map((text) => text.full_text).join(' ')}
+              </p>
+            </div>
           </Tab.Pane>
           <Tab.Pane eventKey="lines">
             <TextLines texts={texts} />
@@ -44,16 +45,19 @@ function TextTabs({ texts, usernames, finishedAt }) {
 
 function TextLines({ texts }) {
   return (
-    <Table className="table-sm">
-      <tbody>
-      {texts.map((text, i) => (
-        <tr key={text.username + i}>
-          <td className="text-muted" style={{ width: '5em', border: 'none' }}>{`${text.username}:`}</td>
-          <td style={{ border: 'none' }}>{text.full_text}</td>
-        </tr>
-      ))}
-      </tbody>
-    </Table>
+    <div className="paper p-2">
+      <Table className="table-sm">
+        <tbody>
+        {texts.map((text, i) => (
+          <tr key={text.username + i}>
+            <td className="text-muted"
+                style={{ width: '5em', border: 'none' }}>{`${text.username}:`}</td>
+            <td style={{ border: 'none' }}>{text.full_text}</td>
+          </tr>
+        ))}
+        </tbody>
+      </Table>
+    </div>
   );
 }
 
@@ -62,11 +66,11 @@ function StoryHeadline({ usernames, dateISOString }) {
     <p className="h5">
       Story by
       {` ${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`}
-      <p className="small text-muted">
+      <span className="small text-muted" style={{ display: 'block' }}>
         Finished on
         {' '}
         {formatTimeStampDateOnly(dateISOString)}
-      </p>
+      </span>
     </p>
   );
 }

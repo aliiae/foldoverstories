@@ -7,6 +7,7 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS,
 } from './types';
+import { getRooms } from './room';
 
 export const setupTokenConfig = (getState) => {
   const { token } = getState().auth;
@@ -52,6 +53,7 @@ export const login = (username, password) => (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
+      dispatch(getRooms());
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));

@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 
 import RoomDashboard from './RoomDashboard';
 import StartButton from './StartNewStoryButton';
+import { websiteTitle } from '../../settings';
 
 export default function Landing() {
-  const title = 'Paper Stories';
+  useEffect(() => {
+    document.title = `${websiteTitle}`;
+  });
+
   return (
     <div>
-      <Jumbotron>
-        <h1 className="display-3">{`Welcome to ${title} !`}</h1>
+      <Jumbotron className="mt-3 paper">
+        <h1 className="display-3">{`Welcome to ${websiteTitle} !`}</h1>
         <p className="lead">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt, nulla quis
           porttitor

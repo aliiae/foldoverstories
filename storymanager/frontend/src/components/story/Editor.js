@@ -10,6 +10,7 @@ import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
 import { getRoomStatus } from '../../actions/room';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { websiteTitle } from '../../settings';
 
 function Editor(props) {
   const {
@@ -19,8 +20,8 @@ function Editor(props) {
 
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
-    document.title = `${roomTitle} | Paper Stories`;
-  }, [match.params.id, roomIsFinished, userIsLoading]);
+    document.title = `${roomTitle} | ${websiteTitle}`;
+  }, []);
 
   if (userIsLoading) {
     return <LoadingSpinner />;
@@ -30,8 +31,8 @@ function Editor(props) {
       <Col md={7}>
         {roomIsFinished ? (<FinishedTextViewer roomTitle={roomTitle} />)
           : (
-            <div className="mt-3">
-              <Row><VisibleTextDisplay roomTitle={roomTitle} /></Row>
+            <div className="mt-3 p-3 paper editor">
+              <VisibleTextDisplay roomTitle={roomTitle} />
               <TextAreaButton roomTitle={roomTitle} />
             </div>
           )}

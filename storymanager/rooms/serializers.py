@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from rest_framework.fields import CurrentUserDefault
 from rest_framework.generics import get_object_or_404
 
 from texts.models import Text

@@ -1,0 +1,53 @@
+.logo-text {
+  text-transform: uppercase;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 4em;
+  line-height: 4em;
+  background-color: #f5f5f5;
+}
+
+.editor {
+  background-color: #ffffff;
+}
+
+.jumbotron {
+  background-color: #ffffff;
+  border-radius: 0;
+}
+
+/* Paper Effect from http://cssdeck.com/labs/pure-css-folded-paper-effect */
+.paper {
+  background-image: -webkit-linear-gradient(hsla(0, 0%, 0%, .025), hsla(0, 0%, 100%, .05) 33%, hsla(0, 0%, 0%, .05) 33%, hsla(0, 0%, 100%, .05) 67%, hsla(0, 0%, 0%, .05) 67%, hsla(0, 0%, 100%, .025));
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+/*.paper:after,*/
+/*.paper:before {*/
+/*  bottom: .1em;*/
+/*  box-shadow: 0 0 .5em .5em hsla(0, 0%, 0%, .25);*/
+/*  content: '';*/
+/*  height: 3em;*/
+/*  position: absolute;*/
+/*  width: 80%;*/
+/*  z-index: -1;*/
+/*}*/
+
+/*.paper:after {*/
+/*  right: 1em;*/
+/*  -webkit-transform: rotate(3deg);*/
+/*  -webkit-transform-origin: 100% 100%;*/
+/*}*/
+
+/*.paper:before {*/
+/*  left: 1em;*/
+/*  -webkit-transform: rotate(-3deg);*/
+/*  -webkit-transform-origin: 0% 100%;*/
+/*}*/
+
+​

@@ -7,14 +7,14 @@ from rest_framework.generics import get_object_or_404
 
 from rooms.models import Room, Membership
 from texts.models import Text
-from .serializers import TextsSerializer
+from .serializers import TextsSerializer, TextsFullSerializer
 
 
 class TextsViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = TextsSerializer
+    serializer_class = TextsFullSerializer
 
     def get_queryset(self):
         room_title = self.kwargs['room_title']
@@ -35,8 +35,7 @@ class TextsViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         return Text.objects.filter(room__room_title=room_title)
 
-    def perform_create(self, serializer: TextsSerializer):
-        # TODO: add timeout?
+    def perform_create(self, serializer: TextsFullSerializer):
         room_title = self.kwargs['room_title']
         room = get_object_or_404(Room, room_title=room_title)
         if room.is_finished:

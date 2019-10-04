@@ -1,48 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Provider as AlertProvider } from 'react-alert';
-import AlertTemplate from 'react-alert-template-basic';
-import { Provider } from 'react-redux';
+import {
+  BrowserRouter, Route, Switch, Redirect,
+} from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
+import { Provider } from 'react-redux';
 import Header from './layout/Header';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
-import PrivateRoute from './common/PrivateRoute';
 import Landing from './landing/Landing';
-// import Alerts from './layout/Alerts';
 import Editor from './story/Editor';
+import Footer from './layout/Footer';
 import store from '../store';
 import { loadUser } from '../actions/auth';
 
-const alertOptions = {
-  timeout: 3000,
-  position: 'top center',
-};
+function App() {
+  useEffect(() => store.dispatch(loadUser()), []);
 
-class App extends React.Component {
-  componentDidMount() {
-    store.dispatch(loadUser());
-  }
-
-  render() {
-    return (
-      <Provider store={store}>
-        <BrowserRouter>
-          <Header />
-          <div className="container">
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route exact path="/story/:id" component={Editor} />
-              <Route exact path="/story" component={() => (<Redirect to="/" />)} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </Provider>
-    );
-  }
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <Container>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/story/:id" component={Editor} />
+            <Route exact path="/story" component={() => (<Redirect to="/" />)} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+          </Switch>
+        </Container>
+        <Footer />
+      </BrowserRouter>
+    </Provider>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
