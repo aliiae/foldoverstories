@@ -10,4 +10,4 @@ webpack.config.js
 package*
 /storymanager/rooms/migrations/*
 /storymanager/texts/migrations/*
-*/.pyc
+/storymanager/*/__pycache__/*

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
@@ -19,39 +19,38 @@ const defaultProps = {
   users: [],
 };
 
-class RoomUsers extends React.Component {
-  componentDidMount() {
-    const { getUsersConnect, roomTitle } = this.props;
+function RoomUsers(props) {
+  const { getUsersConnect, roomTitle } = props;
+  useEffect(() => {
     getUsersConnect(roomTitle);
-  }
+  }, []);
 
-  render() {
-    const { users } = this.props;
-    return (
-      <Card className="mt-3">
-        <Card.Header>Authors</Card.Header>
-        <Card.Body>
-          <ul className="list-unstyled card-text">
-            {users.map((u) => (
-              <li key={u.username}>
-                {`${u.username} `}
-                <span className="text-muted small">
+
+  const { users } = props;
+  return (
+    <Card className="mt-3">
+      <Card.Header>Authors</Card.Header>
+      <Card.Body>
+        <ul className="list-unstyled card-text">
+          {users.map((u) => (
+            <li key={u.username}>
+              {`${u.username} `}
+              <span className="text-muted small">
                   (
                   <Pluralize
                     singular="contribution"
                     count={u.texts_count}
                     zero="no contributions"
                   />
-                  {' '}
-                  to the story)
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Card.Body>
-      </Card>
-    );
-  }
+                {' '}
+                to the story)
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Card.Body>
+    </Card>
+  );
 }
 
 RoomUsers.propTypes = propTypes;

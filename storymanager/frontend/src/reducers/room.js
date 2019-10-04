@@ -9,7 +9,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  rooms: [], user_left_room: false, texts: [], is_finished: false, finished_at: null,
+  rooms: {}, user_left_room: false, texts: [], is_finished: false, finished_at: null,
 };
 
 export default function (state = initialState, action) {

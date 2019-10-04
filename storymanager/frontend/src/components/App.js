@@ -21,16 +21,18 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Header />
-        <Container>
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/story/:id" component={Editor} />
-            <Route exact path="/story" component={() => (<Redirect to="/" />)} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-          </Switch>
-        </Container>
+        <div style={{ minHeight: '100vh' }}>
+          <Header />
+          <Container>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/story/:id" component={Editor} />
+              <Route exact path="/story" component={() => (<Redirect to="/" />)} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+            </Switch>
+          </Container>
+        </div>
         <Footer />
       </BrowserRouter>
     </Provider>

@@ -31,7 +31,7 @@ StartButton.propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
-  history: PropTypes.objectOf(PropTypes.object).isRequired,
+  history: PropTypes.object.isRequired,
 };
 StartButton.defaultProps = {
   isAuthenticated: false,

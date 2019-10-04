@@ -3,17 +3,17 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 
 import RoomDashboard from './RoomDashboard';
 import StartButton from './StartNewStoryButton';
-import { websiteTitle } from '../../settings';
+import { WEBSITE_TITLE } from '../../settings';
 
 export default function Landing() {
   useEffect(() => {
-    document.title = `${websiteTitle}`;
+    document.title = `${WEBSITE_TITLE}`;
   });
 
   return (
     <div>
       <Jumbotron className="mt-3 paper">
-        <h1 className="display-3">{`Welcome to ${websiteTitle} !`}</h1>
+        <h1 className="display-3">{`Welcome to ${WEBSITE_TITLE} !`}</h1>
         <p className="lead">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt, nulla quis
           porttitor

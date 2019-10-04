@@ -24,7 +24,8 @@
         "allowAfterThis": true
       }
     ],
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "no-plusplus": 0
   },
   "env": {
     "browser": true

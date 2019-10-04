@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 
 import { logout } from '../../actions/auth';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
-import { websiteTitle } from '../../settings';
+import { WEBSITE_TITLE } from '../../settings';
 
 const propTypes = {
   auth: authPropType,
@@ -17,6 +17,30 @@ const propTypes = {
 const defaultProps = {
   auth: authDefaultProp,
 };
+
+function Logo() {
+  return (
+    <LinkContainer to="/">
+      <Navbar.Brand className="align-items-center">
+        <div style={{display: 'flex'}}>
+          <img
+            src="/static/img/foldover_logo.svg"
+            width="32"
+            height="32"
+            className="d-inline-block align-center mr-2"
+            alt={`${WEBSITE_TITLE} logo`}
+          />
+          <div style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
+          className="mr-1">
+            <div>FOLD</div>
+            <div>-OVER</div>
+          </div>
+          STORIES
+        </div>
+      </Navbar.Brand>
+    </LinkContainer>
+  );
+}
 
 export function Header(props) {
   const { auth: { isAuthenticated, user }, logoutConnect } = props;
@@ -46,18 +70,7 @@ export function Header(props) {
   return (
     <header>
       <Navbar collapseOnSelect expand="sm" bg="light" variant="light">
-        <LinkContainer to="/">
-          <Navbar.Brand className="align-items-center">
-            <img
-              src="/static/img/foldover_logo.svg"
-              width="32"
-              height="32"
-              className="d-inline-block align-center mr-3"
-              alt={`${websiteTitle} logo`}
-            />
-            <span className="logo-text">{websiteTitle}</span>
-          </Navbar.Brand>
-        </LinkContainer>
+        <Logo />
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           {isAuthenticated ? authLinks : guestLinks}

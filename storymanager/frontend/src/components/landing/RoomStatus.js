@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function Emoji({ emoji, label, title }) {
+export function Emoji({ emoji, label, title }) {
   return (
     <span title={title}>
       <span
@@ -27,3 +28,9 @@ export default function RoomStatus({ room }) {
   }
   return hourglassEmoji;
 }
+
+Emoji.propTypes = {
+  emoji: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+};

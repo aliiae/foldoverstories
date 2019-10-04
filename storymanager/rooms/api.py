@@ -3,10 +3,17 @@ from rest_framework import viewsets, permissions, generics
 from rest_framework.exceptions import PermissionDenied, NotAuthenticated, ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from rooms.models import Room, Membership
 from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer
+
+
+class RoomsPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
 
 
 class RoomsViewSet(viewsets.ModelViewSet):
@@ -15,6 +22,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = RoomsSerializer
     lookup_field = 'room_title'
+    pagination_class = RoomsPagination
 
     def get_queryset(self):
         return self.request.user.rooms.all().order_by('-modified_at')

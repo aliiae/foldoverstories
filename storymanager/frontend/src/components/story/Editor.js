@@ -10,7 +10,7 @@ import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
 import { getRoomStatus } from '../../actions/room';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { websiteTitle } from '../../settings';
+import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 
 function Editor(props) {
   const {
@@ -20,7 +20,7 @@ function Editor(props) {
 
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
-    document.title = `${roomTitle} | ${websiteTitle}`;
+    document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
 
   if (userIsLoading) {

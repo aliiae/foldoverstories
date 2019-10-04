@@ -13,8 +13,8 @@ import { setupTokenConfig } from './auth';
 import { getUsers } from './story';
 
 // GET USER'S ROOMS
-export const getRooms = () => (dispatch, getState) => {
-  axios.get('/api/rooms/', setupTokenConfig(getState))
+export const getRooms = (pageNumber = 1) => (dispatch, getState) => {
+  axios.get(`/api/rooms/?page=${pageNumber}`, setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: GET_ROOMS,

@@ -3,7 +3,7 @@
 }
 
 .footer {
-  position: absolute;
+  /*position: absolute;*/
   bottom: 0;
   width: 100%;
   height: 4em;
@@ -18,6 +18,11 @@
 .jumbotron {
   background-color: #ffffff;
   border-radius: 0;
+}
+
+.pagination-center {
+  display: flex;
+  justify-content: center;
 }
 
 /* Paper Effect from http://cssdeck.com/labs/pure-css-folded-paper-effect */
