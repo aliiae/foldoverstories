@@ -18,17 +18,17 @@ function TextTabs({ texts, usernames, finishedAt }) {
             <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="full">Full Text</Nav.Link>
+            <Nav.Link eventKey="full" className="tab-pill">Full Text</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="lines">By Lines</Nav.Link>
+            <Nav.Link eventKey="lines" className="tab-pill">By Lines</Nav.Link>
           </Nav.Item>
         </Nav>
       </div>
       <div>
         <Tab.Content>
           <Tab.Pane eventKey="full">
-            <div className="paper p-2">
+            <div className="finished-text-container paper p-2">
               <p className="full-text">
                 {texts.map((text) => text.full_text).join(' ')}
               </p>
@@ -45,16 +45,20 @@ function TextTabs({ texts, usernames, finishedAt }) {
 
 function TextLines({ texts }) {
   return (
-    <div className="paper p-2">
-      <Table className="table-sm">
+    <div className="finished-text-container paper p-2">
+      <Table className="table-sm text-viewer-table">
         <tbody>
-        {texts.map((text, i) => (
-          <tr key={text.username + i}>
-            <td className="text-muted"
-                style={{ width: '5em', border: 'none' }}>{`${text.username}:`}</td>
-            <td style={{ border: 'none' }}>{text.full_text}</td>
-          </tr>
-        ))}
+          {texts.map((text, i) => (
+            <tr key={text.username + i}>
+              <td
+                className="text-muted"
+                style={{ width: '4em', border: 'none' }}
+              >
+                {`${text.username}:`}
+              </td>
+              <td style={{ border: 'none' }}>{text.full_text}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
@@ -63,7 +67,7 @@ function TextLines({ texts }) {
 
 function StoryHeadline({ usernames, dateISOString }) {
   return (
-    <p className="h5">
+    <h1 className="h5 story-headline">
       Story by
       {` ${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`}
       <span className="small text-muted" style={{ display: 'block' }}>
@@ -71,7 +75,7 @@ function StoryHeadline({ usernames, dateISOString }) {
         {' '}
         {formatTimeStampDateOnly(dateISOString)}
       </span>
-    </p>
+    </h1>
   );
 }
 

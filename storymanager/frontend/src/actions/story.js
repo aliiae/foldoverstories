@@ -3,7 +3,7 @@ import {
   ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN
 } from './types';
 import { returnErrors } from './messages';
-import { setupTokenConfig } from './auth';
+import { setupTokenConfig } from './utils';
 
 const getLastItemOrEmpty = (array) => {
   if (array.length === 0) return '';

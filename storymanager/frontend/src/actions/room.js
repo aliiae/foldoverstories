@@ -9,8 +9,8 @@ import {
   LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
-import { setupTokenConfig } from './auth';
 import { getUsers } from './story';
+import { setupTokenConfig } from './utils';
 
 // GET USER'S ROOMS
 export const getRooms = (pageNumber = 1) => (dispatch, getState) => {

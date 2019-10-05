@@ -27,9 +27,7 @@ function StartButton(props) {
         type="button"
         onClick={onClick}
       >
-        <Emoji emoji="✨" />
         Start a new story
-        <Emoji emoji="✨" />
       </Button>
       {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
     </>

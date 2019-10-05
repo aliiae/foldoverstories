@@ -8,20 +8,7 @@ import {
   REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS,
 } from './types';
 import { getRooms } from './room';
-
-export const setupTokenConfig = (getState) => {
-  const { token } = getState().auth;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  if (token) {
-    config.headers.Authorization = `Token ${token}`;
-  }
-  return config;
-};
-
+import { setupTokenConfig } from './utils';
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
@@ -57,7 +44,7 @@ export const login = (username, password) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({ type: LOGIN_FAIL });
+      dispatch({ type: LOGIN_FAIL, payload: err.response.data });
     });
 };
 

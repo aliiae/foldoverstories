@@ -9,6 +9,7 @@ import { getRooms } from '../../actions/room';
 import RoomStatus from './RoomStatus';
 import { formatTimeStamp } from '../common/dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
+import Container from 'react-bootstrap/Container';
 
 function RoomDashboard(props) {
   const { getRoomsConnect, rooms } = props;
@@ -20,7 +21,7 @@ function RoomDashboard(props) {
     setActivePageNumber(newPageNumber);
     getRoomsConnect(newPageNumber);
   };
-  if (!rooms || !rooms.results) return <></>;
+  if (!rooms || !rooms.results || rooms.results.length === 0) return <></>;
 
   const { count, results } = rooms;
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
@@ -37,8 +38,8 @@ function RoomDashboard(props) {
     );
   }
   return (
-    <div>
-      <Table hover>
+    <Container className="pt-3 pb-2">
+      <Table hover className="dashboard">
         <thead>
           <tr>
             <th scope="col">Story</th>
@@ -64,12 +65,14 @@ function RoomDashboard(props) {
           ))}
         </tbody>
       </Table>
-      <div className="pagination-center">
-        <Pagination>
-          {paginationItems}
-        </Pagination>
-      </div>
-    </div>
+      {numPages > 1 && (
+        <div className="pagination-center">
+          <Pagination>
+            {paginationItems}
+          </Pagination>
+        </div>
+      )}
+    </Container>
   );
 }
 

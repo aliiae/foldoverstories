@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 
 import { Provider } from 'react-redux';
 import Header from './layout/Header';
+import HowToPlay from './about/HowToPlay';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
 import Landing from './landing/Landing';
@@ -23,15 +24,16 @@ function App() {
       <BrowserRouter>
         <div style={{ minHeight: '100vh' }}>
           <Header />
-          <Container>
+          <>
             <Switch>
               <Route exact path="/" component={Landing} />
               <Route exact path="/story/:id" component={Editor} />
               <Route exact path="/story" component={() => (<Redirect to="/" />)} />
+              <Route exact path="/how-to-play" component={HowToPlay} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
             </Switch>
-          </Container>
+          </>
         </div>
         <Footer />
       </BrowserRouter>

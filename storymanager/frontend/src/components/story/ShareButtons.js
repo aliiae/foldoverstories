@@ -10,7 +10,7 @@ import TwitterIcon from 'react-share/lib/TwitterIcon';
 
 export default function ShareButtons({ url }) {
   return (
-    <div className="float-right align-items-center">
+    <div className="float-right align-items-center mt-3">
       <span className="mr-1">Share this story:</span>
       <ButtonToolbar>
         <TelegramShareButton

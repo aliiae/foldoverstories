@@ -7,14 +7,16 @@ export default function Footer() {
   return (
     <footer className="footer">
       <Container className="text-center">
-        &copy; 2019
+        Copyright 2019
         {new Date().getFullYear() > 2019 && document.write(`-${new Date().getFullYear()}`)}
-        ,
         {' '}
-        <a href="mailto:#">alii&#230;</a>
+        &copy;
         {' '}
-        <Emoji emoji="📧" label="email icon emoji" title="Drop an email!" />
+        alii&#230;
+        {'. '}
+        <a href="mailto:#">Contact me</a>
+        .
       </Container>
     </footer>
   );
-};
+}

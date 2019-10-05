@@ -81,11 +81,11 @@ function TextAreaButton(props) {
 
   const placeholder = 'Type your text here. Remember that only the last line will be visible!';
   const submitForm = (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit} className="editor-form">
       <Form.Group controlId="formEnterText">
         <Form.Control
           as="textarea"
-          rows="2"
+          rows="3"
           placeholder={placeholder}
           value={text}
           onChange={onChangeText}

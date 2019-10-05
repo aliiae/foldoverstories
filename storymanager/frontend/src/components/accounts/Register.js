@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,18 +6,46 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
 import { Formik } from 'formik';
-import { string, object as yupObject, ref as yupRef } from 'yup';
 
+import { string, object as yupObject, ref as yupRef } from 'yup';
 import { register } from '../../actions/auth';
 
+
 function Register(props) {
-  const { registerConnect, isAuthenticated } = props;
+  const { registerConnect, isAuthenticated, error } = props;
   if (isAuthenticated) {
     return <Redirect to="/" />;
   }
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState('');
+  useEffect(() => {
+    if (error && error.username) {
+      setShowError(true);
+      setMessage('Sorry, this username is already taken. Please choose another one.');
+    }
+  }, [props]);
+  const handleClose = () => {
+    setShowError(false);
+  };
+  const errorModal = (
+    <>
+      <Modal show={showError} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Oops!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{message}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 
-  // TODO: invalid-feedback taken usernames
   const onSubmit = ({ username, password }) => {
     registerConnect({ username, password });
   };
@@ -99,16 +127,19 @@ function Register(props) {
   );
 
   return (
-    <Col md={6} className="m-auto">
-      <Card>
-        <Card.Body>
-          <Card.Title>
-            <h1 className="text-center">Register</h1>
-          </Card.Title>
-          {formik}
-        </Card.Body>
-      </Card>
-    </Col>
+    <Container>
+      <Col md={6} className="m-auto">
+        <Card className="mt-3">
+          <Card.Body>
+            <Card.Title>
+              <h1 className="text-center">Register</h1>
+            </Card.Title>
+            {formik}
+          </Card.Body>
+        </Card>
+      </Col>
+      {errorModal}
+    </Container>
   );
 }
 

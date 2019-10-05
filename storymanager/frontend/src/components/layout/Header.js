@@ -52,7 +52,11 @@ export function Header(props) {
   const authLinks = (
     <Nav className="ml-auto mt-2 mt-lg-0 align-items-center">
       <Nav.Item className="mr-2">
-        <Navbar.Text><strong>{user ? `Welcome, ${user.username}!` : ''}</strong></Navbar.Text>
+        <Navbar.Text>
+          <span className="nav-welcome-text">
+            <strong>{user ? `Welcome, ${user.username}!` : ''}</strong>
+          </span>
+        </Navbar.Text>
       </Nav.Item>
       <Nav.Item>
         <Button type="button" variant="info" size="sm" onClick={logoutConnect}>Logout</Button>
@@ -63,7 +67,7 @@ export function Header(props) {
   const guestLinks = (
     <Nav className="ml-auto">
       <LinkContainer to="/register">
-        <Nav.Link>Register</Nav.Link>
+        <Nav.Link className="mr-3">Register</Nav.Link>
       </LinkContainer>
       <LinkContainer to="/login">
         <Nav.Link>Login</Nav.Link>
@@ -77,6 +81,11 @@ export function Header(props) {
         <Logo />
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav>
+            <LinkContainer to="/how-to-play">
+              <Nav.Link>How to Play</Nav.Link>
+            </LinkContainer>
+          </Nav>
           {isAuthenticated ? authLinks : guestLinks}
         </Navbar.Collapse>
       </Navbar>
