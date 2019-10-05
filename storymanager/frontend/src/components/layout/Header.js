@@ -20,25 +20,29 @@ const defaultProps = {
 
 function Logo() {
   return (
-    <LinkContainer to="/">
-      <Navbar.Brand className="align-items-center">
-        <div style={{display: 'flex'}}>
+    <Navbar.Brand className="align-items-center">
+      <div style={{ display: 'flex' }}>
+        <LinkContainer to="/">
           <img
             src="/static/img/foldover_logo.svg"
             width="32"
             height="32"
-            className="d-inline-block align-center mr-2"
+            className="d-inline-block align-center mr-2 logo-img"
             alt={`${WEBSITE_TITLE} logo`}
           />
-          <div style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
-          className="mr-1">
-            <div>FOLD</div>
-            <div>-OVER</div>
-          </div>
-          STORIES
-        </div>
-      </Navbar.Brand>
-    </LinkContainer>
+        </LinkContainer>
+        <span
+          style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
+          className="mr-1"
+        >
+          <span>FOLD</span>
+          <span>-OVER</span>
+        </span>
+        <LinkContainer to="/">
+          <span>STORIES</span>
+        </LinkContainer>
+      </div>
+    </Navbar.Brand>
   );
 }
 

@@ -2,6 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export function Emoji({ emoji, label, title }) {
+  if (!label) { // emoji is purely decorative
+    return (
+      <span title={title}>
+        <span aria-hidden="true">{emoji}</span>
+      </span>
+    );
+  }
   return (
     <span title={title}>
       <span
@@ -31,6 +38,11 @@ export default function RoomStatus({ room }) {
 
 Emoji.propTypes = {
   emoji: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  title: PropTypes.string,
+};
+
+Emoji.defaultProps = {
+  label: null,
+  title: null,
 };

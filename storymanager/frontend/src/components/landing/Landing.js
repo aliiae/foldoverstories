@@ -5,6 +5,10 @@ import RoomDashboard from './RoomDashboard';
 import StartButton from './StartNewStoryButton';
 import { WEBSITE_TITLE } from '../../settings';
 
+function WelcomeText() {
+  return <>{`Welcome to ${WEBSITE_TITLE}!`}</>;
+}
+
 export default function Landing() {
   useEffect(() => {
     document.title = `${WEBSITE_TITLE}`;
@@ -12,8 +16,8 @@ export default function Landing() {
 
   return (
     <div>
-      <Jumbotron className="mt-3 paper">
-        <h1 className="display-3">{`Welcome to ${WEBSITE_TITLE} !`}</h1>
+      <Jumbotron className="mt-3">
+        <h1 className="display-3"><WelcomeText /></h1>
         <p className="lead">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam tincidunt, nulla quis
           porttitor

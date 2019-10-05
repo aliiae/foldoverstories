@@ -28,6 +28,9 @@ class VisibleTextDisplay extends React.Component {
     if (userFinished) {
       return '';
     }
+    if (correctTurn && !visibleText) {
+      return <span className="lead text-muted">Start your story!</span>;
+    }
     return (
       <p className="visible-text lead">
         <span className="visible-text">
@@ -37,7 +40,7 @@ class VisibleTextDisplay extends React.Component {
               {visibleText}
             </span>
           )
-            : <span className="text-muted">Start your story!</span>}
+            : ''}
         </span>
       </p>
     );

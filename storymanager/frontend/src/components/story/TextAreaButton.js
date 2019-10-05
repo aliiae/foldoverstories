@@ -50,7 +50,7 @@ function TextAreaButton(props) {
     e.preventDefault();
     const lastNewLineIndex = text.lastIndexOf('\n');
     const textPost = {
-      hidden_text: text.slice(0, lastNewLineIndex),
+      hidden_text: lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '',
       visible_text: text.slice(lastNewLineIndex + 1),
     };
     addTextConnect(textPost, roomTitle);
@@ -95,7 +95,7 @@ function TextAreaButton(props) {
       </Form.Group>
       <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Col>
-          <Button type="submit" variant="success" size="sm">
+          <Button type="submit" variant="success" size="sm" className="shadow-button">
             Submit
           </Button>
         </Col>

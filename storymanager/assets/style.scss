@@ -1,0 +1,68 @@
+$web-font-path: "https://fonts.googleapis.com/css?family=News+Cycle:400,700" !default;
+@import url($web-font-path);
+
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #eee !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #aaa !default;
+$gray-600: #777 !default;
+$gray-700: #495057 !default;
+$gray-800: #333 !default;
+$gray-900: #222 !default;
+$black:    #000 !default;
+
+$purple:  #786ea1 !default;
+$pink:    #d6456b !default;
+$red:     #860202 !default;
+$yellow:  #ffed02 !default;
+$green:   #6a950e !default;
+$teal:    #abcf84 !default;
+$cyan:    #039343 !default;
+$gray:    #424242 !default;
+
+logo-text {
+  text-transform: uppercase;
+}
+
+.footer {
+  height: 4em;
+  line-height: 4em;
+  background-color: $white;
+  border: 1px solid $gray-200;
+}
+
+.editor {
+  background-color: $white;
+}
+
+.jumbotron {
+  background-color: $gray-100;
+  color: $black;
+}
+
+.card, .pagination, .jumbotron {
+  box-shadow: 4px 4px 0 #c3c3c3;
+}
+
+.pagination-center {
+  display: flex;
+  justify-content: center;
+}
+
+.logo-img:hover {
+  cursor: pointer;
+}
+
+.shadow-button {
+  box-shadow: 2px 2px 0 #222;
+}
+
+.start-button {
+  box-shadow: 4px 4px 0 #222;
+}
+
+.shadow-button:hover, .shadow-button:active {
+  box-shadow: 1px 1px 0 #222;
+}

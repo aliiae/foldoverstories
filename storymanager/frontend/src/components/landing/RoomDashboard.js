@@ -51,7 +51,7 @@ function RoomDashboard(props) {
           {results.map((room) => (
             <tr
               key={room.room_title}
-              className={room.user_can_write_now ? 'table-success' : ''}
+              className={room.user_can_write_now ? 'table-success' : !room.is_finished ? 'table-warning' : ''}
             >
               <td>{<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}</td>
               <td>

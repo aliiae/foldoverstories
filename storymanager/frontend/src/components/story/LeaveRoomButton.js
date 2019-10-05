@@ -20,6 +20,7 @@ export default function LeaveRoomButton({ onClick }) {
         variant="danger"
         size="sm"
         onClick={onClick}
+        className="shadow-button"
       >
         Leave this story
       </Button>

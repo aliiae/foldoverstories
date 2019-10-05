@@ -1,23 +1,53 @@
 import re
 from typing import List, Match, Optional
 
-ADJECTIVES: List[str] = ['able', 'acid', 'automatic', 'awake', 'bad', 'bent', 'bitter', 'black',
-                         'blue', 'boiling', 'broken', 'brown', 'certain', 'cheap', 'chemical',
-                         'chief', 'clean', 'clear', 'cold', 'common', 'cruel', 'cut', 'dark',
-                         'dead', 'dear', 'deep', 'delicate', 'dependent', 'different', 'elastic',
-                         'equal', 'false', 'fat', 'feeble', 'female', 'fertile', 'fixed', 'flat',
-                         'foolish', 'free', 'frequent', 'full', 'future', 'general', 'good',
-                         'great', 'green', 'grey', 'hanging', 'hard', 'high', 'hollow', 'ill',
-                         'important', 'kind', 'last', 'late', 'left', 'like', 'living', 'long',
-                         'loose', 'loud', 'low', 'male', 'married', 'material', 'medical',
-                         'military', 'mixed', 'narrow', 'natural', 'necessary', 'new', 'normal',
-                         'old', 'open', 'opposite', 'parallel', 'past', 'political', 'poor',
-                         'possible', 'present', 'private', 'probable', 'public', 'quick', 'ready',
-                         'red', 'regular', 'responsible', 'rough', 'round', 'sad', 'safe', 'same',
-                         'second', 'secret', 'separate', 'sharp', 'short', 'shut', 'slow', 'small',
-                         'smooth', 'soft', 'solid', 'special', 'stiff', 'sudden', 'sweet', 'tall',
-                         'thick', 'thin', 'tired', 'true', 'violent', 'waiting', 'warm', 'wet',
-                         'white', 'wide', 'wise', 'wrong', 'yellow', 'young']
+ADJECTIVES: List[str] = ['able', 'acid', 'acidic', 'acrid', 'adolescent', 'all', 'amazing',
+                         'ancient', 'angelic', 'antique', 'appetizing', 'aromatic', 'automatic',
+                         'awake', 'awful', 'baby', 'babyish', 'bad', 'belated', 'bent', 'best',
+                         'better', 'big', 'bitter', 'black', 'bland', 'blaring', 'blue', 'boiling',
+                         'brief', 'broken', 'brown', 'burning', 'carefree', 'ceramic', 'certain',
+                         'cheap', 'cheerful', 'chemical', 'chief', 'china', 'circular', 'clean',
+                         'clear', 'close', 'closed', 'cloth', 'coarse', 'cold', 'colorless',
+                         'comfortable', 'common', 'cooking', 'cotton', 'crooked', 'cruel', 'cut',
+                         'dance', 'dark', 'dead', 'deafening', 'dear', 'deep', 'delayed',
+                         'delectable', 'delicate', 'dense', 'dependent', 'different', 'difficult',
+                         'disgusting', 'distant', 'distorted', 'drab', 'dull', 'each', 'elastic',
+                         'elated', 'elliptical', 'enormous', 'equal', 'equatorial', 'evening',
+                         'everlasting', 'every', 'evil', 'excited', 'fabric', 'faint', 'false',
+                         'fantastic', 'far', 'faraway', 'fast', 'fat', 'feeble', 'female',
+                         'fertile', 'feverish', 'few', 'fiery', 'fixed', 'flat', 'folding',
+                         'foolish', 'four', 'fragrant', 'free', 'freezing', 'frequent', 'frigid',
+                         'frozen', 'full', 'future', 'general', 'giant', 'gigantic', 'glass',
+                         'gleaming', 'globular', 'glowing', 'good', 'grainy', 'gray', 'great',
+                         'green', 'grey', 'hanging', 'hard', 'heavy', 'high', 'hollow', 'hot',
+                         'huge', 'hulking', 'hushed', 'icy', 'ill', 'important', 'infantile',
+                         'initial', 'irregular', 'jumbo', 'kind', 'last', 'late', 'lean', 'leather',
+                         'left', 'like', 'living', 'loathesome', 'lonely', 'long', 'loose', 'loud',
+                         'lovely', 'low', 'luminous', 'lunar', 'male', 'many', 'married',
+                         'material', 'mature', 'medical', 'mediocre', 'metal', 'metallic',
+                         'military', 'mixed', 'modern', 'morning', 'mountainous', 'mute', 'narrow',
+                         'natural', 'necessary', 'new', 'no', 'noisy', 'normal', 'obese', 'oblong',
+                         'oceanic', 'old', 'one', 'open', 'opposite', 'orange', 'ornate',
+                         'outgoing', 'oval', 'overdue', 'palatable', 'pale', 'parallel', 'past',
+                         'pastel', 'perfumed', 'pertinent', 'pink', 'pitted', 'plastic', 'plump',
+                         'polar', 'polished', 'political', 'poor', 'possible', 'present', 'private',
+                         'probable', 'public', 'pungent', 'putrid', 'quick', 'racing', 'radiant',
+                         'rapid', 'rare', 'ready', 'recent', 'red', 'reeking', 'regular', 'remote',
+                         'responsible', 'rich', 'rolling', 'rotund', 'rough', 'round', 'rushing',
+                         'sad', 'safe', 'same', 'savory', 'scalding', 'scaly', 'scarce', 'scared',
+                         'scented', 'second', 'secret', 'separate', 'serpentine', 'several',
+                         'shadowy', 'sharp', 'shimmering', 'shining', 'short', 'shouting', 'shut',
+                         'silent', 'silicon', 'silver', 'skeletal', 'sleek', 'sleeping', 'slender',
+                         'slim', 'slow', 'small', 'smooth', 'soft', 'solid', 'some', 'sour',
+                         'special', 'speeding', 'spicy', 'square', 'steaming', 'steel', 'stiff',
+                         'sudden', 'svelte', 'sweet', 'sweltering', 'swift', 'swinging',
+                         'talkative', 'tall', 'tanned', 'tasteless', 'teenage', 'thick', 'thin',
+                         'thunderous', 'tiny', 'tired', 'triangular', 'trim', 'true', 'two',
+                         'uncomfortable', 'unusual', 'useful', 'useless', 'usual', 'valuable',
+                         'vast', 'velvety', 'violent', 'vociferous', 'waiting', 'walking', 'warm',
+                         'warped', 'wasteful', 'watery', 'wavy', 'wee', 'wet', 'whispered', 'white',
+                         'wide', 'willowy', 'winding', 'wiry', 'wise', 'wonderful', 'wooden',
+                         'work', 'worse', 'wrong', 'yellow', 'yellowish', 'young', 'zany', 'zigzag']
 NOUNS: List[str] = ['addax', 'adder', 'agama', 'agouti', 'albacore', 'albatross', 'alewife',
                     'alpaca', 'angelfish', 'anhinga', 'ant', 'anteater', 'antelope', 'ape', 'aphid',
                     'argali', 'argonaut', 'ass', 'avocet', 'ayeaye', 'baboon', 'badger',
@@ -107,14 +137,14 @@ def _filter_complex_words(words: List[str]) -> List[str]:
     :param words: List of words.
     :return: List of 'simple' words, i.e. having no more than 2 consecutive consonants or vowels.
     """
+
+    def _has_n_conseq_letters(word: str, pattern: str,
+                              num_conseq_letters: int = 3) -> (Optional[Match[str]]):
+        return re.search(f'\w*{pattern * num_conseq_letters}\w*', word)
+
     simple_words = filter(lambda w: not _has_n_conseq_letters(w, r'[^aeiou]', 3), words)
     simple_words = list(filter(lambda w: not _has_n_conseq_letters(w, r'[aeiou]', 3), simple_words))
     return simple_words
-
-
-def _has_n_conseq_letters(word: str, pattern: str,
-                          num_conseq_letters: int = 3) -> (Optional[Match[str]]):
-    return re.search(f'\w*{pattern * num_conseq_letters}\w*', word)
 
 
 def _split_string_into_word_list(items_str: str) -> List[str]:

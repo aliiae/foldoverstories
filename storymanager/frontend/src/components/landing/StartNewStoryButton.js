@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { addRoom } from '../../actions/room';
+import { Emoji } from './RoomStatus';
 
 function StartButton(props) {
   const {
@@ -19,8 +20,16 @@ function StartButton(props) {
   };
   return (
     <>
-      <Button variant="primary" size="lg" type="button" onClick={onClick}>
+      <Button
+        className="start-button shadow-button"
+        variant="primary"
+        size="lg"
+        type="button"
+        onClick={onClick}
+      >
+        <Emoji emoji="✨" />
         Start a new story
+        <Emoji emoji="✨" />
       </Button>
       {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
     </>
