@@ -15,12 +15,18 @@ export default function HowToPlay() {
               similar to the parlour game called &ldquo;conseqeuences&rdquo;
               or fold-over stories often used for language learning.
             </p>
+            <p>
+              Only last line is visible.
+            </p>
             <hr className="section-break" />
             <h2>Why do I need to register and login?</h2>
             <p>
               Since stories are not public, i.e. each one is available only to its authors,
               the game needs you to register and sign in order to access all stories
               you&apos;ve participated in.
+            </p>
+            <p>
+              Registration is simple &mdash; all you have to provide is username and password.
             </p>
             <hr className="section-break" />
             <h2>How many friends can I invite into a story?</h2>

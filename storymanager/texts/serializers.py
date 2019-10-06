@@ -20,7 +20,7 @@ class TextsFullSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TextsSerializer(serializers.ModelSerializer):
+class TextsVisibleOnlySerializer(serializers.ModelSerializer):
     room = TextsRoomSerializer(read_only=True)
 
     class Meta:

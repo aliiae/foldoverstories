@@ -11,7 +11,6 @@ class Text(models.Model):
                              on_delete=models.CASCADE, db_column='room')
     visible_text = models.TextField()
     hidden_text = models.TextField(default='', blank=True)
-    is_last = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

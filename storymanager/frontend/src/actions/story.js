@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';

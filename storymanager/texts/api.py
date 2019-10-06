@@ -7,14 +7,18 @@ from rest_framework.generics import get_object_or_404
 
 from rooms.models import Room, Membership
 from texts.models import Text
-from .serializers import TextsSerializer, TextsFullSerializer
+from .serializers import TextsVisibleOnlySerializer, TextsFullSerializer
 
 
 class TextsViewSet(viewsets.ModelViewSet):
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = TextsFullSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return TextsFullSerializer
+        return TextsVisibleOnlySerializer
 
     def get_queryset(self):
         room_title = self.kwargs['room_title']
@@ -58,11 +62,11 @@ class TextsViewSet(viewsets.ModelViewSet):
     def _default_turn_user(self):
         return self.request.user  # TODO: Or should it be the owner of the room, users[0]?
 
-    def _get_current_turn_user(self, room: Room) -> Optional[User]:
+    def _get_current_turn_user(self, room) -> Optional[User]:
         """Returns the user allowed to post, the one next after the prev poster in room.users."""
 
         def index_of(target, items):
-            return next(i for i, user in enumerate(items) if user == target)
+            return next(i for i, item in enumerate(items) if item == target)
 
         users = room.users.all().order_by('date_joined')
         if room.texts.count() == 0:
@@ -74,15 +78,15 @@ class TextsViewSet(viewsets.ModelViewSet):
         if prev_turn_user_index is None:
             return self._default_turn_user()
 
-        step_in_queue = 1  # skip users who left
+        step = 1  # skip users who left
         curr_turn_user, curr_turn_membership = self._get_next_user_and_membership(
-            prev_turn_user_index, room, step_in_queue, users)
-        while curr_turn_membership.has_stopped and step_in_queue <= users.count():
-            step_in_queue += 1
+            prev_turn_user_index, room, step, users)
+        while curr_turn_membership.has_stopped and step <= users.count():
+            step += 1
             curr_turn_user, curr_turn_membership = self._get_next_user_and_membership(
-                prev_turn_user_index, room, step_in_queue, users)
+                prev_turn_user_index, room, step, users)
         # finish room if everyone stopped except for the request user (prevent double posting)
-        if step_in_queue == users.count():
+        if step == users.count():
             if prev_turn_user == curr_turn_user == self.request.user:
                 room.is_finished = True
                 room.save()
@@ -105,5 +109,5 @@ class TextsViewSet(viewsets.ModelViewSet):
     @staticmethod
     def _wrong_turn_error_detail(current_turn_user: User) -> Dict[str, str]:
         if not current_turn_user:
-            return {'last_turn': ''}
+            return {'last_turn': 'It was the last turn'}
         return {'current_turn_username': current_turn_user.username}

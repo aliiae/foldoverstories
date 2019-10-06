@@ -28,7 +28,7 @@ function Logo() {
             width="32"
             height="32"
             className="d-inline-block align-center mr-2 logo-img"
-            alt={`${WEBSITE_TITLE} logo`}
+            alt="Logo"
           />
         </LinkContainer>
         <span

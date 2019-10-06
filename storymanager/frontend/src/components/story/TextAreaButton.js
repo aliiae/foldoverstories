@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
 
 import { addText } from '../../actions/story';
 import { leaveRoom } from '../../actions/room';
@@ -14,8 +15,6 @@ import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
-
-// TODO: remove user from room when clicked the 'leave room' button
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
@@ -35,26 +34,88 @@ const defaultProps = {
   currentTurnUsername: null,
 };
 
+function MessageModal({ show, onHide, title, message, onClick }) {
+  return (
+    <Modal show={show} onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{message}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="danger" onClick={onClick} className="mr-auto">
+          Do not show warnings for this story
+        </Button>
+        <Button variant="secondary" onClick={onHide}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+MessageModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+};
+
 function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
     addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
     currentTurnUsername,
   } = props;
-
+  const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalShownCount, setModalShownCount] = useState(0);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
+  const [doNotShowModals, setDoNotShowModals] = useState(false);
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+  const handleDoNotShowModals = () => {
+    setDoNotShowModals(true);
+  };
   const resetInputFields = () => {
     setText('');
   };
 
+  const messageHiddenIsEmpty = 'You seem to submit only one line of text. '
+    + 'In case you don\'t want to make your whole input visible to the next author, '
+    + 'please check that you divided your text with Enter ⏎.';
+
+  useEffect(() => {
+    console.log('effect');
+    if (hiddenIsEmpty) {
+      setShowModal(true);
+    }
+  }, [hiddenIsEmpty]);
+
   const onSubmit = (e) => {
     e.preventDefault();
     const lastNewLineIndex = text.lastIndexOf('\n');
-    const textPost = {
-      hidden_text: lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '',
-      visible_text: text.slice(lastNewLineIndex + 1),
-    };
-    addTextConnect(textPost, roomTitle);
-    resetInputFields();
+    const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
+    const visibleText = text.slice(lastNewLineIndex + 1);
+    console.log(modalShownCount, hiddenIsEmpty);
+    if (hiddenText === '' && modalShownCount === 0) {
+      console.log('yay');
+      setHiddenIsEmpty(true);
+      setModalMessage(messageHiddenIsEmpty);
+      setModalTitle('Only one line?');
+      setModalShownCount(modalShownCount + 1);
+    } else {
+      setHiddenIsEmpty(false);
+      const textPost = {
+        hidden_text: hiddenText,
+        visible_text: visibleText,
+      };
+      addTextConnect(textPost, roomTitle);
+      resetInputFields();
+      setModalShownCount(0);
+    }
   };
 
   const onChangeText = (e) => {
@@ -81,37 +142,49 @@ function TextAreaButton(props) {
 
   const placeholder = 'Type your text here. Remember that only the last line will be visible!';
   const submitForm = (
-    <Form onSubmit={onSubmit} className="editor-form">
-      <Form.Group controlId="formEnterText">
-        <Form.Control
-          as="textarea"
-          rows="3"
-          placeholder={placeholder}
-          value={text}
-          onChange={onChangeText}
-          name="text"
-          style={{ resize: 'none' }}
-        />
-      </Form.Group>
-      <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Col>
-          <Button type="submit" variant="success" size="sm" className="shadow-button">
-            Submit
-          </Button>
-        </Col>
-        <Col className="float-right text-right">
-          <LeaveRoomButton onClick={onClickLeave} />
-        </Col>
-      </Row>
-    </Form>
+    <>
+      <Form onSubmit={onSubmit} className="editor-form">
+        <Form.Group controlId="formEnterText">
+          <Form.Control
+            as="textarea"
+            rows="3"
+            placeholder={placeholder}
+            value={text}
+            onChange={onChangeText}
+            name="text"
+            style={{ resize: 'none' }}
+            required
+          />
+        </Form.Group>
+        <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Col>
+            <Button type="submit" variant="success" size="sm" className="shadow-button">
+              Submit
+            </Button>
+          </Col>
+          <Col className="float-right text-right">
+            <LeaveRoomButton onClick={onClickLeave} />
+          </Col>
+        </Row>
+      </Form>
+      <MessageModal
+        show={!doNotShowModals && showModal}
+        onHide={handleModalClose}
+        message={modalMessage}
+        title={modalTitle}
+        onClick={handleDoNotShowModals}
+      />
+    </>
   );
 
   const waitingMessage = (
     <>
       <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
-      <Col className="float-right text-right">
-        <LeaveRoomButton onClick={onClickLeave} />
-      </Col>
+      <Row>
+        <Col className="float-right text-right">
+          <LeaveRoomButton onClick={onClickLeave} />
+        </Col>
+      </Row>
     </>
   );
 

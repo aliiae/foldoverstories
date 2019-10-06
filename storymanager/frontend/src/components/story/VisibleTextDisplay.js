@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getVisibleText } from '../../actions/story';
@@ -17,41 +17,30 @@ const defaultProps = {
   userFinished: false,
 };
 
-class VisibleTextDisplay extends React.Component {
-  componentDidMount() {
-    const { getVisibleTextConnect, roomTitle } = this.props;
+function VisibleTextDisplay(props) {
+  const { getVisibleTextConnect, roomTitle } = props;
+  useEffect(() => {
     getVisibleTextConnect(roomTitle);
+  }, []);
+  const { visibleText, correctTurn, userFinished } = props;
+  if (userFinished) {
+    return '';
   }
-
-  render() {
-    const { visibleText, correctTurn, userFinished } = this.props;
-    if (userFinished) {
-      return '';
-    }
-    if (correctTurn && !visibleText) {
-      return (
-        <div className="visible-text pl-2">
-          <span className="lead text-muted">Start your story!</span>
-        </div>
-      );
-    }
+  if (correctTurn && !visibleText) {
     return (
       <div className="visible-text pl-2">
-        <p className="lead">
-          <span className>
-            {visibleText
-              ? (
-                <span>
-                &hellip;
-                  {visibleText}
-                </span>
-              )
-              : ''}
-          </span>
-        </p>
+        <p className="lead text-muted">Start your story!</p>
       </div>
     );
   }
+  if (visibleText) {
+    return (
+      <div className="visible-text pl-2">
+        <p className="visible-text-lead lead">{visibleText}</p>
+      </div>
+    );
+  }
+  return null;
 }
 
 VisibleTextDisplay.propTypes = propTypes;

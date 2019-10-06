@@ -169,9 +169,16 @@ $gray: #424242 !default;
 .visible-text {
   width: 100%;
   height: 100%;
-  padding: 1rem;
-  line-height: 1rem;
+  padding: 0.5rem;
+  line-height: 2rem;
   font-size: 1.2rem;
+}
+
+.visible-text-lead {
+  &::before {
+    content: '\2026'; // ellipsis
+    display: inline;
+  }
 }
 
 .paper {
@@ -238,6 +245,32 @@ $gray: #424242 !default;
   }
 }
 
-.illustrated-text-card {
-
+::-moz-selection {
+  background-color: #369;
+  color: #ffffff;
 }
+
+::selection {
+  background-color: #369;
+  color: #ffffff;
+}
+
+.illustrated-text-card {
+  h2 {
+    &::before {
+      content: '\2026 '
+    }
+  }
+}
+
+.paper-top-message {
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.paper-bottom-message {
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+}
+
+
