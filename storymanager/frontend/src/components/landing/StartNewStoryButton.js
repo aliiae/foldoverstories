@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { addRoom } from '../../actions/room';
-import { Emoji } from './RoomStatus';
+import { Emoji } from './Status';
 
 function StartButton(props) {
   const {

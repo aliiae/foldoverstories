@@ -31,6 +31,11 @@ $gray: #424242 !default;
   padding-bottom: $padding;
 }
 
+#app {
+  width: 100vw;
+  height: 100vh;
+}
+
 .color-underline {
   @include color-underline;
 
@@ -251,14 +256,43 @@ $gray: #424242 !default;
 }
 
 ::selection {
-  background-color: #369;
-  color: #ffffff;
+  background-color: $yellow;
+  color: $black;
+}
+
+.text-page-container {
+  background-image: url('/static/img/icons8/ginger-cat-reading.png');
+  background-position: right bottom;
+  background-repeat: no-repeat;
 }
 
 .illustrated-text-card {
+  display: flex;
+  flex-flow: column;
+}
+
+.illustrated-text-card section {
   h2 {
     &::before {
       content: '\2026 '
+    }
+  }
+
+  img {
+    &:nth-of-type(even) {
+      vertical-align: middle;
+      float: left;
+      padding: 1em;
+      overflow: auto;
+      width: 20rem;
+    }
+
+    &:nth-of-type(odd) {
+      vertical-align: middle;
+      float: right;
+      padding: 1em;
+      overflow: auto;
+      width: 20rem;
     }
   }
 }
@@ -273,4 +307,7 @@ $gray: #424242 !default;
   padding-left: 0.5rem;
 }
 
-
+.full-size {
+  width: 100%;
+  height: 100%;
+}

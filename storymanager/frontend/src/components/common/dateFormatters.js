@@ -1,13 +1,20 @@
+import React from 'react';
+import Moment from 'react-moment';
+
 export const formatTimeStamp = (dateISOString) => {
-  // hh:mm, dd/mm/yyyy
-  const date = new Date(dateISOString);
-  return `${date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  })}, ${date.toLocaleDateString()}`;
+  // e.g. 1 hour ago
+  return (
+    <Moment fromNow withTitle titleFormat="LLL">
+      {dateISOString}
+    </Moment>
+  );
 };
 
 export const formatTimeStampDateOnly = (dateISOString) => {
-  // dd/mm/yyyy
-  return new Date(dateISOString).toLocaleDateString();
+  // e.g. 6th October 2019
+  return (
+    <Moment format="LL" withTitle titleFormat="LLL">
+      {dateISOString}
+    </Moment>
+  );
 };

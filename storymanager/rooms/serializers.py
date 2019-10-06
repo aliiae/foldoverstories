@@ -8,10 +8,28 @@ from .models import Room, Membership
 
 class RoomUsersSerializer(serializers.ModelSerializer):
     texts_count = serializers.IntegerField(read_only=True)
+    user_left_room = serializers.SerializerMethodField('did_user_leave_room')
+    user_can_write_now = serializers.SerializerMethodField('can_user_write_now')
+
+    def did_user_leave_room(self, obj) -> bool:  # => user_left_room
+        user_membership = self._get_user_membership(obj)
+        if user_membership:
+            return user_membership.has_stopped
+
+    def can_user_write_now(self, obj) -> bool:  # => user_can_write_now
+        user_membership = self._get_user_membership(obj)
+        if user_membership:
+            return user_membership.can_write_now
+
+    def _get_user_membership(self, obj):
+        if 'room_title' in self.context.get('view').kwargs:
+            room = get_object_or_404(Room, room_title=self.context.get('view').kwargs['room_title'])
+            user_membership = get_object_or_404(Membership, room=room, user=obj)
+            return user_membership
 
     class Meta:
         model = User
-        fields = ('username', 'texts_count')
+        fields = ('username', 'texts_count', 'user_left_room', 'user_can_write_now')
 
 
 class RoomsSerializer(serializers.ModelSerializer):
@@ -19,11 +37,11 @@ class RoomsSerializer(serializers.ModelSerializer):
     user_left_room = serializers.SerializerMethodField('did_user_leave_room')
     user_can_write_now = serializers.SerializerMethodField('can_user_write_now')
 
-    def did_user_leave_room(self, obj):  # user_left_room
+    def did_user_leave_room(self, obj):  # => user_left_room
         user_membership = get_object_or_404(Membership, room=obj, user=self.context['request'].user)
         return user_membership.has_stopped
 
-    def can_user_write_now(self, obj):
+    def can_user_write_now(self, obj):  # => user_can_write_now
         user_membership = get_object_or_404(Membership, room=obj, user=self.context['request'].user)
         return user_membership.can_write_now
 

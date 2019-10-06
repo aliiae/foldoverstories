@@ -88,7 +88,6 @@ function TextAreaButton(props) {
     + 'please check that you divided your text with Enter ⏎.';
 
   useEffect(() => {
-    console.log('effect');
     if (hiddenIsEmpty) {
       setShowModal(true);
     }
@@ -99,9 +98,7 @@ function TextAreaButton(props) {
     const lastNewLineIndex = text.lastIndexOf('\n');
     const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
     const visibleText = text.slice(lastNewLineIndex + 1);
-    console.log(modalShownCount, hiddenIsEmpty);
-    if (hiddenText === '' && modalShownCount === 0) {
-      console.log('yay');
+    if (!doNotShowModals && hiddenText === '' && modalShownCount === 0) {
       setHiddenIsEmpty(true);
       setModalMessage(messageHiddenIsEmpty);
       setModalTitle('Only one line?');

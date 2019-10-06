@@ -129,7 +129,7 @@ function Register(props) {
   return (
     <Container>
       <Col md={6} className="m-auto">
-        <Card className="mt-3">
+        <Card className="mt-3 mb-3">
           <Card.Body>
             <Card.Title>
               <h1 className="text-center">Register</h1>

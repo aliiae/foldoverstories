@@ -59,8 +59,11 @@ class TextsViewSet(viewsets.ModelViewSet):
         room.save()
         serializer.save(author=self.request.user, room=room)
 
-    def _default_turn_user(self):
-        return self.request.user  # TODO: Or should it be the owner of the room, users[0]?
+    def _default_turn_user(self, room):
+        default_user = self.request.user
+        default_membership = get_object_or_404(Membership, room=room, user=default_user)
+        default_membership.can_write_now = True
+        return default_user
 
     def _get_current_turn_user(self, room) -> Optional[User]:
         """Returns the user allowed to post, the one next after the prev poster in room.users."""
@@ -70,13 +73,13 @@ class TextsViewSet(viewsets.ModelViewSet):
 
         users = room.users.all().order_by('date_joined')
         if room.texts.count() == 0:
-            return self._default_turn_user()
+            return self._default_turn_user(room)
         if users.count() == 1:
             return users[0]
         prev_turn_user = room.texts.last().author
         prev_turn_user_index = index_of(prev_turn_user, users)
         if prev_turn_user_index is None:
-            return self._default_turn_user()
+            return self._default_turn_user(room)
 
         step = 1  # skip users who left
         curr_turn_user, curr_turn_membership = self._get_next_user_and_membership(

@@ -5,6 +5,7 @@ import Pluralize from 'react-pluralize';
 import Card from 'react-bootstrap/Card';
 
 import { getUsers } from '../../actions/story';
+import Status from '../landing/Status';
 
 const propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
@@ -13,6 +14,7 @@ const propTypes = {
   })),
   roomTitle: PropTypes.string.isRequired,
   getUsersConnect: PropTypes.func.isRequired,
+  showStatus: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -20,12 +22,10 @@ const defaultProps = {
 };
 
 function RoomUsers(props) {
-  const { getUsersConnect, roomTitle } = props;
+  const { getUsersConnect, roomTitle, showStatus } = props;
   useEffect(() => {
     getUsersConnect(roomTitle);
   }, []);
-
-
   const { users } = props;
   return (
     <Card className="mt-3">
@@ -34,14 +34,14 @@ function RoomUsers(props) {
         <ul className="list-unstyled card-text">
           {users.map((u) => (
             <li key={u.username}>
+              {showStatus && <Status item={u} />}
               {`${u.username} `}
               <span className="text-muted small">
-                  (
-                  <Pluralize
-                    singular="contribution"
-                    count={u.texts_count}
-                    zero="no contributions"
-                  />
+                (<Pluralize
+                singular="contribution"
+                count={u.texts_count}
+                zero="no contributions"
+                />
                 {' '}
                 to the story)
               </span>

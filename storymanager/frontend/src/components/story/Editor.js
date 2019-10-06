@@ -53,7 +53,7 @@ function Editor(props) {
             )}
         </Col>
         <Col md={3}>
-          <RoomUsers roomTitle={roomTitle} />
+          <RoomUsers roomTitle={roomTitle} showStatus={!roomIsFinished} />
         </Col>
       </Row>
     </Container>

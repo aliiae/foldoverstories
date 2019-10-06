@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import Pagination from 'react-bootstrap/Pagination';
-import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
 import { getRooms } from '../../actions/room';
-import RoomStatus from './RoomStatus';
+import Status from './Status';
 import { formatTimeStamp } from '../common/dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
-import Container from 'react-bootstrap/Container';
 
 function RoomDashboard(props) {
   const { getRoomsConnect, rooms } = props;
@@ -39,7 +39,7 @@ function RoomDashboard(props) {
   }
   return (
     <Container className="pt-3 pb-2">
-      <Table hover className="dashboard">
+      <Table hover responsive className="dashboard">
         <thead>
           <tr>
             <th scope="col">Story</th>
@@ -59,7 +59,7 @@ function RoomDashboard(props) {
                 {room.users.map((user) => user.username)
                   .reduce((prev, curr) => [prev, ', ', curr])}
               </td>
-              <td className="text-center"><RoomStatus room={room} /></td>
+              <td className="text-center"><Status item={room} /></td>
               <td>{formatTimeStamp(room.modified_at)}</td>
             </tr>
           ))}

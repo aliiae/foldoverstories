@@ -22,19 +22,17 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div style={{ minHeight: '100vh' }}>
-          <Header />
-          <>
-            <Switch>
-              <Route exact path="/" component={Landing} />
-              <Route exact path="/story/:id" component={Editor} />
-              <Route exact path="/story" component={() => (<Redirect to="/" />)} />
-              <Route exact path="/how-to-play" component={HowToPlay} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-            </Switch>
-          </>
-        </div>
+        <Header />
+        <main style={{ minHeight: '100vh' }}>
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/story/:id" component={Editor} />
+            <Route exact path="/story" component={() => (<Redirect to="/" />)} />
+            <Route exact path="/how-to-play" component={HowToPlay} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+          </Switch>
+        </main>
         <Footer />
       </BrowserRouter>
     </Provider>
