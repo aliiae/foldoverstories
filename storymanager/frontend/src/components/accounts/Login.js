@@ -61,9 +61,9 @@ function Login(props) {
   };
 
   return (
-    <Container>
+    <Container className="pt-3 pb-3">
       <Col md={6} className="m-auto">
-        <Card className="mt-3 mb-3">
+        <Card>
           <Card.Body>
             <Card.Title>
               <h1 className="text-center">Login</h1>

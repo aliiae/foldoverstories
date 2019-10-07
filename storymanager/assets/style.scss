@@ -15,6 +15,13 @@ $gray-800: #333 !default;
 $gray-900: #222 !default;
 $black: #000 !default;
 
+$primary: #EB6864;
+$secondary: #aaa;
+$success: #22B24C;
+$info: #369;
+$warning: #F5E625;
+$danger: #F57A00;
+
 $purple: #786ea1 !default;
 $pink: #d6456b !default;
 $red: #860202 !default;
@@ -24,6 +31,8 @@ $teal: #abcf84 !default;
 $cyan: #039343 !default;
 $gray: #424242 !default;
 
+$nav-height: 4rem;
+
 @mixin color-underline($border: 2px, $color: $yellow, $padding: 2px) {
   text-decoration: none;
   transition: all 0.2s ease-in;
@@ -32,8 +41,17 @@ $gray: #424242 !default;
 }
 
 #app {
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+}
+
+.main-content {
+  min-height: -webkit-calc(100vh - 8rem);
+  min-height: -moz-calc(100vh - 8rem);
+  min-height: calc(100vh - 8rem);
+}
+
+.nav {
+  height: $nav-height;
 }
 
 .color-underline {
@@ -46,19 +64,19 @@ $gray: #424242 !default;
 
 .footer, .navbar-nav, .card, .jumbotron, .illustrated-text-card {
   a {
-    @include color-underline;
-
-    &:hover {
-      @include color-underline(5px, $yellow, 1px)
-    }
+    @extend .color-underline;
   }
 }
 
-.footer {
-  height: 4em;
-  line-height: 4em;
-  background-color: $white;
+.gray-border {
   border: 1px solid $gray-200;
+}
+
+.footer {
+  height: $nav-height;
+  line-height: $nav-height;
+  background-color: $white;
+  @extend .gray-border;
 }
 
 .editor {
@@ -66,9 +84,9 @@ $gray: #424242 !default;
 }
 
 .jumbotron {
-  background-color: $gray-100;
+  background-color: transparent;
   color: $black;
-  border: 1px solid $gray-200;
+  //@extend .gray-border;
 }
 
 .card, .pagination, .dashboard, .paper {
@@ -94,7 +112,7 @@ $gray: #424242 !default;
 .table {
   background-color: $white;
   border-radius: 0.25rem;
-  border: 1px solid $gray-200;
+  @extend .gray-border;
 
   & a {
     @include color-underline;
@@ -189,7 +207,7 @@ $gray: #424242 !default;
 .paper {
   padding: 37px 55px 27px;
   position: relative;
-  border: 1px solid $gray-200;
+  @extend .gray-border;
   line-height: 2em;
   background: white;
   background: -webkit-linear-gradient(top, #DFE8EC 0%, white 8%) 0 57px;
@@ -261,9 +279,6 @@ $gray: #424242 !default;
 }
 
 .text-page-container {
-  background-image: url('/static/img/icons8/ginger-cat-reading.png');
-  background-position: right bottom;
-  background-repeat: no-repeat;
 }
 
 .illustrated-text-card {

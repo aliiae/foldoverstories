@@ -29,7 +29,7 @@ function VisibleTextDisplay(props) {
   if (correctTurn && !visibleText) {
     return (
       <div className="visible-text pl-2">
-        <p className="lead text-muted">Start your story!</p>
+        <p className="lead text-muted">Start your story! ↓</p>
       </div>
     );
   }

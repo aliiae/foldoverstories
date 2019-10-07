@@ -14,7 +14,7 @@ export default function Footer() {
         {' '}
         alii&#230;
         {'. '}
-        <a href="mailto:#">Contact me</a>
+        <a href="mailto:#">Email</a>
         .
       </Container>
     </footer>

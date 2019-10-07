@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 
 export default function HowToPlay() {
   return (
-    <div className="dark-bg full-size">
+    <div className="dark-bg">
       <Container className="pt-3 pb-3">
         <Col md={8} className="m-auto">
           <div className="p-3 illustrated-text-card">

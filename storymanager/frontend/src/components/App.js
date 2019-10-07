@@ -23,7 +23,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <Header />
-        <main style={{ minHeight: '100vh' }}>
+        <main className="main-content">
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route exact path="/story/:id" component={Editor} />

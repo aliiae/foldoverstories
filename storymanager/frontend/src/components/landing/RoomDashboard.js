@@ -21,7 +21,7 @@ function RoomDashboard(props) {
     setActivePageNumber(newPageNumber);
     getRoomsConnect(newPageNumber);
   };
-  if (!rooms || !rooms.results || rooms.results.length === 0) return <></>;
+  if (!rooms || !rooms.results || rooms.results.length === 0) return null;
 
   const { count, results } = rooms;
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
@@ -37,42 +37,45 @@ function RoomDashboard(props) {
       </Pagination.Item>,
     );
   }
+
   return (
-    <Container className="pt-3 pb-2">
-      <Table hover responsive className="dashboard">
-        <thead>
-          <tr>
-            <th scope="col">Story</th>
-            <th scope="col">Authors</th>
-            <th scope="col" className="text-center">Status</th>
-            <th scope="col">Last Updated</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((room) => (
-            <tr
-              key={room.room_title}
-              className={room.user_can_write_now ? 'table-success' : !room.is_finished ? 'table-warning' : ''}
-            >
-              <td>{<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}</td>
-              <td>
-                {room.users.map((user) => user.username)
-                  .reduce((prev, curr) => [prev, ', ', curr])}
-              </td>
-              <td className="text-center"><Status item={room} /></td>
-              <td>{formatTimeStamp(room.modified_at)}</td>
+    <div className="dark-bg">
+      <Container className="pt-3 pb-2">
+        <Table hover responsive className="dashboard">
+          <thead>
+            <tr>
+              <th scope="col">Story</th>
+              <th scope="col">Authors</th>
+              <th scope="col" className="text-center">Status</th>
+              <th scope="col">Last Updated</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-      {numPages > 1 && (
-        <div className="pagination-center">
-          <Pagination>
-            {paginationItems}
-          </Pagination>
-        </div>
-      )}
-    </Container>
+          </thead>
+          <tbody>
+            {results.map((room) => (
+              <tr
+                key={room.room_title}
+                className={room.user_can_write_now ? 'table-success' : !room.is_finished ? 'table-warning' : ''}
+              >
+                <td>{<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}</td>
+                <td>
+                  {room.users.map((user) => user.username)
+                    .reduce((prev, curr) => [prev, ', ', curr])}
+                </td>
+                <td className="text-center"><Status item={room} /></td>
+                <td>{formatTimeStamp(room.modified_at)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        {numPages > 1 && (
+          <div className="pagination-center">
+            <Pagination>
+              {paginationItems}
+            </Pagination>
+          </div>
+        )}
+      </Container>
+    </div>
   );
 }
 
