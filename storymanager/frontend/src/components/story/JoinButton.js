@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import { addUserIntoRoom } from '../../actions/room';
 
 function JoinButton(props) {
-  const { addUserIntoRoomConnect, roomTitle, isAuthenticated } = props;
+  const {
+    addUserIntoRoomConnect, roomTitle, isAuthenticated, sendWsMessage,
+  } = props;
   const onClick = () => {
     addUserIntoRoomConnect(roomTitle);
+    sendWsMessage(JSON.stringify({ msg_type: 'room.join', command: 'join', room: roomTitle }));
   };
 
   return (
@@ -27,6 +30,7 @@ JoinButton.propTypes = {
   addUserIntoRoomConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool,
+  sendWsMessage: PropTypes.func.isRequired,
 };
 
 JoinButton.defaultProps = {

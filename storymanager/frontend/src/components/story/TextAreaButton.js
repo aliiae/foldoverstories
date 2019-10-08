@@ -25,6 +25,7 @@ const propTypes = {
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
   currentTurnUsername: PropTypes.string,
+  sendWsMessage: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -34,7 +35,7 @@ const defaultProps = {
   currentTurnUsername: null,
 };
 
-function MessageModal({ show, onHide, title, message, onClick }) {
+function MessageModal({ show, onHide, title, message }) {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
@@ -42,9 +43,6 @@ function MessageModal({ show, onHide, title, message, onClick }) {
       </Modal.Header>
       <Modal.Body>{message}</Modal.Body>
       <Modal.Footer>
-        <Button variant="danger" onClick={onClick} className="mr-auto">
-          Do not show warnings for this story
-        </Button>
         <Button variant="secondary" onClick={onHide}>
           Close
         </Button>
@@ -56,7 +54,6 @@ function MessageModal({ show, onHide, title, message, onClick }) {
 MessageModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
@@ -65,19 +62,15 @@ function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
     addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
-    currentTurnUsername,
+    currentTurnUsername, sendWsMessage,
   } = props;
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalShownCount, setModalShownCount] = useState(0);
   const [modalMessage, setModalMessage] = useState('');
   const [modalTitle, setModalTitle] = useState('');
-  const [doNotShowModals, setDoNotShowModals] = useState(false);
   const handleModalClose = () => {
     setShowModal(false);
-  };
-  const handleDoNotShowModals = () => {
-    setDoNotShowModals(true);
   };
   const resetInputFields = () => {
     setText('');
@@ -91,14 +84,14 @@ function TextAreaButton(props) {
     if (hiddenIsEmpty) {
       setShowModal(true);
     }
-  }, [hiddenIsEmpty]);
+  }, [hiddenIsEmpty, correctTurn]);
 
   const onSubmit = (e) => {
     e.preventDefault();
     const lastNewLineIndex = text.lastIndexOf('\n');
     const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
     const visibleText = text.slice(lastNewLineIndex + 1);
-    if (!doNotShowModals && hiddenText === '' && modalShownCount === 0) {
+    if (hiddenText === '' && modalShownCount === 0) {
       setHiddenIsEmpty(true);
       setModalMessage(messageHiddenIsEmpty);
       setModalTitle('Only one line?');
@@ -110,6 +103,7 @@ function TextAreaButton(props) {
         visible_text: visibleText,
       };
       addTextConnect(textPost, roomTitle);
+      sendWsMessage(JSON.stringify({ msg_type: 'room.text', command: 'send', room: roomTitle }));
       resetInputFields();
       setModalShownCount(0);
     }
@@ -121,6 +115,7 @@ function TextAreaButton(props) {
 
   const onClickLeave = () => {
     leaveRoomConnect(roomTitle);
+    sendWsMessage(JSON.stringify({ msg_type: 'room.leave', command: 'leave', room: roomTitle }));
   };
 
   if (auth === null) {
@@ -131,7 +126,7 @@ function TextAreaButton(props) {
     return <LoadingSpinner />;
   }
   if (!isAuthenticated || !usernames.includes(user.username)) {
-    return (<JoinButton roomTitle={roomTitle} />);
+    return (<JoinButton roomTitle={roomTitle} sendWsMessage={sendWsMessage} />);
   }
   if (userFinished) {
     return <LeftRoomMessage />;
@@ -165,11 +160,10 @@ function TextAreaButton(props) {
         </Row>
       </Form>
       <MessageModal
-        show={!doNotShowModals && showModal}
+        show={showModal}
         onHide={handleModalClose}
         message={modalMessage}
         title={modalTitle}
-        onClick={handleDoNotShowModals}
       />
     </>
   );

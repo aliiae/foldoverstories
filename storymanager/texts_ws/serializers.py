@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from rooms.models import Room
 from rooms.serializers import RoomUsersSerializer
-from .models import Text
+from texts.models import Text
+
+User = get_user_model()
 
 
 class TextsRoomSerializer(serializers.ModelSerializer):

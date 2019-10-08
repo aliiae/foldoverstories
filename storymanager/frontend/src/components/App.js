@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter, Route, Switch, Redirect,
 } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
 
 import { Provider } from 'react-redux';
 import Header from './layout/Header';
@@ -15,6 +14,7 @@ import Editor from './story/Editor';
 import Footer from './layout/Footer';
 import store from '../store';
 import { loadUser } from '../actions/auth';
+import { WebsocketNotifier } from './websockets/WebsocketNotifier';
 
 function App() {
   useEffect(() => store.dispatch(loadUser()), []);

@@ -12,7 +12,6 @@ export const ADD_TEXT = 'ADD_TEXT';
 export const GET_USERS = 'GET_USERS';
 export const WRONG_TURN = 'WRONG_TURN';
 export const LAST_TURN = 'LAST_TURN';
-
 export const GET_ERRORS = 'GET_ERRORS';
 
 export const USER_LOADING = 'USER_LOADING';
@@ -28,3 +27,10 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 
 export const GET_MESSAGES = 'GET_MESSAGES';
 export const CREATE_MESSAGE = 'CREATE_MESSAGE';
+
+export const USER_ONLINE = 'USER_ONLINE';
+export const USER_OFFLINE = 'USER_OFFLINE';
+export const WS_CONNECTING = 'WS_CONNECTING';
+export const WS_OPENED = 'WS_OPENED';
+export const WS_CLOSED = 'WS_CLOSED';
+export const SET_WS_STATUS = 'SET_WS_STATUS';

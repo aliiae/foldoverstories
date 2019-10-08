@@ -4,6 +4,7 @@ import errors from './errors';
 import messages from './messages';
 import auth from './auth';
 import room from './room';
+import websockets from './websockets';
 
 export default combineReducers({
   story,
@@ -11,4 +12,5 @@ export default combineReducers({
   errors,
   messages,
   auth,
+  websockets,
 });

@@ -14,7 +14,7 @@ const propTypes = {
   })),
   roomTitle: PropTypes.string.isRequired,
   getUsersConnect: PropTypes.func.isRequired,
-  showStatus: PropTypes.bool.isRequired,
+  showUserStatus: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -22,7 +22,7 @@ const defaultProps = {
 };
 
 function RoomUsers(props) {
-  const { getUsersConnect, roomTitle, showStatus } = props;
+  const { getUsersConnect, roomTitle, showUserStatus } = props;
   useEffect(() => {
     getUsersConnect(roomTitle);
   }, []);
@@ -34,13 +34,14 @@ function RoomUsers(props) {
         <ul className="list-unstyled card-text">
           {users.map((u) => (
             <li key={u.username}>
-              {showStatus && <Status item={u} />}
+              {showUserStatus && <Status item={u} />}
               {`${u.username} `}
               <span className="text-muted small">
-                (<Pluralize
-                singular="contribution"
-                count={u.texts_count}
-                zero="no contributions"
+                (
+                <Pluralize
+                  singular="contribution"
+                  count={u.texts_count}
+                  zero="no contributions"
                 />
                 {' '}
                 to the story)

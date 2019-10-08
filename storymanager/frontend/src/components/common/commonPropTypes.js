@@ -16,4 +16,13 @@ export const textsPropType = PropTypes.arrayOf(PropTypes.shape({
   username: PropTypes.string,
 }));
 
+export const matchPropType = PropTypes.shape({
+  location: PropTypes.object,
+  path: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
+  params: PropTypes.object,
+});
+
 export const authDefaultProp = { isAuthenticated: false, token: '', user: {} };

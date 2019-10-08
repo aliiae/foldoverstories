@@ -8,7 +8,7 @@ from rooms.utils import ADJECTIVES, NOUNS
 
 
 def random_adj_noun_pair(delimiter: str = '-') -> str:
-    """
+    '''
     Creates a random adj-noun pair joined by the specified delimiter.
 
     Sources:
@@ -21,12 +21,12 @@ def random_adj_noun_pair(delimiter: str = '-') -> str:
 
 
     :return: A string in the form adjective + delimiter + noun, e.g. 'small-bird'.
-    """
+    '''
     return random.choice(ADJECTIVES) + delimiter + random.choice(NOUNS)
 
 
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
-    """Tries to generate a unique adj-noun pair for 5 times, else returns a random integer."""
+    '''Tries to generate a unique adj-noun pair for 5 times, else returns a random integer.'''
     attempts = attempts or 1
     while attempts:
         adj_noun_pair = random_adj_noun_pair('-')
@@ -49,6 +49,14 @@ class Room(models.Model):
         if self.is_finished:
             self.finished_at = timezone.now()
         super(Room, self).save(*args, **kwargs)
+
+    @property
+    def group_name(self) -> str:
+        """
+        Returns the Channels Group name that sockets should subscribe to to get sent
+        messages as they are generated.
+        """
+        return str(self.room_title)
 
 
 class Membership(models.Model):

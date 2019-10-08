@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'knox',
+    'channels',
+    'texts_ws',
     'accounts',
     'rooms',
     'texts',
@@ -134,3 +136,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
+
+# Channels
+
+ASGI_APPLICATION = 'storymanager.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

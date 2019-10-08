@@ -1,5 +1,5 @@
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN, WS_GET_VISIBLE_TEXT,
 } from '../actions/types';
 
 const initialState = {
