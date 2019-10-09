@@ -17,7 +17,7 @@ class TextsFullSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Text
-        fields = '__all__'
+        fields = ('visible_text', 'author', 'room', 'hidden_text')
 
 
 class TextsVisibleOnlySerializer(serializers.ModelSerializer):

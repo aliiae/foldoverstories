@@ -25,7 +25,6 @@ const propTypes = {
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
   currentTurnUsername: PropTypes.string,
-  sendWsMessage: PropTypes.func.isRequired,
 };
 
 const defaultProps = {

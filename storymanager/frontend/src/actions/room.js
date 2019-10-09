@@ -65,7 +65,6 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
         type: ADD_USER_INTO_ROOM,
         payload: res.data,
       });
-      dispatch(getUsers(roomTitle));
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });

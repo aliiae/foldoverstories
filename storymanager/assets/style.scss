@@ -1,4 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=News+Cycle:400,700);
 @import url(https://fonts.googleapis.com/css?family=Handlee);
 
 $cursive-font-family: 'Handlee', cursive;
@@ -35,12 +34,12 @@ $nav-height: 4rem;
 
 @mixin color-underline($border: 2px, $color: $yellow, $padding: 2px) {
   text-decoration: none;
-  transition: all 0.2s ease-in;
+  transition: all .2s ease-in;
   border-bottom: $border solid $color;
   padding-bottom: $padding;
 }
 
-#app {
+.app {
   min-height: 100vh;
 }
 
@@ -48,13 +47,20 @@ $nav-height: 4rem;
   min-height: -webkit-calc(100vh - 8rem);
   min-height: -moz-calc(100vh - 8rem);
   min-height: calc(100vh - 8rem);
+  display: flex;
+  flex-flow: column;
+}
+
+.align-center {
+  margin: auto;
 }
 
 .nav {
   height: $nav-height;
 }
 
-.color-underline {
+.color-underline,
+%color-underline {
   @include color-underline;
 
   &:hover {
@@ -62,13 +68,18 @@ $nav-height: 4rem;
   }
 }
 
-.footer, .navbar-nav, .card, .jumbotron, .illustrated-text-card {
+.footer,
+.navbar-nav,
+.card,
+.jumbotron,
+.illustrated-text-card {
+
   a {
-    @extend .color-underline;
+    @extend %color-underline;
   }
 }
 
-.gray-border {
+%gray-border {
   border: 1px solid $gray-200;
 }
 
@@ -76,7 +87,8 @@ $nav-height: 4rem;
   height: $nav-height;
   line-height: $nav-height;
   background-color: $white;
-  @extend .gray-border;
+
+  @extend %gray-border;
 }
 
 .editor {
@@ -86,11 +98,33 @@ $nav-height: 4rem;
 .jumbotron {
   background-color: transparent;
   color: $black;
-  //@extend .gray-border;
+  //@extend %gray-border;
 }
 
-.card, .pagination, .dashboard, .paper {
+.card,
+.pagination,
+.dashboard,
+.paper {
   box-shadow: 4px 4px 0 #c3c3c3;
+}
+
+.dashboard {
+  transition: all .2s ease-in-out;
+}
+
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 200ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
 }
 
 .text-viewer-table {
@@ -111,12 +145,14 @@ $nav-height: 4rem;
 
 .table {
   background-color: $white;
-  border-radius: 0.25rem;
-  @extend .gray-border;
+  border-radius: .25rem;
+
+  @extend %gray-border;
 
   & a {
-    @include color-underline;
     color: black;
+
+    @include color-underline;
 
     &:hover {
       @include color-underline(5px, $yellow, 1px)
@@ -134,6 +170,7 @@ $nav-height: 4rem;
 }
 
 .logo-img {
+
   &:hover {
     cursor: pointer;
   }
@@ -144,10 +181,12 @@ $nav-height: 4rem;
 }
 
 .editor-form {
-  margin-top: 0.8rem;
+  margin-top: .8rem;
 }
 
-.shadow-button, .nav-item button, .tab-pill.active {
+.shadow-button,
+.nav-item button,
+.tab-pill.active {
   box-shadow: 2px 2px 0 #222 !important;
 
   &:hover {
@@ -155,7 +194,8 @@ $nav-height: 4rem;
   }
 }
 
-.start-button, .card button {
+.start-button,
+.card button {
   box-shadow: 4px 4px 0 #222;
 
   &:hover {
@@ -164,12 +204,15 @@ $nav-height: 4rem;
 }
 
 .start-button {
-  &::before, &::after {
+
+  &::before,
+  &::after {
     content: '✨';
   }
 }
 
 .nav-welcome-text {
+
   &::after {
     content: ' 👋';
   }
@@ -192,12 +235,13 @@ $nav-height: 4rem;
 .visible-text {
   width: 100%;
   height: 100%;
-  padding: 0.5rem;
+  padding: .5rem;
   line-height: 2rem;
   font-size: 1.2rem;
 }
 
 .visible-text-lead {
+
   &::before {
     content: '\2026'; // ellipsis
     display: inline;
@@ -207,7 +251,6 @@ $nav-height: 4rem;
 .paper {
   padding: 37px 55px 27px;
   position: relative;
-  @extend .gray-border;
   line-height: 2em;
   background: white;
   background: -webkit-linear-gradient(top, #DFE8EC 0%, white 8%) 0 57px;
@@ -216,6 +259,8 @@ $nav-height: 4rem;
   -moz-background-size: 100% 30px;
   -ms-background-size: 100% 30px;
   background-size: 2em 2em;
+
+  @extend %gray-border;
 }
 
 .paper textarea {
@@ -239,7 +284,7 @@ $nav-height: 4rem;
   &::before {
     content: '* * *';
     position: absolute;
-    top: -0.1rem;
+    top: -.1rem;
     left: 50%;
   }
 }
@@ -287,13 +332,16 @@ $nav-height: 4rem;
 }
 
 .illustrated-text-card section {
+
   h2 {
+
     &::before {
       content: '\2026 '
     }
   }
 
   img {
+
     &:nth-of-type(even) {
       vertical-align: middle;
       float: left;
@@ -313,13 +361,13 @@ $nav-height: 4rem;
 }
 
 .paper-top-message {
-  padding-top: 0.5rem;
-  padding-left: 0.5rem;
+  padding-top: .5rem;
+  padding-left: .5rem;
 }
 
 .paper-bottom-message {
   padding-top: 1rem;
-  padding-left: 0.5rem;
+  padding-left: .5rem;
 }
 
 .full-size {

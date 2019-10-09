@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
-import Button from 'react-bootstrap/Button';
 
+import Button from 'react-bootstrap/Button';
 import { logout } from '../../actions/auth';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
-import { WEBSITE_TITLE } from '../../settings';
 
 const propTypes = {
   auth: authPropType,
@@ -100,4 +100,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { logoutConnect: logout })(Header);
+export default withRouter(connect(mapStateToProps, { logoutConnect: logout })(Header));

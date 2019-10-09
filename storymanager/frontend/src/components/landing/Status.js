@@ -43,5 +43,5 @@ Emoji.propTypes = {
 
 Emoji.defaultProps = {
   label: null,
-  title: null,
+  title: '',
 };

@@ -21,6 +21,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
           visible_text: lastItem.visible_text,
           room: lastItem.room,
           correct_turn: true,
+          current_turn_username: null,
         },
       });
     }).catch((err) => {
@@ -53,7 +54,5 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
         type: ADD_TEXT,
         payload: res.data,
       });
-      dispatch(getUsers(roomTitle));
-      dispatch(getVisibleText(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

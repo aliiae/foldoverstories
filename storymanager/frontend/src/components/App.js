@@ -14,7 +14,6 @@ import Editor from './story/Editor';
 import Footer from './layout/Footer';
 import store from '../store';
 import { loadUser } from '../actions/auth';
-import { WebsocketNotifier } from './websockets/WebsocketNotifier';
 
 function App() {
   useEffect(() => store.dispatch(loadUser()), []);
@@ -31,6 +30,7 @@ function App() {
             <Route exact path="/how-to-play" component={HowToPlay} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route path="*" component={() => (<span>404</span>)} />
           </Switch>
         </main>
         <Footer />
