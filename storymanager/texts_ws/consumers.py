@@ -20,7 +20,7 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
         else:
             channel_groups = []
             self.rooms = set(
-                [room_title for room_title in await self._get_user_rooms(self.scope['user'])])
+                (room_title for room_title in await self._get_user_rooms(self.scope['user'])))
             for room in self.rooms:
                 channel_groups.append(self.channel_layer.group_add(room, self.channel_name))
             asyncio.gather(*channel_groups)
@@ -29,35 +29,36 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
     async def receive_json(self, content, **kwargs):
         command = content.get('command', None)
         try:
-            if command == 'join':
-                await self.join_room(content['room'])
-            elif command == 'leave':
-                await self.leave_room(content['room'])
-            elif command == 'send':
-                await self.send_room(content['room'])
+            pass
+            # if command == 'join':
+            #     await self.join_room(content['room'])
+            # elif command == 'leave':
+            #     await self.leave_room(content['room'])
+            # elif command == 'send':
+            #     await self.send_room(content['room'])
         except ClientError as e:
             await self.send_json({'error': e.code})
-
-    async def join_room(self, room_title):
-        """Called by receive_json when someone sent a join command."""
-        room = await self._get_room_or_error(room_title)
-        await self.channel_layer.group_send(room.group_name, {'type': 'room.join'})
-        self.rooms.add(room_title)
-        await self.channel_layer.group_add(room.group_name, self.channel_name)
-
-    async def leave_room(self, room_title):
-        """Called by receive_json when someone sent a leave command."""
-        room = await self._get_room_or_error(room_title)
-        await self.channel_layer.group_send(room.group_name, {'type': 'room.leave'})
-        # self.rooms.discard(room_title)
-        # await self.channel_layer.group_discard(room.group_name, self.channel_name)
-
-    async def send_room(self, room_title):
-        """Called by receive_json when someone sends a text to a room."""
-        if room_title not in self.rooms:
-            raise ClientError('ROOM_ACCESS_DENIED')
-        room = await self._get_room_or_error(room_title)
-        await self.channel_layer.group_send(room.group_name, {'type': 'room.text'})
+    #
+    # async def join_room(self, room_title):
+    #     """Called by receive_json when someone sent a join command."""
+    #     room = await self._get_room_or_error(room_title)
+    #     await self.channel_layer.group_send(room.group_name, {'type': 'room.join'})
+    #     self.rooms.add(room_title)
+    #     await self.channel_layer.group_add(room.group_name, self.channel_name)
+    #
+    # async def leave_room(self, room_title):
+    #     """Called by receive_json when someone sent a leave command."""
+    #     room = await self._get_room_or_error(room_title)
+    #     await self.channel_layer.group_send(room.group_name, {'type': 'room.leave'})
+    #     # self.rooms.discard(room_title)
+    #     # await self.channel_layer.group_discard(room.group_name, self.channel_name)
+    #
+    # async def send_room(self, room_title):
+    #     """Called by receive_json when someone sends a text to a room."""
+    #     if room_title not in self.rooms:
+    #         raise ClientError('ROOM_ACCESS_DENIED')
+    #     room = await self._get_room_or_error(room_title)
+    #     await self.channel_layer.group_send(room.group_name, {'type': 'room.text'})
 
     async def room_join(self, event):
         await self.send_json({'msg_type': 'room.join'})

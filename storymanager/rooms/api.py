@@ -7,6 +7,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from rooms.models import Room, Membership
+from texts_ws.consumers import RoomConsumer
+from texts_ws.server_send import send_channel_message
 from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer
 
 
@@ -42,6 +44,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
             raise NotAuthenticated(detail='User needs to login first')
         room.users.add(request.user)
         room.save()
+        send_channel_message(room_title, 'room.join')
         return Response(status=200)
 
     def get(self, request, *args, **kwargs):
@@ -72,6 +75,7 @@ class LeaveRoomAPI(generics.GenericAPIView):
         if all(membership.has_stopped for membership in room_memberships):  # all authors left
             room.is_finished = True
             room.save()
+        send_channel_message(room_title, 'room.leave')
         return Response(status=200)
 
 

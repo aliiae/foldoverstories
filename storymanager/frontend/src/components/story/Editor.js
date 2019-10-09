@@ -23,7 +23,7 @@ function Editor(props) {
   const { userIsLoading } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
-  const { sendMessage } = useWebsocket({ isOnline, token: auth.token, roomTitle });
+  useWebsocket({ isOnline, token: auth.token, roomTitle });
 
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
@@ -53,7 +53,7 @@ function Editor(props) {
                 </p>
                 <div className="p-3 paper">
                   <VisibleTextDisplay roomTitle={roomTitle} />
-                  <TextAreaButton roomTitle={roomTitle} sendWsMessage={sendMessage} />
+                  <TextAreaButton roomTitle={roomTitle} />
                 </div>
               </div>
             )}

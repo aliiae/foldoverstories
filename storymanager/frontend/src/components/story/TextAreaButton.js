@@ -62,7 +62,7 @@ function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
     addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
-    currentTurnUsername, sendWsMessage,
+    currentTurnUsername,
   } = props;
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -103,7 +103,6 @@ function TextAreaButton(props) {
         visible_text: visibleText,
       };
       addTextConnect(textPost, roomTitle);
-      sendWsMessage(JSON.stringify({ msg_type: 'room.text', command: 'send', room: roomTitle }));
       resetInputFields();
       setModalShownCount(0);
     }
@@ -115,7 +114,6 @@ function TextAreaButton(props) {
 
   const onClickLeave = () => {
     leaveRoomConnect(roomTitle);
-    sendWsMessage(JSON.stringify({ msg_type: 'room.leave', command: 'leave', room: roomTitle }));
   };
 
   if (auth === null) {
@@ -126,7 +124,7 @@ function TextAreaButton(props) {
     return <LoadingSpinner />;
   }
   if (!isAuthenticated || !usernames.includes(user.username)) {
-    return (<JoinButton roomTitle={roomTitle} sendWsMessage={sendWsMessage} />);
+    return (<JoinButton roomTitle={roomTitle} />);
   }
   if (userFinished) {
     return <LeftRoomMessage />;
