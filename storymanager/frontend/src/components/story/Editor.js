@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { connect } from 'react-redux';
 import Container from 'react-bootstrap/Container';
-
+import Button from 'react-bootstrap/Button';
 import FinishedTextViewer from './FinishedTextViewer';
 import VisibleTextDisplay from './VisibleTextDisplay';
 import TextAreaButton from './TextAreaButton';
@@ -15,6 +15,9 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';
 import useWebsocket from '../../hooks/useWebsocket';
+import { Emoji } from '../landing/Status';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 function Editor(props) {
   const {
@@ -22,13 +25,24 @@ function Editor(props) {
   } = props;
   const { userIsLoading } = auth;
   const roomTitle = match.params.id;
+  const [showCopied, setShowCopied] = useState(false);
   const { isOnline } = useInternetStatus();
   useWebsocket({ isOnline, token: auth.token, roomTitle });
-
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, [isLastTurn]);
+
+  let dummyRef = useRef(null);
+  const url = window.location.href;
+
+  const onClickCopy = () => {
+    dummyRef.style.display = 'block';
+    dummyRef.select();
+    document.execCommand('copy');
+    dummyRef.style.display = 'none';
+    setShowCopied(true);
+  };
 
   if (userIsLoading) {
     return <LoadingSpinner />;
@@ -47,9 +61,38 @@ function Editor(props) {
                     href={window.location.href}
                     className="color-underline"
                     title="Link to this page"
+                    onClick={onClickCopy}
                   >
-                    {window.location.href}
+                    {url}
                   </a>
+                  {' '}
+                  <input
+                    className="hidden-input"
+                    tabIndex="-1"
+                    ref={(el) => {
+                      dummyRef = el;
+                    }}
+                    value={url}
+                    readOnly
+                  />
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={(
+                      <Tooltip>
+                        Copy link to clipboard
+                      </Tooltip>
+                    )}
+                  >
+                    <Button
+                      className="inline-button"
+                      size="sm"
+                      variant="primary"
+                      onClick={onClickCopy}
+                    >
+                      Copy
+                    </Button>
+                  </OverlayTrigger>
+                  {showCopied ? <span className="text-success"> Copied!</span> : null}
                 </p>
                 <div className="p-3 paper">
                   <VisibleTextDisplay roomTitle={roomTitle} />

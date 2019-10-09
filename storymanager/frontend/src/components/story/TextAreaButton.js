@@ -15,6 +15,7 @@ import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
+import Alert from 'react-bootstrap/Alert';
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
@@ -34,23 +35,16 @@ const defaultProps = {
   currentTurnUsername: null,
 };
 
-function MessageModal({ show, onHide, title, message }) {
+function AlertMessage({ show, onHide, title, message }) {
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{message}</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <Alert show={show} onClose={onHide} variant="warning" dismissible>
+      <Alert.Heading>{title}</Alert.Heading>
+      <p>{message}</p>
+    </Alert>
   );
 }
 
-MessageModal.propTypes = {
+AlertMessage.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
@@ -64,15 +58,16 @@ function TextAreaButton(props) {
     currentTurnUsername,
   } = props;
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalShownCount, setModalShownCount] = useState(0);
-  const [modalMessage, setModalMessage] = useState('');
-  const [modalTitle, setModalTitle] = useState('');
-  const handleModalClose = () => {
-    setShowModal(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertWasShown, setAlertWasShown] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const handleCloseAlert = () => {
+    setShowAlert(false);
   };
   const resetInputFields = () => {
     setText('');
+    setAlertWasShown(false);
   };
 
   const messageHiddenIsEmpty = 'You seem to submit only one line of text. '
@@ -81,7 +76,8 @@ function TextAreaButton(props) {
 
   useEffect(() => {
     if (hiddenIsEmpty) {
-      setShowModal(true);
+      setShowAlert(true);
+      setAlertWasShown(true);
     }
   }, [hiddenIsEmpty, correctTurn]);
 
@@ -90,20 +86,20 @@ function TextAreaButton(props) {
     const lastNewLineIndex = text.lastIndexOf('\n');
     const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
     const visibleText = text.slice(lastNewLineIndex + 1);
-    if (hiddenText === '' && modalShownCount === 0) {
+    if (hiddenText === '' && !alertWasShown) {
       setHiddenIsEmpty(true);
-      setModalMessage(messageHiddenIsEmpty);
-      setModalTitle('Only one line?');
-      setModalShownCount(modalShownCount + 1);
+      setAlertMessage(messageHiddenIsEmpty);
+      setAlertTitle('Only one line?');
+      setAlertWasShown(true);
     } else {
       setHiddenIsEmpty(false);
+      setShowAlert(false);
       const textPost = {
         hidden_text: hiddenText,
         visible_text: visibleText,
       };
       addTextConnect(textPost, roomTitle);
       resetInputFields();
-      setModalShownCount(0);
     }
   };
 
@@ -143,6 +139,7 @@ function TextAreaButton(props) {
             name="text"
             style={{ resize: 'none' }}
             required
+            autoFocus
           />
         </Form.Group>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -156,11 +153,11 @@ function TextAreaButton(props) {
           </Col>
         </Row>
       </Form>
-      <MessageModal
-        show={showModal}
-        onHide={handleModalClose}
-        message={modalMessage}
-        title={modalTitle}
+      <AlertMessage
+        show={showAlert}
+        onHide={handleCloseAlert}
+        message={alertMessage}
+        title={alertTitle}
       />
     </>
   );

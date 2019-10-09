@@ -37,7 +37,6 @@ function RoomDashboard(props) {
       </Pagination.Item>,
     );
   }
-
   return (
     <div className="dark-bg">
       <Container className="pt-3 pb-2">
@@ -56,7 +55,9 @@ function RoomDashboard(props) {
                 key={room.room_title}
                 className={room.user_can_write_now ? 'table-success' : !room.is_finished ? 'table-warning' : ''}
               >
-                <td>{<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}</td>
+                <td className="room-link-td">
+                  {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
+                </td>
                 <td>
                   {room.users.map((user) => user.username)
                     .reduce((prev, curr) => [prev, ', ', curr])}

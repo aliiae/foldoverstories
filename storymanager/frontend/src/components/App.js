@@ -11,13 +11,13 @@ import Login from './accounts/Login';
 import Register from './accounts/Register';
 import Landing from './landing/Landing';
 import Editor from './story/Editor';
+import PageNotFound from './common/PageNotFound';
 import Footer from './layout/Footer';
 import store from '../store';
 import { loadUser } from '../actions/auth';
 
 function App() {
   useEffect(() => store.dispatch(loadUser()), []);
-
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -30,7 +30,7 @@ function App() {
             <Route exact path="/how-to-play" component={HowToPlay} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route path="*" component={() => (<span>404</span>)} />
+            <Route path="*" component={PageNotFound} />
           </Switch>
         </main>
         <Footer />

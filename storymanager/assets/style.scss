@@ -1,6 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Handlee);
+@import url('https://fonts.googleapis.com/css?family=Neucha|Roboto&display=swap');
 
-$cursive-font-family: 'Handlee', cursive;
+$main-font-family: 'Roboto', sans-serif;
+$cursive-font-family: 'Neucha', sans-serif;
 
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
@@ -49,6 +50,7 @@ $nav-height: 4rem;
   min-height: calc(100vh - 8rem);
   display: flex;
   flex-flow: column;
+  font-family: $main-font-family;
 }
 
 .align-center {
@@ -93,6 +95,7 @@ $nav-height: 4rem;
 
 .editor {
   background-color: $white;
+  margin-bottom: 1rem;
 }
 
 .jumbotron {
@@ -110,21 +113,6 @@ $nav-height: 4rem;
 
 .dashboard {
   transition: all .2s ease-in-out;
-}
-
-.my-node-enter {
-  opacity: 0;
-}
-.my-node-enter-active {
-  opacity: 1;
-  transition: opacity 200ms;
-}
-.my-node-exit {
-  opacity: 1;
-}
-.my-node-exit-active {
-  opacity: 0;
-  transition: opacity 200ms;
 }
 
 .text-viewer-table {
@@ -160,8 +148,12 @@ $nav-height: 4rem;
   }
 }
 
-.dark-bg {
+%dark-bg {
   background-color: $gray-100;
+}
+
+.dark-bg {
+  @extend %dark-bg;
 }
 
 .pagination-center {
@@ -186,6 +178,7 @@ $nav-height: 4rem;
 
 .shadow-button,
 .nav-item button,
+.inline-button,
 .tab-pill.active {
   box-shadow: 2px 2px 0 #222 !important;
 
@@ -249,6 +242,7 @@ $nav-height: 4rem;
 }
 
 .paper {
+  font-family: $cursive-font-family;
   padding: 37px 55px 27px;
   position: relative;
   line-height: 2em;
@@ -280,6 +274,7 @@ $nav-height: 4rem;
 
 .finished-text-container {
   position: relative;
+  font-family: $main-font-family;
 
   &::before {
     content: '* * *';
@@ -373,4 +368,49 @@ $nav-height: 4rem;
 .full-size {
   width: 100%;
   height: 100%;
+}
+
+.hidden-input {
+  display: none;
+  position: absolute;
+  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.room-link-td {
+
+  &::before {
+    content: '✶ ';
+    color: $primary;
+  }
+
+  //&::after {
+  //  content: ' ✶';
+  //  color: $primary;
+  //}
+}
+
+.alert {
+  margin-top: 1rem;
+}
+
+%highlight {
+  display: table;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, #FFD0AE 50%);
+}
+
+.not-found {
+  margin: auto;
+  font-family: $cursive-font-family;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  p {
+    @extend %highlight;
+  }
+}
+
+.highlight {
+
 }

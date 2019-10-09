@@ -7,12 +7,12 @@ export default function HowToPlay() {
     <div className="dark-bg">
       <Container className="pt-3 pb-3">
         <Col md={8} className="m-auto">
-          <div className="p-3 illustrated-text-card">
-            <h1 className="text-center">How to Play</h1>
+          <article className="p-3 illustrated-text-card">
+            <h1 className="text-center mb-3 display-4">How to Play</h1>
             <section>
               <h2>What is Fold-over Stories?</h2>
               <p>
-                Fold-over Stories implements a storytelling game
+                Fold-over Stories implements a creative storytelling game
                 similar to the parlour game called &ldquo;conseqeuences&rdquo;
                 or fold-over stories often used in language learning.
               </p>
@@ -56,7 +56,7 @@ export default function HowToPlay() {
                 ...
               </p>
             </section>
-          </div>
+          </article>
         </Col>
       </Container>
     </div>
