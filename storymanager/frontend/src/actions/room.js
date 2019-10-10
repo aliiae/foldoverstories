@@ -9,7 +9,7 @@ import {
   LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
-import { getUsers } from './story';
+import { getUsers, getVisibleText } from './story';
 import { setupTokenConfig } from './utils';
 
 // GET USER'S ROOMS
@@ -65,6 +65,8 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
         type: ADD_USER_INTO_ROOM,
         payload: res.data,
       });
+      dispatch(getVisibleText(roomTitle));
+      dispatch(getUsers(roomTitle));
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Modal from 'react-bootstrap/Modal';
 
+import Col from 'react-bootstrap/Col';
 import { addText } from '../../actions/story';
 import { leaveRoom } from '../../actions/room';
 import JoinButton from './JoinButton';
@@ -15,7 +15,6 @@ import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
-import Alert from 'react-bootstrap/Alert';
 
 const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
@@ -26,6 +25,7 @@ const propTypes = {
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
   currentTurnUsername: PropTypes.string,
+  isLastTurn: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -33,6 +33,7 @@ const defaultProps = {
   userFinished: false,
   auth: authDefaultProp,
   currentTurnUsername: null,
+  isLastTurn: false,
 };
 
 function AlertMessage({ show, onHide, title, message }) {
@@ -55,7 +56,7 @@ function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
     addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
-    currentTurnUsername,
+    currentTurnUsername, isLastTurn,
   } = props;
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -120,6 +121,17 @@ function TextAreaButton(props) {
   }
   if (!isAuthenticated || !usernames.includes(user.username)) {
     return (<JoinButton roomTitle={roomTitle} />);
+  }
+  if (isLastTurn) {
+    return (
+      <>
+        <p className="lead paper-top-message">This was the last turn in this story!</p>
+        <p className="paper-bottom-message">
+          The other authors have finished their parts, refresh this page to read the completed
+          masterpiece.
+        </p>
+      </>
+    );
   }
   if (userFinished) {
     return <LeftRoomMessage />;
@@ -188,6 +200,7 @@ const mapStateToProps = (state) => ({
   correctTurn: state.story.correct_turn,
   usernames: state.story.users.map((user) => user.username),
   userFinished: state.room.user_left_room,
+  isLastTurn: state.story.last_turn,
   currentTurnUsername: state.story.current_turn_username,
 });
 

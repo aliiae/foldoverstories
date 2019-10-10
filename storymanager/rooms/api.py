@@ -11,11 +11,8 @@ from rest_framework.response import Response
 from rooms.models import Room, Membership
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from texts_ws.server_send import send_channel_message
+from texts_ws.server_send import send_channel_message, WEBSOCKET_MSG_JOIN, WEBSOCKET_MSG_LEAVE
 from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer
-
-WEBSOCKET_MSG_JOIN = 'room.join'
-WEBSOCKET_MSG_LEAVE = 'room.leave'
 
 User = get_user_model()
 
@@ -48,6 +45,8 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
+        if request.user in room.users.all():
+            raise ValidationError(detail='User has already joined')
         new_user_membership = Membership(room=room, user=request.user)  # adds user to the room
         new_user_membership.save()
         room.save()

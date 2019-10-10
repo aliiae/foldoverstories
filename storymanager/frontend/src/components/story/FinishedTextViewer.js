@@ -12,19 +12,17 @@ import { textsPropType } from '../common/commonPropTypes';
 function TextTabs({ texts, usernames, finishedAt }) {
   return (
     <Tab.Container defaultActiveKey="full">
-      <div>
-        <Nav variant="pills" className="flex-row justify-content-end">
-          <Nav.Item className="mr-auto">
-            <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="full" className="tab-pill">Full Text</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="lines" className="tab-pill">By Lines</Nav.Link>
-          </Nav.Item>
-        </Nav>
-      </div>
+      <Nav variant="pills" className="flex-row justify-content-end">
+        <Nav.Item className="mr-auto">
+          <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="full" className="tab-pill">Full Text</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="lines" className="tab-pill">By Lines</Nav.Link>
+        </Nav.Item>
+      </Nav>
       <div>
         <Tab.Content>
           <Tab.Pane eventKey="full">
@@ -48,17 +46,17 @@ function TextLines({ texts }) {
     <div className="finished-text-container paper p-2">
       <Table className="table-sm text-viewer-table">
         <tbody>
-          {texts.map((text, i) => (
-            <tr key={text.username + i}>
-              <td
-                className="text-muted"
-                style={{ width: '4em', border: 'none' }}
-              >
-                {`${text.username}:`}
-              </td>
-              <td style={{ border: 'none' }}>{text.full_text}</td>
-            </tr>
-          ))}
+        {texts.map((text, i) => (
+          <tr key={text.username + i}>
+            <td
+              className="text-muted"
+              style={{ width: '4em', border: 'none' }}
+            >
+              {`${text.username}:`}
+            </td>
+            <td style={{ border: 'none' }}>{text.full_text}</td>
+          </tr>
+        ))}
         </tbody>
       </Table>
     </div>

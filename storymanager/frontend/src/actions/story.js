@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';
@@ -29,6 +29,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
         dispatch({ type: WRONG_TURN, payload: err.response.data.current_turn_username });
       } else if (err.response.data.last_turn) {
         dispatch({ type: LAST_TURN });
+        dispatch({ type: LEAVE_ROOM });
       } else {
         dispatch(returnErrors(err.response.data, err.response.status));
       }
@@ -54,5 +55,6 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
         type: ADD_TEXT,
         payload: res.data,
       });
+      dispatch(getUsers(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

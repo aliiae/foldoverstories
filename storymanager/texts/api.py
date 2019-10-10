@@ -8,11 +8,10 @@ from rest_framework.generics import get_object_or_404
 from rooms.models import Room, Membership
 from storymanager.django_types import QueryType
 from texts.models import Text
-from texts_ws.server_send import send_channel_message
+from texts_ws.server_send import send_channel_message, WEBSOCKET_MSG_ADD_TEXT
 from .serializers import TextsVisibleOnlySerializer, TextsFullSerializer
 
 User = get_user_model()
-WEBSOCKET_MSG_ADD_TEXT = 'room.text'
 
 
 class TextsViewSet(viewsets.ModelViewSet):
@@ -25,6 +24,8 @@ class TextsViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QueryType[Text]:
         room = self._room_instance
+        if room.is_finished:
+            raise PermissionDenied(detail='Story is finished')
         is_new_user: bool = self.request.user not in room.users.all()
         if is_new_user:  # new users can view anything
             return Text.objects.filter(room__room_title=self._room_title)

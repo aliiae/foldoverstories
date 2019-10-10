@@ -4,6 +4,7 @@ import { SOCKET_URL } from '../settings';
 import { wsClosed, wsOpened } from '../actions/websockets';
 import { getUsers, getVisibleText } from '../actions/story';
 import { getRoomStatus } from '../actions/room';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 
 const useWebsocket = ({ isOnline, token, roomTitle }) => {
@@ -22,6 +23,11 @@ const useWebsocket = ({ isOnline, token, roomTitle }) => {
     console.log(message.msg_type);
     switch (message.msg_type) {
       case 'room.text':
+        dispatchAction(getUsers(roomTitle));
+        dispatchAction(getVisibleText(roomTitle));
+        dispatchAction(getRoomStatus(roomTitle));
+        dispatchAction(getUsers(roomTitle));
+        break;
       case 'room.leave':
       case 'room.join':
         dispatchAction(getUsers(roomTitle));
@@ -42,7 +48,7 @@ const useWebsocket = ({ isOnline, token, roomTitle }) => {
   const onClose = () => {
     console.log('WS client closed');
     if (wsRef.current) {
-      wsRef.current.close();
+      endWebsocket();
     }
   };
   const onError = () => {
