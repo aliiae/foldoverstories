@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.http import HttpResponse
-from rest_framework import viewsets, permissions, generics
+from rest_framework import viewsets, permissions, generics, status
 from rest_framework.exceptions import PermissionDenied, NotAuthenticated, ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin
@@ -25,8 +25,8 @@ class RoomsPagination(PageNumberPagination):
 class RoomsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = RoomsSerializer
-    lookup_field = 'room_title'
     pagination_class = RoomsPagination
+    lookup_field = 'room_title'
 
     def get_queryset(self) -> QueryType[Room]:
         return self.request.user.rooms.all().order_by('-modified_at')
@@ -49,7 +49,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         # new_user_membership = Membership(room=room, user=request.user)  # adds user to the room
         # new_user_membership.save()
         # room.save()
-        return Response(status=200)
+        return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, *kwargs)
@@ -72,11 +72,11 @@ class LeaveRoomAPI(generics.GenericAPIView):
         if not user_membership:
             raise ValidationError(detail='User has not joined the room')
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
-            return Response(status=204)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         leave_room(room_title, user_membership)
         if all(membership.has_stopped for membership in room_memberships):  # all authors left
             close_room(room)
-        return Response(status=200)
+        return Response(status=status.HTTP_200_OK)
 
 
 class RoomReadViewSet(viewsets.ModelViewSet):

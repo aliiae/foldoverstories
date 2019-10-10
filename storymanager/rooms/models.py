@@ -20,7 +20,7 @@ def get_membership(user: User, room: 'Room') -> 'Membership':
     return Membership.objects.get(room=room, user=user)
 
 
-def add_user_to_room(user, room):
+def add_user_to_room(user: User, room: 'Room'):
     if Membership.objects.filter(room=room, user=user).exists():
         return
     new_user_membership = Membership(room=room, user=user)  # adds user to the room
@@ -38,8 +38,8 @@ def leave_room(room_title, user_membership):
 
 def close_room(room):
     room.is_finished = True
-    send_channel_message(room.room_title, WEBSOCKET_MSG_FINISH_ROOM)
     room.save()
+    send_channel_message(room.room_title, WEBSOCKET_MSG_FINISH_ROOM)
 
 
 def random_adj_noun_pair(delimiter: str = '-') -> str:

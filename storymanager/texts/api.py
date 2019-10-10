@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 
 from rooms.models import (Room, add_user_to_room, Membership, get_room_users, get_membership,
                           close_room)
