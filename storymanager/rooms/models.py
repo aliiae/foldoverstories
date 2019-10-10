@@ -1,14 +1,49 @@
 import random
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
 from rooms.utils import ADJECTIVES, NOUNS
+from storymanager.django_types import QueryType
+from websockets.server_sends import (send_channel_message, WEBSOCKET_MSG_JOIN,
+                                     WEBSOCKET_MSG_FINISH_ROOM, WEBSOCKET_MSG_LEAVE)
+
+User = get_user_model()
+
+
+def get_room_users(room: 'Room') -> QueryType[User]:
+    return room.users.all().order_by('date_joined')
+
+
+def get_membership(user: User, room: 'Room') -> 'Membership':
+    return Membership.objects.get(room=room, user=user)
+
+
+def add_user_to_room(user, room):
+    if Membership.objects.filter(room=room, user=user).exists():
+        return
+    new_user_membership = Membership(room=room, user=user)  # adds user to the room
+    new_user_membership.save()
+    send_channel_message(room.room_title, WEBSOCKET_MSG_JOIN)
+    room.save()
+
+
+def leave_room(room_title, user_membership):
+    user_membership.has_stopped = True
+    user_membership.can_write_now = False
+    user_membership.save()
+    send_channel_message(room_title, WEBSOCKET_MSG_LEAVE)
+
+
+def close_room(room):
+    room.is_finished = True
+    send_channel_message(room.room_title, WEBSOCKET_MSG_FINISH_ROOM)
+    room.save()
 
 
 def random_adj_noun_pair(delimiter: str = '-') -> str:
-    '''
+    """
     Creates a random adj-noun pair joined by the specified delimiter.
 
     Sources:
@@ -21,15 +56,15 @@ def random_adj_noun_pair(delimiter: str = '-') -> str:
 
 
     :return: A string in the form adjective + delimiter + noun, e.g. 'small-bird'.
-    '''
+    """
     return random.choice(ADJECTIVES) + delimiter + random.choice(NOUNS)
 
 
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
-    '''Tries to generate a unique adj-noun pair for 5 times, else returns a random integer.'''
+    """Tries to generate a unique adj-noun pair for 5 times, else returns a random integer."""
     attempts = attempts or 1
     while attempts:
-        adj_noun_pair = random_adj_noun_pair('-')
+        adj_noun_pair = random_adj_noun_pair()
         if not Room.objects.filter(room_title=adj_noun_pair).exists():
             return adj_noun_pair
         attempts -= 1
@@ -39,7 +74,8 @@ def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
 class Room(models.Model):
     room_title = models.SlugField(unique=True, default=attempt_random_adj_noun_pair,
                                   primary_key=True)
-    users = models.ManyToManyField(User, related_name='rooms', blank=True, through='Membership')
+    users = models.ManyToManyField(User, related_name='rooms', blank=True,
+                                   through='Membership')
     is_finished = models.BooleanField(default=False)
     finished_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

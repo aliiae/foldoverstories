@@ -3,7 +3,7 @@ import { Redirect, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { addRoom } from '../../actions/room';
+import { addRoom } from '../../store/actions/room';
 import { Emoji } from './Status';
 
 function StartButton(props) {

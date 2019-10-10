@@ -1,9 +1,9 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SOCKET_URL } from '../settings';
-import { wsClosed, wsOpened } from '../actions/websockets';
-import { getUsers, getVisibleText } from '../actions/story';
-import { getRoomStatus } from '../actions/room';
+import { wsClosed, wsOpened } from '../store/actions/websockets';
+import { getUsers, getVisibleText } from '../store/actions/story';
+import { getRoomStatus } from '../store/actions/room';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 
@@ -30,6 +30,7 @@ const useWebsocket = ({ isOnline, token, roomTitle }) => {
         break;
       case 'room.leave':
       case 'room.join':
+      case 'room.finish':
         dispatchAction(getUsers(roomTitle));
         dispatchAction(getVisibleText(roomTitle));
         dispatchAction(getRoomStatus(roomTitle));
@@ -48,7 +49,7 @@ const useWebsocket = ({ isOnline, token, roomTitle }) => {
   const onClose = () => {
     console.log('WS client closed');
     if (wsRef.current) {
-      endWebsocket();
+      wsRef.current.close();
     }
   };
   const onError = () => {

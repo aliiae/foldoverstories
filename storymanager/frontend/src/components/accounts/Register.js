@@ -11,7 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Formik } from 'formik';
 
 import { string, object as yupObject, ref as yupRef } from 'yup';
-import { register } from '../../actions/auth';
+import { register } from '../../store/actions/auth';
 
 
 function Register(props) {

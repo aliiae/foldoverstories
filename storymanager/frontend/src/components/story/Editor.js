@@ -10,7 +10,7 @@ import VisibleTextDisplay from './VisibleTextDisplay';
 import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
 import { authPropType, matchPropType } from '../common/commonPropTypes';
-import { getRoomStatus } from '../../actions/room';
+import { getRoomStatus } from '../../store/actions/room';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';

@@ -4,7 +4,7 @@ from frontend.views import index
 
 urlpatterns = [
     path('', include('frontend.urls')),
-    path('', include('texts_ws.urls')),
+    path('', include('websockets.urls')),
     path('', include('texts.urls')),
     path('', include('rooms.urls')),
     path('', include('accounts.urls')),

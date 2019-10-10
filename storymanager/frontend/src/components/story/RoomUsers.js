@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import Card from 'react-bootstrap/Card';
 
-import { getUsers } from '../../actions/story';
+import { getUsers } from '../../store/actions/story';
 import Status from '../landing/Status';
 
 const propTypes = {

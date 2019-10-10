@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'knox',
     'channels',
-    'texts_ws',
+    'websockets',
     'accounts',
     'rooms',
     'texts',

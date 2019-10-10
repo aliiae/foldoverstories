@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from 'react-bootstrap/Button';
-import { logout } from '../../actions/auth';
+import { logout } from '../../store/actions/auth';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
 
 const propTypes = {

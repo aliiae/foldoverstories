@@ -7,8 +7,8 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 
 import Col from 'react-bootstrap/Col';
-import { addText } from '../../actions/story';
-import { leaveRoom } from '../../actions/room';
+import { addText } from '../../store/actions/story';
+import { leaveRoom } from '../../store/actions/room';
 import JoinButton from './JoinButton';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { authDefaultProp, authPropType } from '../common/commonPropTypes';
@@ -72,7 +72,7 @@ function TextAreaButton(props) {
   };
 
   const messageHiddenIsEmpty = 'You seem to submit only one line of text. '
-    + 'In case you don\'t want to make your whole input visible to the next author, '
+    + 'Unless you want to make your whole input visible to the next author, '
     + 'please check that you divided your text with Enter ⏎.';
 
   useEffect(() => {

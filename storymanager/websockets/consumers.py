@@ -1,9 +1,8 @@
 import asyncio
+
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from rest_framework.generics import get_object_or_404
-from rooms.models import Room
 
 User = get_user_model()
 
@@ -27,7 +26,6 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             await self.accept(subprotocol=self.scope['subprotocols'][1])
 
     async def receive_json(self, content, **kwargs):
-        command = content.get('command', None)
         try:
             pass
             # if command == 'join':
@@ -69,6 +67,9 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
     async def room_text(self, event):
         await self.send_json({'msg_type': 'room.text'})
 
+    async def room_finish(self, event):
+        await self.send_json({'msg_type': 'room.finish'})
+
     async def disconnect(self, code):
         # remove this channel from every room's group
         channel_groups = [
@@ -81,10 +82,6 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
 
     async def echo_message(self, event):
         await self.send_json(event)
-
-    @database_sync_to_async
-    def _get_room_or_error(self, room_title):
-        return get_object_or_404(Room, room_title=room_title)
 
     @database_sync_to_async
     def _get_user_rooms(self, user):

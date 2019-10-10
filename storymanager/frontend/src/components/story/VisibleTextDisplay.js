@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getVisibleText } from '../../actions/story';
-import room from '../../reducers/room';
+import { getVisibleText } from '../../store/actions/story';
+import room from '../../store/reducers/room';
 
 const propTypes = {
   visibleText: PropTypes.string,

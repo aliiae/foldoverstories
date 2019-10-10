@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
-import { readRoomTexts } from '../../actions/room';
+import { readRoomTexts } from '../../store/actions/room';
 import { formatTimeStampDateOnly } from '../common/dateFormatters';
 import ShareButtons from './ShareButtons';
 import { textsPropType } from '../common/commonPropTypes';

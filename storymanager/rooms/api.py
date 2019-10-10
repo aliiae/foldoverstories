@@ -8,10 +8,9 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from rooms.models import Room, Membership
+from rooms.models import Room, add_user_to_room, Membership, close_room, leave_room
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from texts_ws.server_send import send_channel_message, WEBSOCKET_MSG_JOIN, WEBSOCKET_MSG_LEAVE
 from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer
 
 User = get_user_model()
@@ -34,23 +33,22 @@ class RoomsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: RoomsSerializer):
         room = serializer.save()
-        room.users.add(self.request.user)
+        add_user_to_room(self.request.user, room)
 
 
 class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
     serializer_class = RoomUsersSerializer
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
+        """Adds `request.user` into the room with `room_title`."""
         room_title = self.kwargs['room_title']
         room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
-        if request.user in room.users.all():
-            raise ValidationError(detail='User has already joined')
-        new_user_membership = Membership(room=room, user=request.user)  # adds user to the room
-        new_user_membership.save()
-        room.save()
-        send_channel_message(room_title, WEBSOCKET_MSG_JOIN)
+        add_user_to_room(self.request.user, room)
+        # new_user_membership = Membership(room=room, user=request.user)  # adds user to the room
+        # new_user_membership.save()
+        # room.save()
         return Response(status=200)
 
     def get(self, request, *args, **kwargs):
@@ -75,13 +73,9 @@ class LeaveRoomAPI(generics.GenericAPIView):
             raise ValidationError(detail='User has not joined the room')
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
             return Response(status=204)
-        user_membership.has_stopped = True
-        user_membership.can_write_now = False
-        user_membership.save()
+        leave_room(room_title, user_membership)
         if all(membership.has_stopped for membership in room_memberships):  # all authors left
-            room.is_finished = True
-            room.save()
-        send_channel_message(room_title, WEBSOCKET_MSG_LEAVE)
+            close_room(room)
         return Response(status=200)
 
 

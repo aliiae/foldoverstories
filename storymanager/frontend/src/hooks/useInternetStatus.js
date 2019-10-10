@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { userOnline, userOffline } from '../actions/websockets';
+import { userOnline, userOffline } from '../store/actions/websockets';
 
 const useInternetStatus = () => {
   const dispatchAction = useDispatch();

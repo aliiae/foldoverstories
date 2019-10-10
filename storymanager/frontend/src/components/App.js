@@ -13,8 +13,8 @@ import Landing from './landing/Landing';
 import Editor from './story/Editor';
 import PageNotFound from './common/PageNotFound';
 import Footer from './layout/Footer';
-import store from '../store';
-import { loadUser } from '../actions/auth';
+import store from '../store/store';
+import { loadUser } from '../store/actions/auth';
 
 function App() {
   useEffect(() => store.dispatch(loadUser()), []);
