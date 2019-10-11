@@ -17,6 +17,7 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';
 import useWebsocket from '../../hooks/useWebsocket';
+import SvgLinkButton from '../layout/SvgLinkButton';
 
 function CopyButton({ onClick }) {
   return (
@@ -57,15 +58,7 @@ const InviteLink = React.forwardRef((props, ref) => {
         {url}
       </a>
       {' '}
-      <input
-        className="hidden-input"
-        tabIndex="-1"
-        ref={ref}
-        value={url}
-        readOnly
-      />
-      <CopyButton onClick={onClick} />
-      {showCopied ? <span className="text-success"> Copied!</span> : null}
+      <SvgLinkButton url={url} size={32} />
     </p>
   );
 });

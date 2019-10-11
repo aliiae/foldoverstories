@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import SvgFoldoverLogo from '../common/SvgFoldoverLogo';
+import SvgFoldoverLogo from '../layout/SvgFoldoverLogo';
 
 export default function HowToPlay() {
   return (
@@ -12,10 +12,10 @@ export default function HowToPlay() {
             <h1 className="text-center mb-3 display-4">How to Play</h1>
             <section>
               <h2>What is Fold-over Stories?</h2>
-              <SvgFoldoverLogo />
+              <SvgFoldoverLogo width="4rem" height="4rem" />
               <p>
                 Fold-over Stories implements a creative storytelling game
-                similar to the parlour game called &ldquo;conseqeuences&rdquo;
+                similar to the parlour game called &ldquo;consequences&rdquo;
                 or fold-over stories often used in language learning.
               </p>
               <p>

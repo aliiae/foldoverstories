@@ -43,8 +43,8 @@ function RoomDashboard(props) {
         <Table hover responsive className="dashboard">
           <thead>
             <tr>
-              <th scope="col" width="30%">Story</th>
-              <th scope="col" width="30%">Authors</th>
+              <th scope="col" width="40%">Story</th>
+              <th scope="col" width="20%">Authors</th>
               <th scope="col" className="text-center" width="10%">Status</th>
               <th scope="col" width="30%">Last Updated</th>
             </tr>

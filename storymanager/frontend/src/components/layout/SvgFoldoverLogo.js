@@ -1,7 +1,7 @@
 import React from 'react';
 
 const SvgFoldoverLogo = (props) => (
-  <svg viewBox="153 133 274 254" width="4em" height="4em" {...props}>
+  <svg viewBox="153 133 274 254" {...props}>
     <defs>
       <path d="M203.99 220L160 300" id="foldover_logo_svg__b" />
       <path d="M380 300l40-83.45" id="foldover_logo_svg__c" />

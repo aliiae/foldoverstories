@@ -9,6 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { logout } from '../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../common/commonPropTypes';
+import SvgFoldoverLogo from './SvgFoldoverLogo';
 
 const propTypes = {
   auth: authPropType,
@@ -20,29 +21,21 @@ const defaultProps = {
 
 function Logo() {
   return (
-    <Navbar.Brand className="align-items-center">
-      <div style={{ display: 'flex' }}>
-        <LinkContainer exact to="/">
-          <img
-            src="/static/img/foldover_logo.svg"
-            width="32"
-            height="32"
-            className="d-inline-block align-center mr-2 logo-img"
-            alt="Logo"
-          />
-        </LinkContainer>
-        <span
-          style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
-          className="mr-1"
-        >
-          <span>FOLD</span>
-          <span>-OVER</span>
-        </span>
-        <LinkContainer exact to="/">
+    <LinkContainer to="/">
+      <Navbar.Brand className="align-items-center">
+        <div style={{ display: 'flex' }}>
+          <SvgFoldoverLogo width="32" height="32" />
+          <span
+            style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
+            className="mr-1 ml-1"
+          >
+            <span>FOLD</span>
+            <span>-OVER</span>
+          </span>
           <span>STORIES</span>
-        </LinkContainer>
-      </div>
-    </Navbar.Brand>
+        </div>
+      </Navbar.Brand>
+    </LinkContainer>
   );
 }
 
