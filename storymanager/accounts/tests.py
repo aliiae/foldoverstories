@@ -4,18 +4,9 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient, APITestCase
 
-PASSWORD = 'pass_w0rd!'
+from storymanager.tests_utils import create_user, login_user_into_client, PASSWORD
+
 User = get_user_model()
-
-
-def create_user(username: str = 'test_user', password: str = PASSWORD) -> User:
-    return User.objects.create_user(username=username, password=password)
-
-
-def login_user_into_client(user: User, client: APIClient):
-    instance, token = AuthToken.objects.create(user=user)
-    client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
-    client.login(username=user.username, password=PASSWORD)
 
 
 class AuthenticationTest(APITestCase):

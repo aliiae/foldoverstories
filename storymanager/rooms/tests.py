@@ -2,20 +2,14 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-
-from accounts.tests import create_user, login_user_into_client
-from rooms.models import Room, Membership, add_user_to_room
+from rooms.models import Membership, add_user_to_room
+from storymanager.tests_utils import create_user, login_user_into_client, create_user_room, \
+    create_user_room_text
 
 User = get_user_model()
 
 
-def create_user_room(user: User, room_title: str, **kwargs) -> Room:
-    room = Room.objects.create(room_title=room_title, **kwargs)
-    add_user_to_room(user, room)
-    return room
-
-
-class HttpTripTest(APITestCase):
+class HttpRoomsTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
@@ -23,13 +17,20 @@ class HttpTripTest(APITestCase):
         login_user_into_client(self.user, self.client)
         self.room_title = 'a-b'
 
+    def test_user_can_create_room(self):
+        response = self.client.post(reverse('rooms-list'))
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        list_response = self.client.get(reverse('rooms-list'))
+        self.assertEqual(status.HTTP_200_OK, list_response.status_code)
+        self.assertEqual(len(list_response.data['results']), 1)
+
     def test_user_can_list_rooms(self):
         rooms = [create_user_room(self.user, self.room_title + str(i)) for i in range(10)]
         response = self.client.get(reverse('rooms-list'))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        exp_room_titles = [room.room_title for room in rooms]
+        exp_room_titles = list(reversed([room.room_title for room in rooms]))
         act_room_titles = [room.get('room_title') for room in response.data['results']]
-        self.assertCountEqual(exp_room_titles, act_room_titles)
+        self.assertListEqual(exp_room_titles, act_room_titles)
 
     def test_user_can_retrieve_room_by_title(self):
         room = create_user_room(self.user, self.room_title)
@@ -39,10 +40,20 @@ class HttpTripTest(APITestCase):
 
     def test_user_can_read_room_texts_by_title(self):
         room = create_user_room(self.user, self.room_title, is_finished=True)
+        texts = [create_user_room_text(self.user, room, visible_text=str(i))
+                 for i in range(10)]
         response = self.client.get(
             reverse('room_read-list', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual([], response.data)  # todo: populate with texts
+        self.assertEqual([t.hidden_text + ' ' + t.visible_text for t in texts],
+                         [t['full_text'] for t in response.data])
+
+    def test_user_can_read_empty_room_with_no_texts_by_title(self):
+        room = create_user_room(self.user, self.room_title, is_finished=True)
+        response = self.client.get(
+            reverse('room_read-list', kwargs={'room_title': room.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertListEqual([], response.data)
 
     def test_user_can_join_room(self):
         room = create_user_room(self.user, self.room_title)
@@ -79,4 +90,4 @@ class HttpTripTest(APITestCase):
         response = self.client.get(
             reverse('room_users', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(usernames, [u['username'] for u in response.data])
+        self.assertListEqual(usernames, [u['username'] for u in response.data])

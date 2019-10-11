@@ -16,4 +16,4 @@ def send_channel_message(group_name, msg_type):
     except ClientError:
         pass
     except OSError:
-        pass
+        pass  #todo: log to check ws connection

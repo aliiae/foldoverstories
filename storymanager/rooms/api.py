@@ -46,9 +46,6 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
         add_user_to_room(self.request.user, room)
-        # new_user_membership = Membership(room=room, user=request.user)  # adds user to the room
-        # new_user_membership.save()
-        # room.save()
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):

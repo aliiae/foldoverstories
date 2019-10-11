@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
-from rest_framework.response import Response
 
 from rooms.models import (Room, add_user_to_room, Membership, get_room_users, get_membership,
                           close_room)
@@ -84,9 +83,9 @@ class TextsViewSet(viewsets.ModelViewSet):
         prev_turn_user_index = index_of(prev_turn_user, users)
         if prev_turn_user_index == -1:  # current user is the first one to write
             return self._default_turn_user(room)
-        # prev_turn_membership = self._get_membership(prev_turn_user, room)
-        # prev_turn_membership.can_write_now = False
-        # prev_turn_membership.save()
+        prev_turn_membership = get_membership(prev_turn_user, room)
+        prev_turn_membership.can_write_now = False
+        prev_turn_membership.save()
         curr_turn_user, curr_turn_membership = None, None
         for i in range(1, users.count()):
             curr_turn_user = users[(prev_turn_user_index + i) % users.count()]
