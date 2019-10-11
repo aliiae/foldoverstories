@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 import { connect } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import Tooltip from 'react-bootstrap/Tooltip';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import FinishedTextViewer from './FinishedTextViewer';
 import VisibleTextDisplay from './VisibleTextDisplay';
 import TextAreaButton from './TextAreaButton';
@@ -15,9 +17,64 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';
 import useWebsocket from '../../hooks/useWebsocket';
-import { Emoji } from '../landing/Status';
-import Tooltip from 'react-bootstrap/Tooltip';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+
+function CopyButton({ onClick }) {
+  return (
+    <OverlayTrigger
+      placement="top"
+      overlay={(
+        <Tooltip>Copy link to clipboard</Tooltip>
+      )}
+    >
+      <Button
+        className="inline-button"
+        size="sm"
+        variant="primary"
+        onClick={onClick}
+      >
+        Copy
+      </Button>
+    </OverlayTrigger>
+  );
+}
+
+CopyButton.propTypes = { onClick: PropTypes.func.isRequired };
+
+const InviteLink = React.forwardRef((props, ref) => {
+  const {
+    showCopied, onClick, url,
+  } = props;
+  return (
+    <p className="text-muted small">
+      You can invite other authors by sending this link:
+      {' '}
+      <a
+        href={window.location.href}
+        className="color-underline"
+        title="Link to this page"
+        onClick={onClick}
+      >
+        {url}
+      </a>
+      {' '}
+      <input
+        className="hidden-input"
+        tabIndex="-1"
+        ref={ref}
+        value={url}
+        readOnly
+      />
+      <CopyButton onClick={onClick} />
+      {showCopied ? <span className="text-success"> Copied!</span> : null}
+    </p>
+  );
+});
+
+InviteLink.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  showCopied: PropTypes.bool.isRequired,
+};
 
 function Editor(props) {
   const {
@@ -36,6 +93,10 @@ function Editor(props) {
   let dummyRef = useRef(null);
   const url = window.location.href;
 
+  if (userIsLoading) {
+    return <LoadingSpinner />;
+  }
+
   const onClickCopy = () => {
     dummyRef.style.display = 'block';
     dummyRef.select();
@@ -44,9 +105,6 @@ function Editor(props) {
     setShowCopied(true);
   };
 
-  if (userIsLoading) {
-    return <LoadingSpinner />;
-  }
   return (
     <Container className="editor">
       <Row className="justify-content-center">
@@ -54,46 +112,14 @@ function Editor(props) {
           {roomIsFinished || isLastTurn ? (<FinishedTextViewer roomTitle={roomTitle} />)
             : (
               <div className="mt-3">
-                <p className="text-muted small">
-                  You can invite other authors by sending this link:
-                  {' '}
-                  <a
-                    href={window.location.href}
-                    className="color-underline"
-                    title="Link to this page"
-                    onClick={onClickCopy}
-                  >
-                    {url}
-                  </a>
-                  {' '}
-                  <input
-                    className="hidden-input"
-                    tabIndex="-1"
-                    ref={(el) => {
-                      dummyRef = el;
-                    }}
-                    value={url}
-                    readOnly
-                  />
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={(
-                      <Tooltip>
-                        Copy link to clipboard
-                      </Tooltip>
-                    )}
-                  >
-                    <Button
-                      className="inline-button"
-                      size="sm"
-                      variant="primary"
-                      onClick={onClickCopy}
-                    >
-                      Copy
-                    </Button>
-                  </OverlayTrigger>
-                  {showCopied ? <span className="text-success"> Copied!</span> : null}
-                </p>
+                <InviteLink
+                  showCopied={showCopied}
+                  onClick={onClickCopy}
+                  url={url}
+                  ref={(el) => {
+                    dummyRef = el;
+                  }}
+                />
                 <div className="p-3 paper">
                   <VisibleTextDisplay roomTitle={roomTitle} />
                   <TextAreaButton roomTitle={roomTitle} />

@@ -22,7 +22,7 @@ function Logo() {
   return (
     <Navbar.Brand className="align-items-center">
       <div style={{ display: 'flex' }}>
-        <LinkContainer to="/">
+        <LinkContainer exact to="/">
           <img
             src="/static/img/foldover_logo.svg"
             width="32"
@@ -38,7 +38,7 @@ function Logo() {
           <span>FOLD</span>
           <span>-OVER</span>
         </span>
-        <LinkContainer to="/">
+        <LinkContainer exact to="/">
           <span>STORIES</span>
         </LinkContainer>
       </div>
