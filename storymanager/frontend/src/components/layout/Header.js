@@ -8,14 +8,14 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from 'react-bootstrap/Button';
 import { logout } from '../../store/actions/auth';
-import { authDefaultProp, authPropType } from '../common/commonPropTypes';
+import { authDefaultPropType, authPropType } from '../common/commonPropTypes';
 
 const propTypes = {
   auth: authPropType,
   logoutConnect: PropTypes.func.isRequired,
 };
 const defaultProps = {
-  auth: authDefaultProp,
+  auth: authDefaultPropType,
 };
 
 function Logo() {

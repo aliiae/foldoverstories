@@ -4,7 +4,6 @@ import { SOCKET_URL } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
 import { getUsers, getVisibleText } from '../store/actions/story';
 import { getRoomStatus } from '../store/actions/room';
-import ReconnectingWebSocket from 'reconnecting-websocket';
 
 
 const useWebsocket = ({ isOnline, token, roomTitle }) => {

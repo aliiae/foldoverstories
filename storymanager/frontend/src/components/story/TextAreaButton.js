@@ -11,7 +11,7 @@ import { addText } from '../../store/actions/story';
 import { leaveRoom } from '../../store/actions/room';
 import JoinButton from './JoinButton';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { authDefaultProp, authPropType } from '../common/commonPropTypes';
+import { authDefaultPropType, authPropType } from '../common/commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
@@ -31,7 +31,7 @@ const propTypes = {
 const defaultProps = {
   usernames: [],
   userFinished: false,
-  auth: authDefaultProp,
+  auth: authDefaultPropType,
   currentTurnUsername: null,
   isLastTurn: false,
 };
@@ -87,7 +87,7 @@ function TextAreaButton(props) {
     const lastNewLineIndex = text.lastIndexOf('\n');
     const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
     const visibleText = text.slice(lastNewLineIndex + 1);
-    if (hiddenText === '' && !alertWasShown) {
+    if (!hiddenText && !alertWasShown) {
       setHiddenIsEmpty(true);
       setAlertMessage(messageHiddenIsEmpty);
       setAlertTitle('Only one line?');

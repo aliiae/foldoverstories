@@ -1,15 +1,21 @@
-import React from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { withRouter, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-import { addRoom } from '../../store/actions/room';
-import { Emoji } from './Status';
+import { addRoom, clearRoomTitle } from '../../store/actions/room';
 
 function StartButton(props) {
   const {
-    addRoomConnect, isAuthenticated, history, roomTitle,
+    addRoomConnect, clearRoomTitleConnect, isAuthenticated, roomTitle,
   } = props;
+  const history = useHistory();
+  useEffect(() => {
+    if (isAuthenticated && roomTitle) {
+      history.push(`/story/${roomTitle}`);
+      clearRoomTitleConnect();
+    }
+  }, [roomTitle, isAuthenticated]);
   const onClick = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
@@ -29,16 +35,15 @@ function StartButton(props) {
       >
         Start a new story
       </Button>
-      {roomTitle && isAuthenticated ? <Redirect to={`/story/${roomTitle}`} /> : ''}
     </>
   );
 }
 
 StartButton.propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
+  clearRoomTitleConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
-  history: PropTypes.object.isRequired,
 };
 StartButton.defaultProps = {
   isAuthenticated: false,
@@ -50,4 +55,5 @@ const mapStateToProps = (state) => ({
   roomTitle: state.room.room_title,
 });
 
-export default withRouter(connect(mapStateToProps, { addRoomConnect: addRoom })(StartButton));
+export default withRouter(connect(mapStateToProps,
+  { addRoomConnect: addRoom, clearRoomTitleConnect: clearRoomTitle })(StartButton));

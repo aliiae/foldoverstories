@@ -94,3 +94,8 @@ export const leaveRoom = (roomTitle) => (dispatch, getState) => {
       dispatch(getUsers(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };
+
+/* Needed for going back on home page after creating a room */
+export const clearRoomTitle = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_ROOM_TITLE' });
+};

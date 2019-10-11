@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Col from 'react-bootstrap/Col';
@@ -12,19 +12,14 @@ import Button from 'react-bootstrap/Button';
 import { login } from '../../store/actions/auth';
 
 function Login(props) {
-  const [form, setValues] = useState({
-    username: '',
-    password: '',
-  });
-  const {
-    loginConnect, isAuthenticated, history, error,
-  } = props;
+  const [form, setValues] = useState({ username: '', password: '' });
+  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState('');
+  const { loginConnect, isAuthenticated, error } = props;
+  const history = useHistory();
   if (isAuthenticated) {
     history.goBack(); // redirects to the previous page
   }
-
-  const [showError, setShowError] = useState(false);
-  const [message, setMessage] = useState('');
   useEffect(() => {
     if (error && error.non_field_errors && error.non_field_errors[0] === 'Incorrect Credentials') {
       setShowError(true);
