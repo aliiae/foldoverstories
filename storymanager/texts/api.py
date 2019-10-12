@@ -9,7 +9,7 @@ from rooms.models import (Room, add_user_to_room, Membership, get_room_users, ge
                           close_room)
 from storymanager.django_types import QueryType
 from texts.models import Text
-from websockets.server_sends import send_channel_message, WEBSOCKET_MSG_ADD_TEXT
+from websockets.server_send import send_channel_message, WEBSOCKET_MSG_ADD_TEXT
 from .serializers import TextsVisibleOnlySerializer, TextsFullSerializer
 
 User = get_user_model()
@@ -58,7 +58,11 @@ class TextsViewSet(viewsets.ModelViewSet):
             user_membership.save()
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         room.save()
-        send_channel_message(self._room_title, WEBSOCKET_MSG_ADD_TEXT)
+        send_channel_message(self._room_title, {
+            'type': WEBSOCKET_MSG_ADD_TEXT,
+            'room_title': self._room_title,
+            'username': current_turn_user.username,
+        })
         serializer.save(author=request_user, room=room)
 
     def _default_turn_user(self, room: Room) -> User:

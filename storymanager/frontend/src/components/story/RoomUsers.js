@@ -14,7 +14,7 @@ const propTypes = {
   })),
   roomTitle: PropTypes.string.isRequired,
   getUsersConnect: PropTypes.func.isRequired,
-  showUserStatus: PropTypes.bool.isRequired,
+  roomIsFinished: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -22,9 +22,11 @@ const defaultProps = {
 };
 
 function RoomUsers(props) {
-  const { getUsersConnect, roomTitle, showUserStatus } = props;
+  const { getUsersConnect, roomTitle, roomIsFinished } = props;
   useEffect(() => {
-    getUsersConnect(roomTitle);
+    if (!roomIsFinished) {
+      getUsersConnect(roomTitle);
+    }
   }, []);
   const { users } = props;
   return (
@@ -34,7 +36,7 @@ function RoomUsers(props) {
         <ul className="list-unstyled card-text">
           {users.map((u) => (
             <li key={u.username}>
-              {showUserStatus && <Status item={u} />}
+              {!roomIsFinished && <Status item={u} />}
               {`${u.username} `}
               <span className="text-muted small">
                 (

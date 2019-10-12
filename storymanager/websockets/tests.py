@@ -11,7 +11,7 @@ from rest_framework.test import APIClient
 from storymanager.routing import application
 from rooms.models import add_user_to_room
 from storymanager.tests_utils import create_user, login_user_into_client, create_user_room
-from websockets.server_sends import WEBSOCKET_MSG_JOIN
+from websockets.server_send import WEBSOCKET_MSG_JOIN
 
 TEST_CHANNEL_LAYERS = {
     'default': {
@@ -69,5 +69,5 @@ class TestWebsockets:
         # Receive JSON message from server on test channel.
         response = await channel_layer.receive('test_channel')
         data = response.get('data')
-        assert data['msg_type'] == WEBSOCKET_MSG_JOIN
+        assert data['type'] == WEBSOCKET_MSG_JOIN
         await communicator.disconnect()

@@ -1,9 +1,9 @@
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN, WS_GET_VISIBLE_TEXT,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
 } from '../actions/types';
 
 const initialState = {
-  visible_text: '',
+  visible_text: null,
   users: [],
   correct_turn: true,
   room: null,
@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
         current_turn_username: action.payload,
         correct_turn: false,
       };
-    case LAST_TURN: // TODO
+    case LAST_TURN:
       return {
         ...state,
         last_turn: true,

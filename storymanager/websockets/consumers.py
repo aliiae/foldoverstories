@@ -32,16 +32,16 @@ class RoomConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({'error': e.code})
 
     async def room_join(self, event):
-        await self.send_json({'msg_type': 'room.join'})
+        await self.send_json(event)
 
     async def room_leave(self, event):
-        await self.send_json({'msg_type': 'room.leave'})
+        await self.send_json(event)
 
     async def room_text(self, event):
-        await self.send_json({'msg_type': 'room.text'})
+        await self.send_json(event)
 
     async def room_finish(self, event):
-        await self.send_json({'msg_type': 'room.finish'})
+        await self.send_json(event)
 
     async def disconnect(self, code):
         # remove this channel from every room's group

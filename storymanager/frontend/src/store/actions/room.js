@@ -76,6 +76,7 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
 export const readRoomTexts = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/rooms/${roomTitle}/read/`, setupTokenConfig(getState))
     .then((res) => {
+      dispatch(getUsers(roomTitle));
       dispatch({
         type: READ_ROOM_TEXTS,
         payload: res.data,

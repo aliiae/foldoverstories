@@ -9,6 +9,7 @@ import Header from './layout/Header';
 import HowToPlay from './about/HowToPlay';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
+import NotificationToasts from './layout/NotificationToasts';
 import Landing from './landing/Landing';
 import Editor from './story/Editor';
 import PageNotFound from './common/PageNotFound';
@@ -22,6 +23,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <Header />
+        <NotificationToasts />
         <main className="main-content">
           <Switch>
             <Route exact path="/" component={Landing} />

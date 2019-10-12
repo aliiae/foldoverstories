@@ -22,6 +22,7 @@ const propTypes = {
   roomTitle: PropTypes.string.isRequired,
   correctTurn: PropTypes.bool.isRequired,
   userFinished: PropTypes.bool,
+  roomFinished: PropTypes.bool,
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
   currentTurnUsername: PropTypes.string,
@@ -31,6 +32,7 @@ const propTypes = {
 const defaultProps = {
   usernames: [],
   userFinished: false,
+  roomFinished: null,
   auth: authDefaultPropType,
   currentTurnUsername: null,
   isLastTurn: false,
@@ -56,7 +58,7 @@ function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
     addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
-    currentTurnUsername, isLastTurn,
+    currentTurnUsername, isLastTurn, roomFinished,
   } = props;
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -112,14 +114,14 @@ function TextAreaButton(props) {
     leaveRoomConnect(roomTitle);
   };
 
-  if (auth === null) {
+  if (auth === null || roomFinished === null) {
     return <LoadingSpinner />;
   }
   const { isLoading, isAuthenticated, user } = auth;
   if (isLoading || isAuthenticated === null) {
     return <LoadingSpinner />;
   }
-  if (!isAuthenticated || !usernames.includes(user.username)) {
+  if (!isLoading && (!isAuthenticated || !usernames.includes(user.username))) {
     return (<JoinButton roomTitle={roomTitle} />);
   }
   if (isLastTurn) {
@@ -200,6 +202,7 @@ const mapStateToProps = (state) => ({
   correctTurn: state.story.correct_turn,
   usernames: state.story.users.map((user) => user.username),
   userFinished: state.room.user_left_room,
+  roomFinished: state.room.is_finished,
   isLastTurn: state.story.last_turn,
   currentTurnUsername: state.story.current_turn_username,
 });

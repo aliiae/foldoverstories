@@ -6,7 +6,7 @@ import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';
 
 const getLastItemOrEmpty = (array) => {
-  if (array.length === 0) return '';
+  if (array.length === 0) return {};
   return array[array.length - 1];
 };
 
@@ -18,7 +18,7 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
       dispatch({
         type: GET_VISIBLE_TEXT,
         payload: {
-          visible_text: lastItem.visible_text,
+          visible_text: lastItem.visible_text ? lastItem.visible_text : '',
           room: lastItem.room,
           correct_turn: true,
           current_turn_username: null,

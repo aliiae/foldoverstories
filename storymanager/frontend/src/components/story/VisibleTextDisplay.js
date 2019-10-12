@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getVisibleText } from '../../store/actions/story';
-import room from '../../store/reducers/room';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 const propTypes = {
   visibleText: PropTypes.string,
@@ -14,7 +14,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  visibleText: '',
+  visibleText: null,
   correctTurn: true,
   userFinished: false,
   wsStatus: null,
@@ -26,8 +26,12 @@ function VisibleTextDisplay(props) {
     getVisibleTextConnect(roomTitle);
   }, [roomTitle, wsStatus]);
   const { visibleText, correctTurn, userFinished } = props;
+
   if (userFinished) {
     return '';
+  }
+  if (visibleText === null) {
+    return <LoadingSpinner />;
   }
   if (correctTurn && !visibleText) {
     return (

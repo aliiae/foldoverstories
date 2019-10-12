@@ -6,8 +6,8 @@ from django.utils import timezone
 
 from rooms.utils import ADJECTIVES, NOUNS
 from storymanager.django_types import QueryType
-from websockets.server_sends import (send_channel_message, WEBSOCKET_MSG_JOIN,
-                                     WEBSOCKET_MSG_FINISH_ROOM, WEBSOCKET_MSG_LEAVE)
+from websockets.server_send import (send_channel_message, WEBSOCKET_MSG_JOIN,
+                                    WEBSOCKET_MSG_FINISH, WEBSOCKET_MSG_LEAVE)
 
 User = get_user_model()
 
@@ -25,21 +25,32 @@ def add_user_to_room(user: User, room: 'Room'):
         return
     new_user_membership = Membership(room=room, user=user)  # adds user to the room
     new_user_membership.save()
-    send_channel_message(room.room_title, WEBSOCKET_MSG_JOIN)
+    send_channel_message(room.room_title, {
+        'type': WEBSOCKET_MSG_JOIN,
+        'room_title': room.room_title,
+        'username': user.username,
+    })
     room.save()
 
 
-def leave_room(room_title, user_membership):
+def leave_room(room_title: str, user_membership: 'Membership'):
     user_membership.has_stopped = True
     user_membership.can_write_now = False
     user_membership.save()
-    send_channel_message(room_title, WEBSOCKET_MSG_LEAVE)
+    send_channel_message(room_title, {
+        'type': WEBSOCKET_MSG_LEAVE,
+        'room_title': room_title,
+        'username': user_membership.user.username,
+    })
 
 
-def close_room(room):
+def close_room(room: 'Room'):
     room.is_finished = True
     room.save()
-    send_channel_message(room.room_title, WEBSOCKET_MSG_FINISH_ROOM)
+    send_channel_message(room.room_title, {
+        'type': WEBSOCKET_MSG_FINISH,
+        'room_title': room.room_title,
+    })
 
 
 def random_adj_noun_pair(delimiter: str = '-') -> str:
