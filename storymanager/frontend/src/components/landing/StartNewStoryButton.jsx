@@ -13,8 +13,10 @@ function StartButton(props) {
   useEffect(() => {
     if (isAuthenticated && roomTitle) {
       history.push(`/story/${roomTitle}`);
-      clearRoomTitleConnect();
     }
+    return () => {
+      clearRoomTitleConnect();
+    };
   }, [roomTitle, isAuthenticated]);
   const onClick = (e) => {
     e.preventDefault();

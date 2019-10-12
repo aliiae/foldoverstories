@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
 from texts.models import Text
-from .models import Room, Membership
+from .models import Room, Membership, user_is_in_room
 
 User = get_user_model()
 
@@ -40,11 +40,17 @@ class RoomsSerializer(serializers.ModelSerializer):
     user_can_write_now = serializers.SerializerMethodField('can_user_write_now')
 
     def did_user_leave_room(self, obj):  # => user_left_room
-        user_membership = get_object_or_404(Membership, room=obj, user=self.context['request'].user)
+        user = self.context['request'].user
+        if not user_is_in_room(user, obj):
+            return None
+        user_membership = get_object_or_404(Membership, room=obj, user=user)
         return user_membership.has_stopped
 
     def can_user_write_now(self, obj):  # => user_can_write_now
-        user_membership = get_object_or_404(Membership, room=obj, user=self.context['request'].user)
+        user = self.context['request'].user
+        if not user_is_in_room(user, obj):
+            return None
+        user_membership = get_object_or_404(Membership, room=obj, user=user)
         return user_membership.can_write_now
 
     class Meta:

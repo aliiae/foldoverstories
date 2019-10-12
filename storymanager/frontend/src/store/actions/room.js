@@ -11,6 +11,7 @@ import {
 import { returnErrors } from './messages';
 import { getUsers, getVisibleText } from './story';
 import { setupTokenConfig } from './utils';
+import room from '../reducers/room';
 
 // GET USER'S ROOMS
 export const getRooms = (pageNumber = 1) => (dispatch, getState) => {
@@ -27,11 +28,11 @@ export const getRooms = (pageNumber = 1) => (dispatch, getState) => {
 export const addRoom = (room) => (dispatch, getState) => {
   axios.post('/api/rooms/', room, setupTokenConfig(getState))
     .then((res) => {
+      dispatch(getRooms());
       dispatch({
         type: ADD_ROOM_SUCCESS,
         payload: res.data,
       });
-      dispatch(getRooms());
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
@@ -65,8 +66,8 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
         type: ADD_USER_INTO_ROOM,
         payload: res.data,
       });
-      dispatch(getVisibleText(roomTitle));
       dispatch(getUsers(roomTitle));
+      dispatch(getVisibleText(roomTitle));
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });

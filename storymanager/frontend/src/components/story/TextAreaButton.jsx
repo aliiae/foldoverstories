@@ -115,7 +115,7 @@ function TextAreaButton(props) {
     leaveRoomConnect(roomTitle);
   };
 
-  if (auth === null || roomFinished === null) {
+  if (auth === null || roomFinished === null || correctTurn === null) {
     return <LoadingSpinner />;
   }
   const { isLoading, isAuthenticated, user } = auth;

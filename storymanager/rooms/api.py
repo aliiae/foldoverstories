@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, generics, status
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, NotAuthenticated, ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin
@@ -24,16 +25,38 @@ class RoomsPagination(PageNumberPagination):
 
 class RoomsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = RoomsSerializer
     pagination_class = RoomsPagination
     lookup_field = 'room_title'
+    serializer_class = RoomsSerializer
 
     def get_queryset(self) -> QueryType[Room]:
         return self.request.user.rooms.all().order_by('-modified_at')
 
+    def retrieve(self, request, room_title=None, *args, **kwargs):
+        room = get_object_or_404(Room, room_title=room_title)
+        serializer = self.get_serializer(room)
+        return Response(serializer.data)
+
     def perform_create(self, serializer: RoomsSerializer):
-        room = serializer.save()
+        room: Room = serializer.save()
         add_user_to_room(self.request.user, room)
+
+    @action(detail=True, methods=['post'])
+    def leave(self, request: RequestType, room_title=None, *args, **kwargs) -> HttpResponse:
+        room = get_object_or_404(Room, room_title=room_title)
+        if not request.user.is_authenticated:
+            raise NotAuthenticated(detail='User needs to login first')
+
+        room_memberships: QueryType[Membership] = Membership.objects.filter(room=room).all()
+        user_membership: Membership = room_memberships.get(user=self.request.user)
+        if not user_membership:
+            raise ValidationError(detail='User has not joined the room')
+        if user_membership.has_stopped:  # user has previously left the room, nothing to do
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        leave_room(room_title, user_membership)
+        if all(membership.has_stopped for membership in room_memberships):  # all authors left
+            close_room(room)
+        return Response(status=status.HTTP_200_OK)
 
 
 class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
@@ -55,25 +78,6 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         room = get_object_or_404(Room, room_title=self.kwargs['room_title'])
         room_users = room.users.annotate(texts_count=Count('texts', filter=Q(texts__room=room)))
         return room_users.all().order_by('membership__joined_at')
-
-
-class LeaveRoomAPI(generics.GenericAPIView):
-    def post(self, request: RequestType, *args, **kwargs) -> HttpResponse:
-        room_title = self.kwargs['room_title']
-        room = get_object_or_404(Room, room_title=room_title)
-        if not request.user.is_authenticated:
-            raise NotAuthenticated(detail='User needs to login first')
-
-        room_memberships: QueryType[Membership] = Membership.objects.filter(room=room).all()
-        user_membership: Membership = room_memberships.get(user=self.request.user)
-        if not user_membership:
-            raise ValidationError(detail='User has not joined the room')
-        if user_membership.has_stopped:  # user has previously left the room, nothing to do
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        leave_room(room_title, user_membership)
-        if all(membership.has_stopped for membership in room_memberships):  # all authors left
-            close_room(room)
-        return Response(status=status.HTTP_200_OK)
 
 
 class RoomReadViewSet(viewsets.ModelViewSet):

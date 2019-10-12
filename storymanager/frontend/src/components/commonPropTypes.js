@@ -22,7 +22,11 @@ export const matchPropType = PropTypes.shape({
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  params: PropTypes.object,
+  params: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  isExact: PropTypes.bool.isRequired,
+  url: PropTypes.string.isRequired,
 });
 
 export const authDefaultPropType = { isAuthenticated: false, token: null, user: null };

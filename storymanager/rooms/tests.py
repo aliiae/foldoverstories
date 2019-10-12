@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 from rooms.models import Membership, add_user_to_room
-from storymanager.tests_utils import create_user, login_user_into_client, create_user_room, \
-    create_user_room_text
+from storymanager.tests_utils import (create_user, login_user_into_client, create_user_room,
+                                      create_user_room_text)
 
 User = get_user_model()
 
@@ -32,8 +32,15 @@ class HttpRoomsTest(APITestCase):
         act_room_titles = [room.get('room_title') for room in response.data['results']]
         self.assertListEqual(exp_room_titles, act_room_titles)
 
-    def test_user_can_retrieve_room_by_title(self):
+    def test_user_can_retrieve_own_room_by_title(self):
         room = create_user_room(self.user, self.room_title)
+        response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(room.room_title, response.data.get('room_title'))
+
+    def test_user_can_retrieve_another_users_room_before_joining(self):
+        another_user = create_user('another-user')
+        room = create_user_room(another_user, self.room_title)
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(room.room_title, response.data.get('room_title'))
@@ -74,7 +81,7 @@ class HttpRoomsTest(APITestCase):
     def test_user_can_leave_room(self):
         room = create_user_room(self.user, self.room_title)
         response = self.client.post(
-            reverse('leave_room', kwargs={'room_title': room.room_title}))
+            reverse('rooms-leave', kwargs={'room_title': room.room_title}))
         user_membership = Membership.objects.get(room=room, user=self.user)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertTrue(user_membership.has_stopped)

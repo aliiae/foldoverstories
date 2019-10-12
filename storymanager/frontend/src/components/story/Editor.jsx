@@ -50,9 +50,10 @@ function Editor(props) {
     isOnline, user: auth.user, token: auth.token, roomTitle, roomIsFinished,
   });
   useEffect(() => {
+    console.log('roomstatus', roomTitle);
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
-  }, [isLastTurn]);
+  }, [roomTitle, isLastTurn]);
 
   const currentUrl = window.location.href;
 
@@ -63,6 +64,9 @@ function Editor(props) {
   return (
     <Container className="editor">
       <Row className="justify-content-center">
+        <Col md={3} className="order-2">
+          <RoomUsers roomTitle={roomTitle} roomIsFinished={roomIsFinished} />
+        </Col>
         <Col md={7}>
           {roomIsFinished || isLastTurn ? (<FinishedTextViewer roomTitle={roomTitle} />)
             : (
@@ -74,9 +78,6 @@ function Editor(props) {
                 </div>
               </div>
             )}
-        </Col>
-        <Col md={3}>
-          <RoomUsers roomTitle={roomTitle} roomIsFinished={roomIsFinished} />
         </Col>
       </Row>
     </Container>

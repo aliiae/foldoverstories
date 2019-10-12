@@ -20,10 +20,14 @@ def get_membership(user: User, room: 'Room') -> 'Membership':
     return Membership.objects.get(room=room, user=user)
 
 
+def user_is_in_room(user: User, room: 'Room') -> bool:
+    return Membership.objects.filter(room=room, user=user).exists()
+
+
 def add_user_to_room(user: User, room: 'Room'):
-    if Membership.objects.filter(room=room, user=user).exists():
+    if user_is_in_room(user, room):
         return
-    new_user_membership = Membership(room=room, user=user)  # adds user to the room
+    new_user_membership = Membership.objects.create(room=room, user=user)  # adds user to the room
     new_user_membership.save()
     send_channel_message(room.room_title, {
         'type': WEBSOCKET_MSG_JOIN,
