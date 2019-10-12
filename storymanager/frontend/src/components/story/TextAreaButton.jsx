@@ -114,7 +114,9 @@ function TextAreaButton(props) {
   const onClickLeave = () => {
     leaveRoomConnect(roomTitle);
   };
-
+  if (userFinished) {
+    return <LeftRoomMessage />;
+  }
   if (auth === null || roomFinished === null || correctTurn === null) {
     return <LoadingSpinner />;
   }
@@ -128,16 +130,13 @@ function TextAreaButton(props) {
   if (isLastTurn) {
     return (
       <>
-        <p className="lead paper-top-message">This was the last turn in this story!</p>
+        <p className="lead paper-top-message">This was the last turn!</p>
         <p className="paper-bottom-message">
-          The other authors have finished their parts, refresh this page to read the completed
-          masterpiece.
+          The other authors have finished their parts, so simply
+          refresh this page to read the completed story.
         </p>
       </>
     );
-  }
-  if (userFinished) {
-    return <LeftRoomMessage />;
   }
 
   const placeholder = 'Type your text here. Remember that only the last line will be visible!';

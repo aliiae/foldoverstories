@@ -55,6 +55,6 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
         type: ADD_TEXT,
         payload: res.data,
       });
-      dispatch(getUsers(roomTitle));
+      dispatch(getUsers(roomTitle)); // updates users' text count
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

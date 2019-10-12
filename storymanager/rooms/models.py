@@ -37,7 +37,7 @@ def add_user_to_room(user: User, room: 'Room'):
     room.save()
 
 
-def leave_room(room_title: str, user_membership: 'Membership'):
+def leave_room(room_title, user_membership: 'Membership'):
     user_membership.has_stopped = True
     user_membership.can_write_now = False
     user_membership.save()

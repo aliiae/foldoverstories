@@ -41,16 +41,15 @@ InviteLink.propTypes = {
 
 function Editor(props) {
   const {
-    getRoomStatusConnect, match, roomIsFinished, auth, isLastTurn,
+    getRoomStatusConnect, match, roomIsFinished, auth, isLastTurn, usernames,
   } = props;
   const { isAuthenticated } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
   useWebsocket({
-    isOnline, user: auth.user, token: auth.token, roomTitle, roomIsFinished,
+    isOnline, user: auth.user, token: auth.token, roomTitle, roomIsFinished, usernames,
   });
   useEffect(() => {
-    console.log('roomstatus', roomTitle);
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, [roomTitle, isLastTurn]);
@@ -90,18 +89,21 @@ Editor.propTypes = {
   roomIsFinished: PropTypes.bool,
   isLastTurn: PropTypes.bool,
   auth: authPropType,
+  usernames: PropTypes.arrayOf(PropTypes.string),
 };
 
 Editor.defaultProps = {
   roomIsFinished: null,
   isLastTurn: null,
   auth: null,
+  usernames: null,
 };
 
 const mapStateToProps = (state) => ({
   roomIsFinished: state.room.is_finished,
   auth: state.auth,
   lastTurn: state.story.last_turn,
+  usernames: state.story.users.map((user) => user.username),
 });
 
 export default connect(mapStateToProps, { getRoomStatusConnect: getRoomStatus })(Editor);

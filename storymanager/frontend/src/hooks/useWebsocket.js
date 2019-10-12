@@ -1,10 +1,10 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { SOCKET_URL } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
 import { getUsers, getVisibleText } from '../store/actions/story';
-import { getRoomStatus } from '../store/actions/room';
+import { getRooms, getRoomStatus } from '../store/actions/room';
 import { addNotification } from '../store/actions/notifications';
 
 const NUM_WS_RECONNECTING_ATTEMPTS = 5;
@@ -13,13 +13,8 @@ const useWebsocket = (props) => {
   const wsRef = useRef(null);
   const dispatchAction = useDispatch();
 
-  const sendMessage = useCallback(
-    (message) => {
-      wsRef.current.send(message);
-    }, [wsRef],
-  );
   const {
-    isOnline, token, roomTitle, user, roomIsFinished,
+    isOnline, token, roomTitle, user, roomIsFinished, usernames,
   } = props;
 
   function dispatchNotification(message, text) {
@@ -33,34 +28,33 @@ const useWebsocket = (props) => {
     ));
   }
 
+  function dispatchAllActions() {
+    dispatchAction(getUsers(roomTitle));
+    dispatchAction(getRoomStatus(roomTitle));
+    dispatchAction(getVisibleText(roomTitle));
+  }
+
   const receiveMessage = (messageObject) => {
     const message = JSON.parse(messageObject.data);
     console.log(message);
     switch (message.type) {
       case 'room.text':
-        dispatchAction(getUsers(roomTitle));
-        dispatchAction(getVisibleText(roomTitle));
-        dispatchAction(getRoomStatus(roomTitle));
-        dispatchAction(getUsers(roomTitle));
+        dispatchAllActions();
         dispatchNotification(message, `${message.username} added text to the ${roomTitle} story`);
+        dispatchAction(getVisibleText(roomTitle));
         break;
       case 'room.leave':
-        dispatchAction(getUsers(roomTitle));
-        dispatchAction(getVisibleText(roomTitle));
-        dispatchAction(getRoomStatus(roomTitle));
+        dispatchAllActions();
         dispatchNotification(message, `${message.username} left the ${roomTitle} story`);
         break;
       case 'room.join':
-        dispatchAction(getUsers(roomTitle));
-        dispatchAction(getVisibleText(roomTitle));
-        dispatchAction(getRoomStatus(roomTitle));
+        dispatchAllActions();
         dispatchNotification(message, `${message.username} joined the ${roomTitle} story`);
         break;
       case 'room.finish':
-        dispatchAction(getUsers(roomTitle));
-        dispatchAction(getVisibleText(roomTitle));
-        dispatchAction(getRoomStatus(roomTitle));
+        dispatchAllActions();
         dispatchNotification(message, `${roomTitle} is finished and ready to be read!`);
+        dispatchAction(getRooms()); // update the room dashboard
         wsRef.current.close();
         break;
       default:
@@ -88,18 +82,22 @@ const useWebsocket = (props) => {
   }, [isOnline]);
 
   useEffect(() => {
-    // make sure that roomIsFinished to loaded (not null)
-    if (!wsRef.current && (user && (roomIsFinished !== null && !roomIsFinished))) {
-      console.log('connecting ws');
-      initWebsocket(token);
+    // make sure that roomIsFinished is loaded (not null)
+    if (wsRef.current || roomIsFinished) {
+      return;
     }
-  }, [initWebsocket, user]);
+    if (!user || !usernames || !usernames.includes(user.username)) {
+      return;
+    }
+    console.log('connecting ws');
+    initWebsocket(token);
+  }, [roomIsFinished, usernames]);
 
   return {
     ws: wsRef.current,
     opened,
-    sendMessage,
     receiveMessage,
+    initWebsocket,
   };
 };
 

@@ -36,7 +36,6 @@ JoinButton.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  usernames: state.story.usernames,
   isAuthenticated: state.auth.isAuthenticated,
 });
 
