@@ -118,7 +118,7 @@ $nav-height: 4rem;
 .text-viewer-table {
   background-color: transparent !important;
   border-width: 0 !important;
-  margin: 1rem;
+  margin: 3.1rem 2rem;
   border-collapse: separate;
   border-spacing: 1rem 0;
 
@@ -173,7 +173,7 @@ $nav-height: 4rem;
 }
 
 .full-text {
-  margin: 1rem;
+  margin: 3.1rem 2rem;
 }
 
 .editor-form {
@@ -188,6 +188,13 @@ $nav-height: 4rem;
 
   &:hover {
     box-shadow: 1px 1px 0 #222 !important;
+  }
+}
+
+.tab-pill {
+
+  &:last-child { // TODO in mobile view
+    margin-bottom: 1rem;
   }
 }
 
@@ -283,7 +290,7 @@ $nav-height: 4rem;
   &::before {
     content: '* * *';
     position: absolute;
-    top: -.1rem;
+    top: 2rem;
     left: 50%;
   }
 }
@@ -429,4 +436,11 @@ $nav-height: 4rem;
 .spinner-container {
   margin: auto;
   text-align: center;
+}
+
+.notifications-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
 }

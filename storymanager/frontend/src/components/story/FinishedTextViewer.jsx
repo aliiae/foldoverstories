@@ -5,9 +5,9 @@ import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
 import { readRoomTexts } from '../../store/actions/room';
-import { formatTimeStampDateOnly } from '../common/dateFormatters';
+import { formatTimeStampDateOnly } from '../dateFormatters';
 import ShareButtons from './ShareButtons';
-import { textsPropType } from '../common/commonPropTypes';
+import { textsPropType } from '../commonPropTypes';
 
 function TextTabs({ texts, usernames, finishedAt }) {
   return (

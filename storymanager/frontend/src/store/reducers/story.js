@@ -5,10 +5,10 @@ import {
 const initialState = {
   visible_text: null,
   users: [],
-  correct_turn: true,
+  correct_turn: null,
   room: null,
   current_turn_username: null,
-  last_turn: false,
+  last_turn: null,
 };
 
 export default function (state = initialState, action) {

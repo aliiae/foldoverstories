@@ -30,7 +30,7 @@ function VisibleTextDisplay(props) {
   if (userFinished) {
     return '';
   }
-  if (visibleText === null) {
+  if (correctTurn && visibleText === null) {
     return <LoadingSpinner />;
   }
   if (correctTurn && !visibleText) {

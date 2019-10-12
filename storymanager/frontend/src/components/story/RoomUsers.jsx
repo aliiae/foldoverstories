@@ -14,19 +14,18 @@ const propTypes = {
   })),
   roomTitle: PropTypes.string.isRequired,
   getUsersConnect: PropTypes.func.isRequired,
-  roomIsFinished: PropTypes.bool.isRequired,
+  roomIsFinished: PropTypes.bool,
 };
 
 const defaultProps = {
   users: [],
+  roomIsFinished: null,
 };
 
 function RoomUsers(props) {
   const { getUsersConnect, roomTitle, roomIsFinished } = props;
   useEffect(() => {
-    if (!roomIsFinished) {
-      getUsersConnect(roomTitle);
-    }
+    getUsersConnect(roomTitle);
   }, []);
   const { users } = props;
   return (

@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 
 import { getRooms } from '../../store/actions/room';
 import Status from './Status';
-import { formatTimeStamp } from '../common/dateFormatters';
+import { formatTimeStamp } from '../dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
 
 function RoomDashboard(props) {

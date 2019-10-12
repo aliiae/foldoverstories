@@ -11,7 +11,7 @@ import { addText } from '../../store/actions/story';
 import { leaveRoom } from '../../store/actions/room';
 import JoinButton from './JoinButton';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { authDefaultPropType, authPropType } from '../common/commonPropTypes';
+import { authDefaultPropType, authPropType } from '../commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
@@ -20,22 +20,23 @@ const propTypes = {
   addTextConnect: PropTypes.func.isRequired,
   leaveRoomConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
-  correctTurn: PropTypes.bool.isRequired,
   userFinished: PropTypes.bool,
   roomFinished: PropTypes.bool,
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
   currentTurnUsername: PropTypes.string,
   isLastTurn: PropTypes.bool,
+  correctTurn: PropTypes.bool,
 };
 
 const defaultProps = {
   usernames: [],
-  userFinished: false,
+  userFinished: null,
   roomFinished: null,
   auth: authDefaultPropType,
   currentTurnUsername: null,
-  isLastTurn: false,
+  isLastTurn: null,
+  correctTurn: null,
 };
 
 function AlertMessage({ show, onHide, title, message }) {

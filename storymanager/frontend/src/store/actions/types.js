@@ -35,3 +35,6 @@ export const WS_CONNECTING = 'WS_CONNECTING';
 export const WS_OPENED = 'WS_OPENED';
 export const WS_CLOSED = 'WS_CLOSED';
 export const SET_WS_STATUS = 'SET_WS_STATUS';
+
+export const ADD_NOTIFICATION = 'ADD_NOTIFICATION';
+export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION';

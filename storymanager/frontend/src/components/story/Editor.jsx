@@ -8,7 +8,7 @@ import FinishedTextViewer from './FinishedTextViewer';
 import VisibleTextDisplay from './VisibleTextDisplay';
 import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
-import { authPropType, matchPropType } from '../common/commonPropTypes';
+import { authPropType, matchPropType } from '../commonPropTypes';
 import { getRoomStatus } from '../../store/actions/room';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
@@ -46,7 +46,9 @@ function Editor(props) {
   const { isAuthenticated } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
-  useWebsocket({ isOnline, token: auth.token, roomTitle });
+  useWebsocket({
+    isOnline, user: auth.user, token: auth.token, roomTitle, roomIsFinished,
+  });
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
@@ -90,8 +92,8 @@ Editor.propTypes = {
 };
 
 Editor.defaultProps = {
-  roomIsFinished: false,
-  isLastTurn: false,
+  roomIsFinished: null,
+  isLastTurn: null,
   auth: null,
 };
 

@@ -10,10 +10,10 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  rooms: {},
-  user_left_room: false,
+  rooms: null,
+  user_left_room: null,
   texts: [],
-  is_finished: false,
+  is_finished: null,
   finished_at: null,
   room_title: null,
 };

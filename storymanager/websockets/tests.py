@@ -36,7 +36,7 @@ def ws_create_login_user_with_group(
 async def auth_connect(token, room_title: str = ROOM_TITLE) -> WebsocketCommunicator:
     communicator = WebsocketCommunicator(
         application=application,
-        subprotocols=['access_token', token],
+        subprotocols=[token],
         path=f'ws/room/{room_title}',
     )
     connected, subprotocol = await communicator.connect()

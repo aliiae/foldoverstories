@@ -25,7 +25,7 @@ export const matchPropType = PropTypes.shape({
   params: PropTypes.object,
 });
 
-export const authDefaultPropType = { isAuthenticated: false, token: '', user: {} };
+export const authDefaultPropType = { isAuthenticated: false, token: null, user: null };
 
 export const historyPropType = PropTypes.shape({
   location: PropTypes.object,
