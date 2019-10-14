@@ -16,7 +16,7 @@ export const loadUser = () => (dispatch, getState) => {
     .then((res) => {
       dispatch({
         type: USER_LOADED,
-        payload: res.data.user,
+        payload: res.data,
       });
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
@@ -37,7 +37,6 @@ export const login = (username, password) => (dispatch) => {
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
-      dispatch(getRooms());
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));

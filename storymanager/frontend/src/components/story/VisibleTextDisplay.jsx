@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getVisibleText } from '../../store/actions/story';
-import LoadingSpinner from '../common/LoadingSpinner';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 const propTypes = {
   visibleText: PropTypes.string,

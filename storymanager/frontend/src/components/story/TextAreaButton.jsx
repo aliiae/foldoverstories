@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 import { addText } from '../../store/actions/story';
 import { leaveRoom } from '../../store/actions/room';
 import JoinButton from './JoinButton';
-import LoadingSpinner from '../common/LoadingSpinner';
+import LoadingSpinner from '../shared/LoadingSpinner';
 import { authDefaultPropType, authPropType } from '../commonPropTypes';
 import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
@@ -158,7 +158,13 @@ function TextAreaButton(props) {
         </Form.Group>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Col>
-            <Button type="submit" variant="success" size="sm" className="shadow-button">
+            <Button
+              type="submit"
+              variant="success"
+              size="sm"
+              className="shadow-button"
+              data-test="submit-button"
+            >
               Submit
             </Button>
           </Col>

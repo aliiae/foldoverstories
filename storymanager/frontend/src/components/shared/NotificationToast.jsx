@@ -33,7 +33,7 @@ NotificationToast.propTypes = {
   title: PropTypes.string,
   text: PropTypes.string.isRequired,
   time: PropTypes.instanceOf(Date).isRequired,
-  remove: PropTypes.func.isRequired,
+  removeNotification: PropTypes.func.isRequired,
 };
 
 NotificationToast.defaultProps = {

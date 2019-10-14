@@ -40,7 +40,7 @@ function RoomDashboard(props) {
   return (
     <div className="dark-bg">
       <Container className="pt-3 pb-2">
-        <Table hover responsive className="dashboard">
+        <Table hover responsive className="dashboard" data-test="dashboard">
           <thead>
             <tr>
               <th scope="col" width="40%">Story</th>

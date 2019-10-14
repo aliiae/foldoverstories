@@ -6,9 +6,9 @@ import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
 import { readRoomTexts } from '../../store/actions/room';
 import { formatTimeStampDateOnly } from '../dateFormatters';
-import ShareButtons from '../common/ShareButtons';
+import ShareButtons from '../shared/ShareButtons';
 import { textsPropType } from '../commonPropTypes';
-import LoadingSpinner from '../common/LoadingSpinner';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 function TextTabs({ texts, usernames, finishedAt }) {
   return (

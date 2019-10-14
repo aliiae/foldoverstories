@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-const SvgLinkIcon = ({ size, ...props }) => (
+export const SvgLinkIcon = ({ size, ...props }) => (
   <svg viewBox="0 0 64 64" width={size} height={size} {...props} className="social-icon">
     <circle cx="32" cy="32" r="31" fill="#EB6864" />
     <svg preserveAspectRatio="xMidYMid meet" viewBox="-16 -16 64 64">
@@ -19,7 +19,7 @@ const SvgLinkIcon = ({ size, ...props }) => (
 
 SvgLinkIcon.propTypes = { size: PropTypes.number.isRequired };
 
-const SvgLinkButton = ({ url, size, ...props }) => {
+const CopyLinkButton = ({ url, children, ...props }) => {
   let hiddenInputRef = useRef(null);
   const [show, setShow] = useState(false);
 
@@ -55,11 +55,12 @@ const SvgLinkButton = ({ url, size, ...props }) => {
           className="unstyled-button"
           {...props}
         >
-          <SvgLinkIcon size={size} />
+          {children}
         </button>
       </OverlayTrigger>
     </>
   );
 };
-SvgLinkButton.propTypes = { url: PropTypes.string.isRequired, size: PropTypes.number.isRequired };
-export default SvgLinkButton;
+CopyLinkButton.propTypes = { url: PropTypes.string.isRequired, children: PropTypes.node };
+CopyLinkButton.defaultProps = { children: null };
+export default CopyLinkButton;

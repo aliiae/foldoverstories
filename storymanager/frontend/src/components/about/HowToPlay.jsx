@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import SvgFoldoverLogo from '../layout/SvgFoldoverLogo';
+import SvgFoldoverLogo from '../shared/SvgFoldoverLogo';
 
 export default function HowToPlay() {
   return (

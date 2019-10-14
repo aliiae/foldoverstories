@@ -34,6 +34,7 @@ function StartButton(props) {
         size="lg"
         type="button"
         onClick={onClick}
+        data-test="start-new-story-button"
       >
         Start a new story
       </Button>

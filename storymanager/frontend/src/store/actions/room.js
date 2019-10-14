@@ -11,7 +11,6 @@ import {
 import { returnErrors } from './messages';
 import { getUsers, getVisibleText } from './story';
 import { setupTokenConfig } from './utils';
-import room from '../reducers/room';
 
 // GET USER'S ROOMS
 export const getRooms = (pageNumber = 1) => (dispatch, getState) => {

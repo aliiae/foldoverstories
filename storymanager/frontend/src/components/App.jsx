@@ -10,11 +10,12 @@ import Header from './layout/Header';
 import HowToPlay from './about/HowToPlay';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
-import NotificationToasts from './layout/NotificationToasts';
+import NotificationToasts from './shared/NotificationToasts';
 import Landing from './landing/Landing';
 import Editor from './story/Editor';
 import PageNotFound from './common/PageNotFound';
 import Footer from './layout/Footer';
+import Main from './layout/Main';
 import store from '../store/store';
 import { loadUser } from '../store/actions/auth';
 
@@ -24,18 +25,20 @@ if (false && process.env.NODE_ENV !== 'production') {
   whyDidYouRender(React, {
     collapseGroups: true,
     include: [/.*/],
-    // exclude: [/^Link/, /^Route/, /^BrowserRouter/],
+    exclude: [/^Link/, /^Route/, /^BrowserRouter/],
   });
 }
 
 function App() {
-  useEffect(() => store.dispatch(loadUser()), []);
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   return (
     <Provider store={store}>
       <BrowserRouter>
         <Header />
         <NotificationToasts />
-        <main className="main-content">
+        <Main className="main-content">
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route exact path="/story/:id" component={Editor} />
@@ -45,11 +48,11 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route path="*" component={PageNotFound} />
           </Switch>
-        </main>
+        </Main>
         <Footer />
       </BrowserRouter>
     </Provider>
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app') || document.createElement('div'));

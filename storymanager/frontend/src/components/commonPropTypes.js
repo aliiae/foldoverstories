@@ -5,7 +5,6 @@ export const authPropType = PropTypes.shape(
     isAuthenticated: PropTypes.boolean,
     token: PropTypes.string,
     user: PropTypes.shape({
-      id: PropTypes.number.isRequired,
       username: PropTypes.string.isRequired,
     }),
   },

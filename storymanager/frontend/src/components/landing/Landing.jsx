@@ -12,7 +12,7 @@ export default function Landing() {
   return (
     <>
       <Container className="align-center">
-        <WelcomeJumbotron />
+        <WelcomeJumbotron data-test="welcome-jumbotron" />
       </Container>
       <RoomDashboard />
     </>

@@ -9,7 +9,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { logout } from '../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../commonPropTypes';
-import SvgFoldoverLogo from './SvgFoldoverLogo';
+import SvgFoldoverLogo from '../shared/SvgFoldoverLogo';
 
 const propTypes = {
   auth: authPropType,
@@ -60,10 +60,10 @@ export function Header(props) {
   const guestLinks = (
     <Nav className="ml-auto">
       <LinkContainer to="/register">
-        <Nav.Link className="mr-3">Register</Nav.Link>
+        <Nav.Link className="mr-3" data-test="register-link">Register</Nav.Link>
       </LinkContainer>
       <LinkContainer to="/login">
-        <Nav.Link>Login</Nav.Link>
+        <Nav.Link data-test="login-link">Login</Nav.Link>
       </LinkContainer>
     </Nav>
   );
@@ -71,12 +71,12 @@ export function Header(props) {
   return (
     <header>
       <Navbar collapseOnSelect expand="sm" bg="light" variant="light">
-        <Logo />
+        <Logo data-test="logo" />
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav>
             <LinkContainer to="/how-to-play">
-              <Nav.Link>How to Play</Nav.Link>
+              <Nav.Link data-test="how-to-play-link">How to Play</Nav.Link>
             </LinkContainer>
           </Nav>
           {isAuthenticated ? authLinks : guestLinks}

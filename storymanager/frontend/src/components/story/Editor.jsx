@@ -10,11 +10,11 @@ import TextAreaButton from './TextAreaButton';
 import RoomUsers from './RoomUsers';
 import { authPropType, matchPropType } from '../commonPropTypes';
 import { getRoomStatus } from '../../store/actions/room';
-import LoadingSpinner from '../common/LoadingSpinner';
+import LoadingSpinner from '../shared/LoadingSpinner';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';
 import useWebsocket from '../../hooks/useWebsocket';
-import SvgLinkButton from '../layout/SvgLinkButton';
+import CopyLinkButton from '../shared/CopyLinkButton';
 
 function InviteLink(props) {
   const { url } = props;
@@ -30,7 +30,7 @@ function InviteLink(props) {
         {url}
       </a>
       {' '}
-      <SvgLinkButton url={url} size={32} />
+      <CopyLinkButton url={url} size={32} />
     </p>
   );
 }
@@ -61,7 +61,7 @@ function Editor(props) {
   }
 
   return (
-    <Container className="editor">
+    <Container className="editor" data-test="editor">
       <Row className="justify-content-center">
         <Col md={3} className="order-2">
           <RoomUsers roomTitle={roomTitle} roomIsFinished={roomIsFinished} />
