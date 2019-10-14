@@ -15,7 +15,7 @@ from websockets.server_send import WEBSOCKET_MSG_JOIN
 
 TEST_CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
     },
 }
 User = get_user_model()
@@ -36,7 +36,7 @@ def ws_create_login_user_with_group(
 async def auth_connect(token, room_title: str = ROOM_TITLE) -> WebsocketCommunicator:
     communicator = WebsocketCommunicator(
         application=application,
-        subprotocols=[token],
+        subprotocols=['accept_token', token],
         path=f'ws/room/{room_title}',
     )
     connected, subprotocol = await communicator.connect()

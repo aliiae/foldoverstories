@@ -28,7 +28,7 @@ function VisibleTextDisplay(props) {
   const { visibleText, correctTurn, userFinished } = props;
 
   if (userFinished) {
-    return '';
+    return null;
   }
   if (correctTurn && visibleText === null) {
     return <LoadingSpinner />;

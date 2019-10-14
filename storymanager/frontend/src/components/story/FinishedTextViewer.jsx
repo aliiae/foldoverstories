@@ -6,8 +6,9 @@ import Tab from 'react-bootstrap/Tab';
 import Table from 'react-bootstrap/Table';
 import { readRoomTexts } from '../../store/actions/room';
 import { formatTimeStampDateOnly } from '../dateFormatters';
-import ShareButtons from './ShareButtons';
+import ShareButtons from '../common/ShareButtons';
 import { textsPropType } from '../commonPropTypes';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 function TextTabs({ texts, usernames, finishedAt }) {
   return (
@@ -64,10 +65,14 @@ function TextLines({ texts }) {
 }
 
 function StoryHeadline({ usernames, dateISOString }) {
+  function getJoinedUsernames() { // format as "user1, user2 & user3"
+    return ` ${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`;
+  }
+
   return (
     <h1 className="h5 story-headline">
       Story by
-      {` ${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`}
+      {getJoinedUsernames()}
       <span className="small text-muted" style={{ display: 'block' }}>
         Finished on
         {' '}
@@ -89,6 +94,9 @@ function FinishedTextViewer(props) {
   useEffect(() => {
     readRoomTextsConnect(roomTitle);
   }, []);
+  if (texts === null) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="mt-3">
       <TextTabs texts={texts} usernames={usernames} finishedAt={finishedAt} />

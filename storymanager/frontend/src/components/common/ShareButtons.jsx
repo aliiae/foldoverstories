@@ -14,7 +14,7 @@ export default function ShareButtons({ url }) {
   return (
     <div className="float-right align-items-center mt-3">
       <span className="mr-1">Share this story:</span>
-      <ButtonToolbar className="d-inline-flex">
+      <ButtonToolbar className="d-inline-flex" data-test="share-buttons">
         <TelegramShareButton url={url}>
           <TelegramIcon size={32} round />
         </TelegramShareButton>

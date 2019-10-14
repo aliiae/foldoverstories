@@ -17,7 +17,7 @@ const NotificationToasts = (props) => {
               <NotificationToast
                 {...notification}
                 key={id}
-                remove={removeNotificationConnect}
+                removeNotification={removeNotificationConnect}
                 if={id}
               />
             );

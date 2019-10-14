@@ -13,7 +13,6 @@ const initialState = {
   isAuthenticated: null,
   isLoading: null,
   user: null,
-  username: '',
   error: null,
 };
 

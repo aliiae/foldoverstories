@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
+
 import Header from './layout/Header';
 import HowToPlay from './about/HowToPlay';
 import Login from './accounts/Login';
@@ -16,6 +17,16 @@ import PageNotFound from './common/PageNotFound';
 import Footer from './layout/Footer';
 import store from '../store/store';
 import { loadUser } from '../store/actions/auth';
+
+if (false && process.env.NODE_ENV !== 'production') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render');
+
+  whyDidYouRender(React, {
+    collapseGroups: true,
+    include: [/.*/],
+    // exclude: [/^Link/, /^Route/, /^BrowserRouter/],
+  });
+}
 
 function App() {
   useEffect(() => store.dispatch(loadUser()), []);

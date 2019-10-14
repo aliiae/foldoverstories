@@ -40,6 +40,16 @@ $nav-height: 4rem;
   padding-bottom: $padding;
 }
 
+%highlight {
+  display: table;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, #FFD0AE 50%);
+}
+
+%gray-border {
+  border: 1px solid $gray-200;
+}
+
+
 .app {
   min-height: 100vh;
 }
@@ -81,10 +91,6 @@ $nav-height: 4rem;
   }
 }
 
-%gray-border {
-  border: 1px solid $gray-200;
-}
-
 .footer {
   height: $nav-height;
   line-height: $nav-height;
@@ -101,7 +107,6 @@ $nav-height: 4rem;
 .jumbotron {
   background-color: transparent;
   color: $black;
-  //@extend %gray-border;
 }
 
 .card,
@@ -227,20 +232,6 @@ $nav-height: 4rem;
     content: ' 👋';
   }
 }
-
-//.story-headline {
-//  &::before {
-//    background-image: url(/static/img/fold_over.svg);
-//    background-size: 2.5rem 2.25rem;
-//    background-repeat: no-repeat;
-//    display: inline-block;
-//    width: 2.5rem;
-//    height: 2.25rem;
-//    content: '';
-//    margin-right: 0.5rem;
-//    vertical-align: -50%;
-//  }
-//}
 
 .visible-text {
   width: 100%;
@@ -390,7 +381,7 @@ $nav-height: 4rem;
 .hidden-input {
   display: none;
   position: absolute;
-  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+  clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
 }
 
@@ -400,20 +391,10 @@ $nav-height: 4rem;
     content: '✶ ';
     color: $primary;
   }
-
-  //&::after {
-  //  content: ' ✶';
-  //  color: $primary;
-  //}
 }
 
 .alert {
   margin-top: 1rem;
-}
-
-%highlight {
-  display: table;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, #FFD0AE 50%);
 }
 
 .not-found {
@@ -434,7 +415,7 @@ $nav-height: 4rem;
 
 .unstyled-button {
   background: none;
-  border: none;
+  border: 0;
   margin: 0;
   padding: 0;
 }

@@ -28,6 +28,9 @@ function RoomUsers(props) {
     getUsersConnect(roomTitle);
   }, []);
   const { users } = props;
+  if (!users || users.length === 0) {
+    return null;
+  }
   return (
     <Card className="mt-3">
       <Card.Header>Authors</Card.Header>

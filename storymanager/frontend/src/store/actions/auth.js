@@ -12,17 +12,15 @@ import { setupTokenConfig } from './utils';
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
-  axios.get('/api/auth/user', setupTokenConfig(getState))
+  return axios.get('/api/auth/user', setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: USER_LOADED,
-        payload: res.data,
+        payload: res.data.user,
       });
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({
-        type: AUTH_ERROR,
-      });
+      dispatch({ type: AUTH_ERROR });
     });
 };
 
@@ -33,8 +31,7 @@ export const login = (username, password) => (dispatch) => {
     },
   };
   const body = JSON.stringify({ username, password });
-  axios
-    .post('/api/auth/login', body, config)
+  return axios.post('/api/auth/login', body, config)
     .then((res) => {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -50,7 +47,7 @@ export const login = (username, password) => (dispatch) => {
 
 
 export const logout = () => (dispatch, getState) => {
-  axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
+  return axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
     .then(() => {
       dispatch({ type: CLEAR_ROOMS });
       dispatch({ type: LOGOUT_SUCCESS });
@@ -60,13 +57,9 @@ export const logout = () => (dispatch, getState) => {
 };
 
 export const register = ({ username, password }) => (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const config = { headers: { 'Content-Type': 'application/json' } };
   const body = JSON.stringify({ username, password });
-  axios.post('/api/auth/register', body, config)
+  return axios.post('/api/auth/register', body, config)
     .then((res) => {
       dispatch({
         type: REGISTER_SUCCESS,
