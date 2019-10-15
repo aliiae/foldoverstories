@@ -282,7 +282,8 @@ $nav-height: 4rem;
 
 .finished-text-container {
   position: relative;
-  font-family: $main-font-family;
+  //font-family: $main-font-family;
+  border-radius: .2rem;
 
   &::before {
     content: '* * *';
@@ -430,4 +431,8 @@ $nav-height: 4rem;
   top: 0;
   right: 0;
   z-index: 5;
+}
+
+.social-icon {
+
 }

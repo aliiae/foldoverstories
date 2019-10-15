@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TelegramShareButton from 'react-share/lib/TelegramShareButton';
-import TelegramIcon from 'react-share/lib/TelegramIcon';
-import EmailShareButton from 'react-share/lib/EmailShareButton';
-import EmailIcon from 'react-share/lib/EmailIcon';
+import {
+  TelegramShareButton,
+  TelegramIcon,
+  EmailShareButton,
+  EmailIcon,
+  TwitterShareButton,
+  TwitterIcon,
+} from 'react-share';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import TwitterShareButton from 'react-share/lib/TwitterShareButton';
-import TwitterIcon from 'react-share/lib/TwitterIcon';
 import CopyLinkButton from './CopyLinkButton';
 import SvgLinkIcon from './SvgLinkIcon';
 

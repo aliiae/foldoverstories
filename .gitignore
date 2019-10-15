@@ -11,3 +11,4 @@ package*
 /storymanager/rooms/migrations/*
 /storymanager/texts/migrations/*
 /storymanager/*/__pycache__/*
+/storymanager/frontend/static/frontend/main.js

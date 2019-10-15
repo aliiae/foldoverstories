@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SvgLinkIcon = ({ size, ...props }) => (
-  <svg viewBox="0 0 64 64" width={size} height={size} {...props} className="social-icon">
+  <svg viewBox="0 0 64 64" width={size} height={size} {...props}>
     <circle cx="32" cy="32" r="31" fill="#EB6864" />
     <svg preserveAspectRatio="xMidYMid meet" viewBox="-16 -16 64 64">
       <g>
