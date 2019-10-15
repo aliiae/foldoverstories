@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -12,22 +13,14 @@ from websockets.server_send import (send_channel_message, WEBSOCKET_MSG_JOIN,
 User = get_user_model()
 
 
-def get_room_users(room: 'Room') -> QueryType[User]:
-    return room.users.all().order_by('date_joined')
-
-
-def get_membership(user: User, room: 'Room') -> 'Membership':
+def get_user_room_membership(user: User, room: 'Room') -> 'Membership':
     return Membership.objects.get(room=room, user=user)
 
 
-def user_is_in_room(user: User, room: 'Room') -> bool:
-    return Membership.objects.filter(room=room, user=user).exists()
-
-
 def add_user_to_room(user: User, room: 'Room'):
-    if user_is_in_room(user, room):
+    if room.has_user(user):
         return
-    new_user_membership = Membership.objects.create(room=room, user=user)  # adds user to the room
+    new_user_membership = Membership.objects.create(room=room, user=user)  # adds user to the self
     new_user_membership.save()
     send_channel_message(room.room_title, {
         'type': WEBSOCKET_MSG_JOIN,
@@ -108,6 +101,61 @@ class Room(models.Model):
         messages as they are generated.
         """
         return str(self.room_title)
+
+    def get_current_turn_user(self, request_user: User) -> Optional[User]:
+        """
+        Returns the user allowed to post, the one next after the prev poster in self.users.
+        Allows the current turn user write, prohibits others.
+
+        Returns None if the room should be closed.
+        """
+
+        def index_of(target, items) -> int:
+            index = next(idx for idx, item in enumerate(items) if item == target)
+            return -1 if index is None else index
+
+        def _default_turn_user() -> User:
+            default_user = request_user
+            default_membership = get_user_room_membership(default_user, self)
+            default_membership.can_write_now = True
+            return default_user
+
+        if self.is_finished:
+            return None
+        users = self.get_room_users()
+        if self.texts.count() == 0:  # the room is empty
+            return _default_turn_user()
+        if users.count() == 1:  # return the room's owner if they're alone
+            return users[0]
+        prev_turn_user: User = self.texts.last().author
+        prev_turn_user_index = index_of(prev_turn_user, users)
+        if prev_turn_user_index == -1:  # current user is the first one to write
+            return _default_turn_user()
+        prev_turn_membership = get_user_room_membership(prev_turn_user, self)
+        if prev_turn_membership.can_write_now:
+            prev_turn_membership.can_write_now = False
+            prev_turn_membership.save()
+        curr_turn_user, curr_turn_membership = None, None
+        for i in range(1, users.count()):
+            curr_turn_user = users[(prev_turn_user_index + i) % users.count()]
+            curr_turn_membership = get_user_room_membership(curr_turn_user, self)
+            if not curr_turn_membership.has_stopped:
+                break
+        else:  # everyone else stopped, finish room to prevent double-posting
+            if prev_turn_user == request_user:
+                close_room(self)
+                return None
+        curr_turn_membership.can_write_now = True
+        curr_turn_membership.save()
+        not_curr_memberships = Membership.objects.filter(room=self).exclude(user=curr_turn_user)
+        not_curr_memberships.update(can_write_now=False)
+        return curr_turn_user
+
+    def get_room_users(self) -> QueryType[User]:
+        return self.users.all().order_by('date_joined')
+
+    def has_user(self, user: 'User') -> bool:
+        return Membership.objects.filter(room=self, user=user).exists()
 
 
 class Membership(models.Model):

@@ -4,16 +4,15 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from accounts.tests import create_user, login_user_into_client
-from rooms.models import add_user_to_room, get_membership
+from rooms.models import add_user_to_room, get_user_room_membership
 from storymanager.tests_utils import create_user_room, create_user_room_text
 
 User = get_user_model()
 
 
 def add_text_from_client_to_room(text_data, client, room):
-    return client.post(reverse(
-        'texts-list', kwargs={'room_title': room.room_title}),
-        data=text_data)
+    return client.post(reverse('texts-list', kwargs={'room_title': room.room_title}),
+                       data=text_data)
 
 
 class HttpTextsTest(APITestCase):
@@ -78,7 +77,7 @@ class HttpTextsTest(APITestCase):
         login_user_into_client(this_user, self.client)
         response = add_text_from_client_to_room(text_data, self.client, self.room)
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
-        membership = get_membership(this_user, self.room)
+        membership = get_user_room_membership(this_user, self.room)
         self.assertFalse(membership.can_write_now)
 
     def test_current_turn_user_is_chronologically_after_previous_author(self):
@@ -98,9 +97,9 @@ class HttpTextsTest(APITestCase):
         for i, user in enumerate(users):
             login_user_into_client(user, self.client)
             response = add_text_from_client_to_room({'visible_text': 'x'}, self.client, self.room)
-            if i < exp_current_turn_index:  # users before
+            if i < exp_current_turn_index:  # users before are not allowed to write
                 self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
             elif i == exp_current_turn_index:
                 self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-            else:  # users after
+            else:  # users after are allowed to write
                 self.assertEqual(status.HTTP_201_CREATED, response.status_code)

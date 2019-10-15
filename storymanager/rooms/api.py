@@ -12,8 +12,8 @@ from rest_framework.response import Response
 from rooms.models import Room, add_user_to_room, Membership, close_room, leave_room
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer, \
-    RoomsReadOnlySerializer
+from .serializers import (RoomsSerializer, RoomUsersSerializer, RoomReadSerializer,
+                          RoomsReadOnlySerializer)
 
 User = get_user_model()
 
@@ -72,6 +72,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
         add_user_to_room(self.request.user, room)
+        room.get_current_turn_user(self.request.user)
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
