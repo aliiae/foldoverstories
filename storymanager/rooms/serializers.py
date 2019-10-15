@@ -34,6 +34,12 @@ class RoomUsersSerializer(serializers.ModelSerializer):
         fields = ('username', 'texts_count', 'user_left_room', 'user_can_write_now')
 
 
+class RoomsReadOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('room_title', 'users', 'is_finished', 'finished_at')
+
+
 class RoomsSerializer(serializers.ModelSerializer):
     users = RoomUsersSerializer(read_only=True, many=True)
     user_left_room = serializers.SerializerMethodField('did_user_leave_room')
@@ -63,12 +69,14 @@ class RoomReadSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField('get_username')
     full_text = serializers.SerializerMethodField('get_full_text')
 
-    def get_full_text(self, obj):
+    @staticmethod
+    def get_full_text(obj):
         return obj.hidden_text + ' ' + obj.visible_text
 
-    def get_username(self, obj):
+    @staticmethod
+    def get_username(obj):
         return obj.author.username
 
     class Meta:
         model = Text
-        fields = ('full_text', 'username')
+        fields = ('id', 'full_text', 'username')

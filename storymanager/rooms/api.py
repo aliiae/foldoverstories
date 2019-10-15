@@ -12,7 +12,8 @@ from rest_framework.response import Response
 from rooms.models import Room, add_user_to_room, Membership, close_room, leave_room
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer
+from .serializers import RoomsSerializer, RoomUsersSerializer, RoomReadSerializer, \
+    RoomsReadOnlySerializer
 
 User = get_user_model()
 
@@ -24,7 +25,7 @@ class RoomsPagination(PageNumberPagination):
 
 
 class RoomsViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = RoomsPagination
     lookup_field = 'room_title'
     serializer_class = RoomsSerializer
@@ -34,6 +35,8 @@ class RoomsViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, room_title=None, *args, **kwargs) -> HttpResponse:
         room: Room = get_object_or_404(Room, room_title=room_title)
+        if not request.user.is_authenticated:
+            return Response(RoomsReadOnlySerializer(room).data)
         serializer: RoomsSerializer = self.get_serializer(room)
         return Response(serializer.data)
 
@@ -81,6 +84,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
 
 
 class RoomReadViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
     serializer_class = RoomReadSerializer
 
     def get_queryset(self) -> QueryType[Text]:
