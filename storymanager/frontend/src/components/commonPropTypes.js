@@ -11,6 +11,7 @@ export const authPropType = PropTypes.shape(
 );
 
 export const textsPropType = PropTypes.arrayOf(PropTypes.shape({
+  id: PropTypes.number,
   full_text: PropTypes.string,
   username: PropTypes.string,
 }));

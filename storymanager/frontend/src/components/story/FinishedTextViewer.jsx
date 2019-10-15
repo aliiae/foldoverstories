@@ -14,11 +14,11 @@ import { Emoji } from '../landing/Status';
 function TextTabs({ texts, usernames, finishedAt }) {
   const isEmpty = texts.length === 0;
   const emptyStoryMessage = (
-    <p className="text-muted">
+    <span className="text-muted">
       <Emoji emoji="🐚" label="empty seashell emoji" />
       {' '}
       This story is empty.
-    </p>
+    </span>
   );
 
   return (
