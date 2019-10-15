@@ -6,8 +6,9 @@ import { removeNotification } from '../../store/actions/notifications';
 
 const NotificationToasts = (props) => {
   const { removeNotificationConnect, notifications } = props;
+  const style = { position: 'relative' };
   return (
-    <div aria-live="polite" aria-atomic="true" style={{ position: 'relative' }}>
+    <div aria-live="polite" aria-atomic="true" style={style}>
       <div className="notifications-container">
         {notifications
           .filter((notification) => notification.username !== notification.sender)

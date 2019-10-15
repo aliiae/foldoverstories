@@ -37,7 +37,6 @@ export const addRoom = (room) => (dispatch, getState) => {
         type: ADD_ROOM_SUCCESS,
         payload: res.data,
       });
-      console.log(res.data);
       dispatch(clearRoomTitle());
       dispatch(getUsers(res.data.room_title));
     }).catch((err) => {

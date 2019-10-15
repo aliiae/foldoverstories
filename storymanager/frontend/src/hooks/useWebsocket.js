@@ -1,10 +1,10 @@
 import { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { SOCKET_URL } from '../settings';
+import { SOCKET_URL, TITLE_DELIMITER } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
 import { getUsers, getVisibleText } from '../store/actions/story';
-import { getRooms, getRoomStatus } from '../store/actions/room';
+import { getRoomStatus } from '../store/actions/room';
 import { addNotification } from '../store/actions/notifications';
 
 const NUM_WS_RECONNECTING_ATTEMPTS = 5;
@@ -17,10 +17,11 @@ const useWebsocket = (props) => {
     isOnline, token, roomTitle, user, roomIsFinished, usernames,
   } = props;
 
-  function dispatchNotification(message, text) {
+  function dispatchNotification(message, text, title) {
     dispatchAction(addNotification(
       {
         text,
+        title,
         username: 'username' in message ? message.username : null,
         sender: user ? user.username : '',
         time: new Date(),
@@ -45,15 +46,20 @@ const useWebsocket = (props) => {
         break;
       case 'room.leave':
         dispatchAllActions();
-        dispatchNotification(message, `${message.username} left the ${roomTitle} story`);
+        dispatchNotification(message,
+          `${message.username} finished their part in the ${roomTitle} story`,
+          `${roomTitle} ${TITLE_DELIMITER} user has finished`);
         break;
       case 'room.join':
         dispatchAllActions();
-        dispatchNotification(message, `${message.username} joined the ${roomTitle} story`);
+        dispatchNotification(message,
+          `${message.username} joined the ${roomTitle} story`,
+          `${roomTitle} ${TITLE_DELIMITER} user has joined`);
         break;
       case 'room.finish':
         dispatchAllActions();
-        dispatchNotification(message, `${roomTitle} is finished and ready to be read!`);
+        dispatchNotification(message, `${roomTitle} is finished and ready to be read!`,
+          `${roomTitle} is finished`);
         wsRef.current.close();
         break;
       default:
