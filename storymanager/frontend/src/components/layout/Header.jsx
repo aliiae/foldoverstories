@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { logout } from '../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../commonPropTypes';
 import SvgFoldoverLogo from '../shared/SvgFoldoverLogo';
+import StartNewStoryButton from '../landing/StartNewStoryButton';
 
 const propTypes = {
   auth: authPropType,
@@ -78,6 +79,9 @@ export function Header(props) {
             <LinkContainer to="/how-to-play">
               <Nav.Link data-test="how-to-play-link">How to Play</Nav.Link>
             </LinkContainer>
+          </Nav>
+          <Nav className="ml-1">
+            <StartNewStoryButton classNames="nav-link bg-transparent border-0 nav-start-button" />
           </Nav>
           {isAuthenticated ? authLinks : guestLinks}
         </Navbar.Collapse>

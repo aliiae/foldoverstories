@@ -14,6 +14,7 @@ export const GET_USERS = 'GET_USERS';
 export const WRONG_TURN = 'WRONG_TURN';
 export const LAST_TURN = 'LAST_TURN';
 export const GET_ERRORS = 'GET_ERRORS';
+export const CLEAR_STORY = 'CLEAR_STORY';
 
 export const USER_LOADING = 'USER_LOADING';
 export const USER_LOADED = 'USER_LOADED';

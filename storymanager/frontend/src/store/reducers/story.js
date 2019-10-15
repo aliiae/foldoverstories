@@ -1,5 +1,5 @@
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
+  ADD_TEXT, CLEAR_STORY, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
 } from '../actions/types';
 
 const initialState = {
@@ -34,6 +34,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         last_turn: true,
+      };
+    case CLEAR_STORY:
+      return {
+        ...state,
+        ...initialState,
       };
     default:
       return state;

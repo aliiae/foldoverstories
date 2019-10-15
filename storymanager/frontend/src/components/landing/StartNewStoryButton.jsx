@@ -7,16 +7,13 @@ import { addRoom, clearRoomTitle } from '../../store/actions/room';
 
 function StartButton(props) {
   const {
-    addRoomConnect, clearRoomTitleConnect, isAuthenticated, roomTitle,
+    addRoomConnect, isAuthenticated, roomTitle, classNames,
   } = props;
   const history = useHistory();
   useEffect(() => {
     if (isAuthenticated && roomTitle) {
       history.push(`/story/${roomTitle}`);
     }
-    return () => {
-      clearRoomTitleConnect();
-    };
   }, [roomTitle, isAuthenticated]);
   const onClick = (e) => {
     e.preventDefault();
@@ -29,7 +26,7 @@ function StartButton(props) {
   return (
     <>
       <Button
-        className="start-button shadow-button"
+        className={classNames}
         variant="primary"
         size="lg"
         type="button"
@@ -47,10 +44,12 @@ StartButton.propTypes = {
   clearRoomTitleConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
+  classNames: PropTypes.string,
 };
 StartButton.defaultProps = {
   isAuthenticated: false,
   roomTitle: '',
+  classNames: 'start-button shadow-button',
 };
 
 const mapStateToProps = (state) => ({

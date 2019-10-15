@@ -34,10 +34,10 @@ $gray: #424242 !default;
 $nav-height: 4rem;
 
 @mixin color-underline($border: 2px, $color: $yellow, $padding: 2px) {
-  text-decoration: none;
+  text-decoration: none !important;
   transition: all .2s ease-in;
-  border-bottom: $border solid $color;
-  padding-bottom: $padding;
+  border-bottom: $border solid $color !important;
+  padding-bottom: $padding !important;
 }
 
 %highlight {
@@ -414,7 +414,8 @@ $nav-height: 4rem;
 
 }
 
-.unstyled-button {
+.unstyled-button,
+.unstyled-button:hover {
   background: none;
   border: 0;
   margin: 0;
@@ -433,6 +434,10 @@ $nav-height: 4rem;
   z-index: 5;
 }
 
-.social-icon {
+.nav-start-button,
+.nav-start-button:hover {
+  font-size: 1.15rem;
+  border-radius: 0;
 
+  @extend %color-underline;
 }

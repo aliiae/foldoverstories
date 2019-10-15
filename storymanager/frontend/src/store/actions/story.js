@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM, CLEAR_STORY,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';
@@ -57,4 +57,8 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
       });
       dispatch(getUsers(roomTitle)); // updates users' text count
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
+};
+
+export const clearStory = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_STORY' });
 };

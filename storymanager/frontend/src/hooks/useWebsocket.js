@@ -54,7 +54,6 @@ const useWebsocket = (props) => {
       case 'room.finish':
         dispatchAllActions();
         dispatchNotification(message, `${roomTitle} is finished and ready to be read!`);
-        dispatchAction(getRooms()); // update the room dashboard
         wsRef.current.close();
         break;
       default:

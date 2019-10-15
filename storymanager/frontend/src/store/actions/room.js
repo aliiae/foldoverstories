@@ -9,7 +9,7 @@ import {
   LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
-import { getUsers, getVisibleText } from './story';
+import { clearStory, getUsers, getVisibleText } from './story';
 import { setupTokenConfig } from './utils';
 
 // GET USER'S ROOMS
@@ -23,15 +23,23 @@ export const getRooms = (pageNumber = 1) => (dispatch, getState) => {
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 
+/* Needed for going back on home page from the editor */
+export const clearRoomTitle = () => (dispatch) => {
+  dispatch({ type: 'CLEAR_ROOM_TITLE' });
+};
+
 // ADD NEW ROOM
 export const addRoom = (room) => (dispatch, getState) => {
   axios.post('/api/rooms/', room, setupTokenConfig(getState))
     .then((res) => {
-      dispatch(getRooms());
+      dispatch(clearStory());
       dispatch({
         type: ADD_ROOM_SUCCESS,
         payload: res.data,
       });
+      console.log(res.data);
+      dispatch(clearRoomTitle());
+      dispatch(getUsers(res.data.room_title));
     }).catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
@@ -47,7 +55,6 @@ export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
       dispatch({
         type: GET_ROOM_STATUS,
         payload: {
-          is_finished: res.data.is_finished,
           user_left_room: res.data.user_left_room,
           finished_at: res.data.finished_at,
         },
@@ -94,9 +101,4 @@ export const leaveRoom = (roomTitle) => (dispatch, getState) => {
       });
       dispatch(getUsers(roomTitle));
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
-};
-
-/* Needed for going back on home page after creating a room */
-export const clearRoomTitle = () => (dispatch) => {
-  dispatch({ type: 'CLEAR_ROOM_TITLE' });
 };
