@@ -55,6 +55,29 @@ AlertMessage.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
+function TextArea({ value, onChange }) {
+  const placeholder = 'Type your text here. Remember that only the last line will be visible!';
+  return (
+    <Form.Control
+      as="textarea"
+      rows="3"
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      name="text"
+      style={{ resize: 'none' }}
+      required
+      autoFocus
+      data-test="story-textarea"
+    />
+  );
+}
+
+TextArea.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
 function TextAreaButton(props) {
   const [text, setText] = useState('');
   const {
@@ -139,22 +162,11 @@ function TextAreaButton(props) {
     );
   }
 
-  const placeholder = 'Type your text here. Remember that only the last line will be visible!';
   const submitForm = (
     <>
       <Form onSubmit={onSubmit} className="editor-form">
         <Form.Group controlId="formEnterText">
-          <Form.Control
-            as="textarea"
-            rows="3"
-            placeholder={placeholder}
-            value={text}
-            onChange={onChangeText}
-            name="text"
-            style={{ resize: 'none' }}
-            required
-            autoFocus
-          />
+          <TextArea value={text} onChange={onChangeText} />
         </Form.Group>
         <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Col>
@@ -163,7 +175,7 @@ function TextAreaButton(props) {
               variant="success"
               size="sm"
               className="shadow-button"
-              data-test="submit-button"
+              data-test="story-submit-button"
             >
               Submit
             </Button>

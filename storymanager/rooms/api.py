@@ -32,9 +32,9 @@ class RoomsViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> QueryType[Room]:
         return self.request.user.rooms.all().order_by('-modified_at')
 
-    def retrieve(self, request, room_title=None, *args, **kwargs):
-        room = get_object_or_404(Room, room_title=room_title)
-        serializer = self.get_serializer(room)
+    def retrieve(self, request, room_title=None, *args, **kwargs) -> HttpResponse:
+        room: Room = get_object_or_404(Room, room_title=room_title)
+        serializer: RoomsSerializer = self.get_serializer(room)
         return Response(serializer.data)
 
     def perform_create(self, serializer: RoomsSerializer):
@@ -43,7 +43,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def leave(self, request: RequestType, room_title=None, *args, **kwargs) -> HttpResponse:
-        room = get_object_or_404(Room, room_title=room_title)
+        room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
 
@@ -64,8 +64,8 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
         """Adds `request.user` into the room with `room_title`."""
-        room_title = self.kwargs['room_title']
-        room = get_object_or_404(Room, room_title=room_title)
+        room_title: str = self.kwargs['room_title']
+        room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
         add_user_to_room(self.request.user, room)

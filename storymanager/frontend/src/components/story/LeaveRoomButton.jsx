@@ -21,7 +21,7 @@ export default function LeaveRoomButton({ onClick }) {
         size="sm"
         onClick={onClick}
         className="shadow-button"
-        data-test="leave-button"
+        data-test="story-leave-button"
       >
         Leave this story
       </Button>

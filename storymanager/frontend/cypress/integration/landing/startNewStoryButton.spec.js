@@ -1,8 +1,10 @@
-const user = { username: 'cypress-user', password: 'cypress-password' };
 describe('Start a new story', () => {
   beforeEach(() => {
-    cy.register(user);
-    cy.login(user);
+    cy.fixture('accounts').as('user');
+    cy.get('@user').then((user) => {
+      cy.register(user);
+      cy.login(user);
+    });
   });
 
   it('can start new story', () => {

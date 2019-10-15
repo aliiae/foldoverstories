@@ -36,14 +36,14 @@ function VisibleTextDisplay(props) {
   if (correctTurn && !visibleText) {
     return (
       <div className="visible-text pl-2">
-        <p className="lead text-muted">Start this story! ↓</p>
+        <p className="lead text-muted" data-test="start-this-story">Start this story! ↓</p>
       </div>
     );
   }
   if (visibleText) {
     return (
       <div className="visible-text pl-2">
-        <p className="visible-text-lead lead">{visibleText}</p>
+        <p className="visible-text-lead lead" data-test="visible-text">{visibleText}</p>
       </div>
     );
   }

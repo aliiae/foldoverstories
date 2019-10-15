@@ -98,7 +98,7 @@ function FinishedTextViewer(props) {
     return <LoadingSpinner />;
   }
   return (
-    <div className="mt-3">
+    <div className="mt-3" data-test="finished-text-viewer">
       <TextTabs texts={texts} usernames={usernames} finishedAt={finishedAt} />
       <ShareButtons url={window.location.href} />
     </div>
