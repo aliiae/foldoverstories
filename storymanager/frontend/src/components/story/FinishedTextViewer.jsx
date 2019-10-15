@@ -9,8 +9,18 @@ import { formatTimeStampDateOnly } from '../dateFormatters';
 import ShareButtons from '../shared/ShareButtons';
 import { textsPropType } from '../commonPropTypes';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import { Emoji } from '../landing/Status';
 
 function TextTabs({ texts, usernames, finishedAt }) {
+  const isEmpty = texts.length === 0;
+  const emptyStoryMessage = (
+    <p className="text-muted">
+      <Emoji emoji="🐚" label="empty seashell emoji" />
+      {' '}
+      This story is empty.
+    </p>
+  );
+
   return (
     <Tab.Container defaultActiveKey="full">
       <Nav variant="pills" className="flex-row justify-content-end">
@@ -18,10 +28,10 @@ function TextTabs({ texts, usernames, finishedAt }) {
           <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="full" className="tab-pill">Full Text</Nav.Link>
+          <Nav.Link eventKey="full" className="tab-pill" disabled={isEmpty}>Full Text</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="lines" className="tab-pill">By Lines</Nav.Link>
+          <Nav.Link eventKey="lines" className="tab-pill" disabled={isEmpty}>By Lines</Nav.Link>
         </Nav.Item>
       </Nav>
       <div>
@@ -29,7 +39,8 @@ function TextTabs({ texts, usernames, finishedAt }) {
           <Tab.Pane eventKey="full">
             <div className="finished-text-container paper p-2">
               <p className="full-text">
-                {texts.map((text) => text.full_text).join(' ')}
+                {isEmpty && emptyStoryMessage}
+                {!isEmpty && texts.map((text) => text.full_text).join(' ')}
               </p>
             </div>
           </Tab.Pane>
@@ -47,8 +58,8 @@ function TextLines({ texts }) {
     <div className="finished-text-container paper p-2">
       <Table className="table-sm text-viewer-table">
         <tbody>
-        {texts.map((text, i) => (
-          <tr key={text.username + i}>
+        {texts.map((text) => (
+          <tr key={text.username + text.id}>
             <td
               className="text-muted"
               style={{ width: '4em', border: 'none' }}
