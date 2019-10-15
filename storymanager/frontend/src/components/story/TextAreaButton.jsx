@@ -16,30 +16,10 @@ import LeftRoomMessage from './LeftRoomMessage';
 import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
 
-const propTypes = {
-  addTextConnect: PropTypes.func.isRequired,
-  leaveRoomConnect: PropTypes.func.isRequired,
-  roomTitle: PropTypes.string.isRequired,
-  userFinished: PropTypes.bool,
-  roomFinished: PropTypes.bool,
-  auth: authPropType,
-  usernames: PropTypes.arrayOf(PropTypes.string),
-  currentTurnUsername: PropTypes.string,
-  isLastTurn: PropTypes.bool,
-  correctTurn: PropTypes.bool,
-};
-
-const defaultProps = {
-  usernames: [],
-  userFinished: null,
-  roomFinished: null,
-  auth: authDefaultPropType,
-  currentTurnUsername: null,
-  isLastTurn: null,
-  correctTurn: null,
-};
-
-function AlertMessage({ show, onHide, title, message }) {
+function AlertMessage(props) {
+  const {
+    show, onHide, title, message,
+  } = props;
   return (
     <Alert show={show} onClose={onHide} variant="warning" dismissible>
       <Alert.Heading>{title}</Alert.Heading>
@@ -212,20 +192,37 @@ function TextAreaButton(props) {
   );
 }
 
-TextAreaButton.propTypes = propTypes;
-TextAreaButton.defaultProps = defaultProps;
+TextAreaButton.propTypes = {
+  addTextConnect: PropTypes.func.isRequired,
+  leaveRoomConnect: PropTypes.func.isRequired,
+  roomTitle: PropTypes.string.isRequired,
+  userFinished: PropTypes.bool,
+  roomFinished: PropTypes.bool,
+  auth: authPropType,
+  usernames: PropTypes.arrayOf(PropTypes.string),
+  currentTurnUsername: PropTypes.string,
+  isLastTurn: PropTypes.bool,
+  correctTurn: PropTypes.bool,
+};
+TextAreaButton.defaultProps = {
+  usernames: [],
+  userFinished: null,
+  roomFinished: null,
+  auth: authDefaultPropType,
+  currentTurnUsername: null,
+  isLastTurn: null,
+  correctTurn: null,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   correctTurn: state.story.correct_turn,
   usernames: state.story.users.map((user) => user.username),
   userFinished: state.room.user_left_room,
-  roomFinished: state.room.is_finished,
+  roomFinished: state.room.finished_at !== null,
   isLastTurn: state.story.last_turn,
   currentTurnUsername: state.story.current_turn_username,
 });
 
 export default connect(mapStateToProps,
-  { addTextConnect: addText, leaveRoomConnect: leaveRoom })(
-  TextAreaButton,
-);
+  { addTextConnect: addText, leaveRoomConnect: leaveRoom })(TextAreaButton);

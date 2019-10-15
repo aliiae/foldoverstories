@@ -140,7 +140,7 @@ TextTabs.defaultProps = { texts: [] };
 TextLines.defaultProps = { texts: [] };
 
 const mapStateToProps = (state) => ({
-  roomIsFinished: state.room.is_finished,
+  roomIsFinished: state.room.finished_at !== null,
   texts: state.room.texts,
   finishedAt: state.room.finished_at,
   usernames: state.story.users.map((user) => user.username),

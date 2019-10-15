@@ -37,7 +37,13 @@ class RoomUsersSerializer(serializers.ModelSerializer):
 class RoomsReadOnlySerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ('room_title', 'users', 'is_finished', 'finished_at')
+        fields = ('room_title', 'is_finished', 'finished_at')
+
+
+class SingleRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('room_title', 'finished_at')
 
 
 class RoomsSerializer(serializers.ModelSerializer):
@@ -61,7 +67,7 @@ class RoomsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ('room_title', 'users', 'is_finished', 'finished_at', 'modified_at',
+        fields = ('room_title', 'users', 'finished_at', 'modified_at',
                   'user_left_room', 'user_can_write_now')
 
 

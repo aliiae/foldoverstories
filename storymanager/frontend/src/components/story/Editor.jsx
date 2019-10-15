@@ -102,7 +102,7 @@ Editor.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  roomIsFinished: state.room.is_finished,
+  roomIsFinished: state.room.finished_at !== null,
   auth: state.auth,
   lastTurn: state.story.last_turn,
   usernames: state.story.users.map((user) => user.username),

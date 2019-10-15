@@ -13,7 +13,7 @@ from rooms.models import Room, add_user_to_room, Membership, close_room, leave_r
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
 from .serializers import (RoomsSerializer, RoomUsersSerializer, RoomReadSerializer,
-                          RoomsReadOnlySerializer)
+                          RoomsReadOnlySerializer, SingleRoomSerializer)
 
 User = get_user_model()
 
@@ -28,7 +28,11 @@ class RoomsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = RoomsPagination
     lookup_field = 'room_title'
-    serializer_class = RoomsSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return SingleRoomSerializer
+        return RoomsSerializer
 
     def get_queryset(self) -> QueryType[Room]:
         return self.request.user.rooms.all().order_by('-modified_at')
@@ -37,10 +41,9 @@ class RoomsViewSet(viewsets.ModelViewSet):
         room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             return Response(RoomsReadOnlySerializer(room).data)
-        serializer: RoomsSerializer = self.get_serializer(room)
-        return Response(serializer.data)
+        return Response(SingleRoomSerializer(room).data)
 
-    def perform_create(self, serializer: RoomsSerializer):
+    def perform_create(self, serializer: SingleRoomSerializer):
         room: Room = serializer.save()
         add_user_to_room(self.request.user, room)
 

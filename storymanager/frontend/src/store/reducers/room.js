@@ -13,7 +13,6 @@ const initialState = {
   rooms: null,
   user_left_room: null,
   texts: [],
-  is_finished: null,
   finished_at: null,
   room_title: null,
 };
