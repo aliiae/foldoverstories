@@ -15,6 +15,7 @@ import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 import useInternetStatus from '../../hooks/useInternetStatus';
 import useWebsocket from '../../hooks/useWebsocket';
 import CopyLinkButton from '../shared/CopyLinkButton';
+import SvgLinkIcon from '../shared/SvgLinkIcon';
 
 function InviteLink(props) {
   const { url } = props;
@@ -30,7 +31,9 @@ function InviteLink(props) {
         {url}
       </a>
       {' '}
-      <CopyLinkButton url={url} size={32} />
+      <CopyLinkButton url={url}>
+        <SvgLinkIcon size={32} />
+      </CopyLinkButton>
     </p>
   );
 }
@@ -43,7 +46,7 @@ function Editor(props) {
   const {
     getRoomStatusConnect, match, roomIsFinished, auth, isLastTurn, usernames,
   } = props;
-  const { isAuthenticated } = auth;
+  const { isLoading } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
   useWebsocket({
@@ -52,14 +55,13 @@ function Editor(props) {
   useEffect(() => {
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
-  }, [roomTitle, isLastTurn]);
+  }, [roomTitle, isLastTurn, roomIsFinished]);
 
   const currentUrl = window.location.href;
 
-  if (!isAuthenticated) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
-
   return (
     <Container className="editor" data-test="editor">
       <Row className="justify-content-center">

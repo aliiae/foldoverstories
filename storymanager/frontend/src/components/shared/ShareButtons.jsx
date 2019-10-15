@@ -7,7 +7,8 @@ import EmailIcon from 'react-share/lib/EmailIcon';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import TwitterShareButton from 'react-share/lib/TwitterShareButton';
 import TwitterIcon from 'react-share/lib/TwitterIcon';
-import CopyLinkButton, { SvgLinkIcon } from './CopyLinkButton';
+import CopyLinkButton from './CopyLinkButton';
+import SvgLinkIcon from './SvgLinkIcon';
 
 
 export default function ShareButtons({ url }) {
