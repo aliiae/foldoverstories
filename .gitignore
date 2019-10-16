@@ -12,4 +12,4 @@ package*
 /storymanager/texts/migrations/*
 /storymanager/*/__pycache__/*
 /storymanager/frontend/static/frontend/main.js
-.coverage
+/storymanager/.coverage
