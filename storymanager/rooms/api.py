@@ -28,11 +28,14 @@ class RoomsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = RoomsPagination
     lookup_field = 'room_title'
+    serializer_class = RoomsSerializer
+    detail_serializer_class = SingleRoomSerializer
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return SingleRoomSerializer
-        return RoomsSerializer
+        if self.action == 'retrieve':
+            if hasattr(self, 'detail_serializer_class'):
+                return self.detail_serializer_class
+        return super(RoomsViewSet, self).get_serializer_class()
 
     def get_queryset(self) -> QueryType[Room]:
         return self.request.user.rooms.all().order_by('-modified_at')
@@ -40,8 +43,8 @@ class RoomsViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, room_title=None, *args, **kwargs) -> HttpResponse:
         room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
-            return Response(RoomsReadOnlySerializer(room).data)
-        return Response(SingleRoomSerializer(room).data)
+            return Response(RoomsReadOnlySerializer(room, context={'request': request}).data)
+        return Response(SingleRoomSerializer(room, context={'request': request}).data)
 
     def perform_create(self, serializer: SingleRoomSerializer):
         room: Room = serializer.save()
@@ -60,9 +63,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
         leave_room(room_title, user_membership)
-        room.get_current_turn_user(self.request.user)  # recalculate current turn user
-        if all(membership.has_stopped for membership in room_memberships):  # all authors left
-            room.close()
+        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
         return Response(status=status.HTTP_200_OK)
 
 
@@ -84,7 +85,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
     def get_queryset(self) -> QueryType[User]:
         room = get_object_or_404(Room, room_title=self.kwargs['room_title'])
         room_users = room.users.annotate(texts_count=Count('texts', filter=Q(texts__room=room)))
-        room.get_current_turn_user(self.request.user)  # recalculate current turn user
+        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
         return room_users.all().order_by('membership__joined_at')
 
 

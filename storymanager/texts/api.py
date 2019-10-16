@@ -16,6 +16,7 @@ User = get_user_model()
 
 class TextsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -30,15 +31,17 @@ class TextsViewSet(viewsets.ModelViewSet):
         if is_new_user:  # new users can view anything
             return Text.objects.filter(room__room_title=self.room_title)
         user_membership: Membership = get_user_room_membership(self.request.user, room)
-        if user_membership.has_stopped:  # user has previously left the self, cannot view anymore
+        if user_membership.has_stopped:  # user has previously left the room, cannot view anymore
             user_membership.can_write_now = False
             user_membership.save()
             raise PermissionDenied(detail='Left room')
-        current_turn_user: User = room.get_current_turn_user(self.request.user)
-        request_membership = get_user_room_membership(self.request.user, room)
+        current_turn_user: User = room.calculate_current_turn_user(self.request.user)
+        request_membership = get_user_room_membership(self.request.user, room)  # recalculate
         if not request_membership.can_write_now:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
-        return Text.objects.filter(room__room_title=self.room_title)
+        texts = Text.objects.filter(room=room)
+        if texts:
+            return texts.order_by('-id')[0]
 
     def perform_create(self, serializer: TextsFullSerializer):
         room = self.room
@@ -50,13 +53,13 @@ class TextsViewSet(viewsets.ModelViewSet):
         if request_membership.has_stopped:
             raise PermissionDenied(detail='User has finished')
 
-        current_turn_user: User = room.get_current_turn_user(self.request.user)
-        request_membership = get_user_room_membership(request_user, room)
+        current_turn_user: User = room.calculate_current_turn_user(self.request.user)
+        request_membership.refresh_from_db()
         if not request_membership.can_write_now:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
-        room.save()
         serializer.save(author=request_user, room=room)
-        room.get_current_turn_user(self.request.user)  # recalculate current turn user
+        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
+        room.save()
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_ADD_TEXT,
             'room_title': self.room_title,

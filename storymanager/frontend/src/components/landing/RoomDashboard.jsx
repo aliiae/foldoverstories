@@ -7,7 +7,7 @@ import Pagination from 'react-bootstrap/Pagination';
 import Container from 'react-bootstrap/Container';
 
 import { getRooms } from '../../store/actions/room';
-import Status from './Status';
+import Status from '../shared/Status';
 import { formatTimeStamp } from '../dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
 
@@ -21,8 +21,7 @@ function RoomDashboard(props) {
     setActivePageNumber(newPageNumber);
     getRoomsConnect(newPageNumber);
   };
-  if (!rooms || !rooms.results || rooms.results.length === 0) return null;
-
+  if (!rooms || !('results' in rooms) || rooms.results.length === 0) return null;
   const { count, results } = rooms;
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
   const paginationItems = [];
@@ -53,7 +52,8 @@ function RoomDashboard(props) {
             {results.map((room) => (
               <tr
                 key={room.room_title}
-                className={room.user_can_write_now ? 'table-success' : !room.finished_at ? 'table-warning' : ''}
+                className={!room.user_left_room && room.user_can_write_now ? 'table-success'
+                  : !room.finished_at ? 'table-warning' : ''}
               >
                 <td className="room-link-td">
                   {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}

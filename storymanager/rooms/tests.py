@@ -85,7 +85,15 @@ class HttpRoomsTest(APITestCase):
             reverse('rooms-leave', kwargs={'room_title': room.room_title}))
         user_membership = Membership.objects.get(room=room, user=self.user)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertFalse(user_membership.can_write_now)
         self.assertTrue(user_membership.has_stopped)
+
+    def test_room_closes_after_everyone_leaves(self):
+        room = create_user_room(self.user, self.room_title)
+        self.client.post(reverse('rooms-leave', kwargs={'room_title': room.room_title}))
+        room.refresh_from_db()
+        self.assertTrue(room.is_finished)
+        self.assertIsNotNone(room.finished_at)
 
     def test_user_can_list_room_users(self):
         room = create_user_room(self.user, self.room_title)

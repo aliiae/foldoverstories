@@ -5,21 +5,15 @@ import {
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';
 
-const getLastItemOrEmpty = (array) => {
-  if (array.length === 0) return {};
-  return array[array.length - 1];
-};
-
 // GET VISIBLE TEXT
 export const getVisibleText = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
-      const lastItem = getLastItemOrEmpty(res.data);
+      const lastItem = res.data || {};
       dispatch({
         type: GET_VISIBLE_TEXT,
         payload: {
           visible_text: lastItem.visible_text ? lastItem.visible_text : '',
-          room: lastItem.room,
           correct_turn: true,
           current_turn_username: null,
         },

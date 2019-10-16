@@ -55,6 +55,7 @@ export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
         type: GET_ROOM_STATUS,
         payload: {
           user_left_room: res.data.user_left_room,
+          user_can_write_now: res.data.user_can_write_now,
           finished_at: res.data.finished_at,
         },
       });

@@ -8,6 +8,7 @@ webpack.config.js
 .DS_Store
 .eslintrc
 package*
+*.pyc
 /storymanager/rooms/migrations/*
 /storymanager/texts/migrations/*
 /storymanager/*/__pycache__/*

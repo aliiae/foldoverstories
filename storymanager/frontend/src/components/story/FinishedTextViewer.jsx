@@ -9,7 +9,7 @@ import { formatTimeStampDateOnly } from '../dateFormatters';
 import ShareButtons from '../shared/ShareButtons';
 import { textsPropType } from '../commonPropTypes';
 import LoadingSpinner from '../shared/LoadingSpinner';
-import { Emoji } from '../landing/Status';
+import { Emoji } from '../shared/Status';
 
 function TextTabs({ texts, usernames, finishedAt }) {
   const isEmpty = texts.length === 0;

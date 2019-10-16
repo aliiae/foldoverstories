@@ -56,12 +56,13 @@ class Room(models.Model):
             self.finished_at = timezone.now()
         super(Room, self).save(*args, **kwargs)
 
-    def get_current_turn_user(self, request_user: User) -> Optional[User]:
+    def calculate_current_turn_user(self, request_user: User) -> Optional[User]:
         """
         Returns the curr_user allowed to post, the one next after the prev poster in self.users.
         Allows the current turn curr_user write, prohibits others.
+        Closes the room if no active (.has_stopped = False) users left.
 
-        Returns None if the room should be closed.
+        Returns None if the room is closed.
         """
 
         def index_of(target, items) -> int:
@@ -74,34 +75,38 @@ class Room(models.Model):
                 curr_membership.can_write_now = True
                 curr_membership.save()
             if update_others:
-                self.update_non_curr_memberships(curr_user)
+                self.close_all_memberships_except(curr_user)
             return curr_user
 
         if self.is_finished:
             return None
-        all_users = self.get_all_room_users()
+        active_users = self.get_active_users()
+        if active_users.count() == 0:  # everyone stopped
+            self.close()
+            return None
         if self.texts.count() == 0:  # the room is empty
             return marked_curr_user(request_user)
+        all_users = self.get_all_room_users()
         if all_users.count() == 1:  # return the room's owner if they're alone
             return marked_curr_user(self.users.all()[0])
         prev_turn_user: User = self.texts.last().author
-        prev_turn_user_index = index_of(prev_turn_user, all_users)
-        if prev_turn_user_index == -1:  # current curr_user is the first one to write, allow anyone
-            return marked_curr_user(request_user)
-        active_users = self.get_active_users()
-        if active_users.count() == 0 or (active_users.count() == 1
-                                         and prev_turn_user == request_user
-                                         == active_users.all()[0]):
+        if active_users.count() == 1 and prev_turn_user == request_user == active_users.all()[0]:
             # everyone else stopped, finish room to prevent double-posting
             self.close()
             return None
+        prev_turn_user_index = index_of(prev_turn_user, all_users)
+        if prev_turn_user_index == -1:  # current curr_user is the first one to write, allow anyone
+            return marked_curr_user(request_user)
         # get the next available active curr_user
         curr_turn_user = active_users[(prev_turn_user_index + 1) % active_users.count()]
         return marked_curr_user(curr_turn_user, update_others=True)
 
-    def update_non_curr_memberships(self, curr_turn_user: User):
+    def close_all_memberships_except(self, excluded_user: User = None):
         """Marks all users who are not `curr_turn_user` as those who cannot write"""
-        not_curr_memberships = Membership.objects.filter(room=self).exclude(user=curr_turn_user)
+        if excluded_user is None:
+            not_curr_memberships = Membership.objects.filter(room=self)
+        else:  # everyone
+            not_curr_memberships = Membership.objects.filter(room=self).exclude(user=excluded_user)
         not_curr_memberships.update(can_write_now=False)
 
     def get_all_room_users(self) -> QueryType[User]:
@@ -119,7 +124,7 @@ class Room(models.Model):
             return
         new_user_membership = Membership.objects.create(room=self, user=user)
         new_user_membership.save()
-        self.get_current_turn_user(user)  # recalculate current turn user
+        self.calculate_current_turn_user(user)  # recalculate current turn user
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_JOIN,
             'room_title': self.room_title,
@@ -128,6 +133,7 @@ class Room(models.Model):
 
     def close(self):
         self.is_finished = True
+        self.close_all_memberships_except()
         self.save()
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_FINISH,
