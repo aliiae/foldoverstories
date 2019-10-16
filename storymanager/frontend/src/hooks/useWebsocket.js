@@ -31,8 +31,8 @@ const useWebsocket = (props) => {
 
   function dispatchAllActions() {
     dispatchAction(getUsers(roomTitle));
-    dispatchAction(getRoomStatus(roomTitle));
     dispatchAction(getVisibleText(roomTitle));
+    dispatchAction(getRoomStatus(roomTitle));
   }
 
   const receiveMessage = (messageObject) => {
@@ -41,8 +41,8 @@ const useWebsocket = (props) => {
     switch (message.type) {
       case 'room.text':
         dispatchAllActions();
-        dispatchNotification(message, `${message.username} added text to the ${roomTitle} story`);
-        dispatchAction(getVisibleText(roomTitle));
+        dispatchNotification(message, `${message.username} added text to the ${roomTitle} story`,
+          `${roomTitle} ${TITLE_DELIMITER} user has joined`);
         break;
       case 'room.leave':
         dispatchAllActions();
@@ -87,14 +87,12 @@ const useWebsocket = (props) => {
   }, [isOnline]);
 
   useEffect(() => {
-    // make sure that roomIsFinished is loaded (not null)
     if (wsRef.current || roomIsFinished) {
       return;
     }
     if (!user || !usernames || !usernames.includes(user.username)) {
       return;
     }
-    console.log('connecting ws');
     initWebsocket(token);
   }, [roomIsFinished, usernames]);
 

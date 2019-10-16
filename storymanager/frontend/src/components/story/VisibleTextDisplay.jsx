@@ -33,7 +33,7 @@ function VisibleTextDisplay(props) {
   if (correctTurn && visibleText === null) {
     return <LoadingSpinner />;
   }
-  if (correctTurn && !visibleText) {
+  if (correctTurn && visibleText === '') {
     return (
       <div className="visible-text pl-2">
         <p className="lead text-muted" data-test="start-this-story">
