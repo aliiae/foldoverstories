@@ -9,7 +9,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from rooms.models import Room, add_user_to_room, Membership, close_room, leave_room
+from rooms.models import Room, Membership, leave_room
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
 from .serializers import (RoomsSerializer, RoomUsersSerializer, RoomReadSerializer,
@@ -45,7 +45,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: SingleRoomSerializer):
         room: Room = serializer.save()
-        add_user_to_room(self.request.user, room)
+        room.add_user(self.request.user)
 
     @action(detail=True, methods=['post'])
     def leave(self, request: RequestType, room_title=None, *args, **kwargs) -> HttpResponse:
@@ -60,8 +60,9 @@ class RoomsViewSet(viewsets.ModelViewSet):
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
         leave_room(room_title, user_membership)
+        room.get_current_turn_user(self.request.user)  # recalculate current turn user
         if all(membership.has_stopped for membership in room_memberships):  # all authors left
-            close_room(room)
+            room.close()
         return Response(status=status.HTTP_200_OK)
 
 
@@ -74,8 +75,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
-        add_user_to_room(self.request.user, room)
-        room.get_current_turn_user(self.request.user)
+        room.add_user(self.request.user)
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
@@ -84,6 +84,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
     def get_queryset(self) -> QueryType[User]:
         room = get_object_or_404(Room, room_title=self.kwargs['room_title'])
         room_users = room.users.annotate(texts_count=Count('texts', filter=Q(texts__room=room)))
+        room.get_current_turn_user(self.request.user)  # recalculate current turn user
         return room_users.all().order_by('membership__joined_at')
 
 

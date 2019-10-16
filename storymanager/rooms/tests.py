@@ -2,9 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-from rooms.models import Membership, add_user_to_room
+from rooms.models import Membership, get_user_room_membership
 from storymanager.tests_utils import (create_user, login_user_into_client, create_user_room,
                                       create_user_room_text)
+from texts.tests import post_text_from_client_to_room
 
 User = get_user_model()
 
@@ -92,9 +93,26 @@ class HttpRoomsTest(APITestCase):
         for username in usernames:
             another_user = create_user(username)
             login_user_into_client(another_user, self.client)
-            add_user_to_room(another_user, room)
+            room.add_user(another_user)
         usernames = [self.user.username] + usernames
         response = self.client.get(
             reverse('room_users', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertListEqual(usernames, [u['username'] for u in response.data])
+
+    def test_user_list_updates_current_turn_user(self):
+        room = create_user_room(self.user, self.room_title)
+        usernames = list(map(str, range(3)))
+        users = []
+        first_author_index = 0
+        for i, username in enumerate(usernames):
+            another_user = create_user(username)
+            login_user_into_client(another_user, self.client)
+            room.add_user(another_user)
+            if i == first_author_index:
+                post_text_from_client_to_room({'visible_text': 'x'}, self.client, room)
+            users.append(another_user)
+        expected_curr_user = users[(first_author_index + 1) % len(users)]
+        self.client.get(reverse('room_users', kwargs={'room_title': room.room_title}))
+        expected_curr_membership = get_user_room_membership(expected_curr_user, room)
+        self.assertTrue(expected_curr_membership.can_write_now)

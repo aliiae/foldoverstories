@@ -9,7 +9,6 @@ from channels.testing import WebsocketCommunicator
 from rest_framework.test import APIClient
 
 from storymanager.routing import application
-from rooms.models import add_user_to_room
 from storymanager.tests_utils import create_user, login_user_into_client, create_user_room
 from websockets.server_send import WEBSOCKET_MSG_JOIN
 
@@ -65,7 +64,7 @@ class TestWebsockets:
         channel_layer = get_channel_layer()
         await channel_layer.group_add(group=ROOM_TITLE, channel='test_channel')
         another_user = await ws_create_login_user_with_group(client=client, username='another_user')
-        await database_sync_to_async(add_user_to_room)(another_user, room)
+        await database_sync_to_async(room.add_user)(another_user)
         # Receive JSON message from server on test channel.
         response = await channel_layer.receive('test_channel')
         data = response.get('data')

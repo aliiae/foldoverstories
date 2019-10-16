@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from knox.models import AuthToken
 from rest_framework.test import APIClient
 
-from rooms.models import Room, add_user_to_room
+from rooms.models import Room
 from texts.models import Text
 
 User = get_user_model()
@@ -27,5 +27,5 @@ def create_user_room_text(user: User, room: Room, visible_text: str = 'text', **
 
 def create_user_room(user: User, room_title: str, **kwargs) -> Room:
     room = Room.objects.create(room_title=room_title, **kwargs)
-    add_user_to_room(user, room)
+    room.add_user(user)
     return room

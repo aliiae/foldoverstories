@@ -1,5 +1,25 @@
 import re
+import random
 from typing import List, Match, Optional
+
+
+def random_adj_noun_pair(delimiter: str = '-') -> str:
+    """
+    Creates a random adj-noun pair joined by the specified delimiter.
+
+    Sources:
+    - Adjectives:
+    -- 100 descriptive words (https://en.wiktionary.org/wiki/Appendix:Basic_English_word_list)
+    -- 50 opposites (https://en.wiktionary.org/wiki/Appendix:Basic_English_word_list)
+    - Nouns:
+    -- Animal names with 1-3 syllables
+    (http://jzimba.blogspot.com/2018/07/a-list-of-animal-names-sorted-by.html)
+
+
+    :return: A string in the form adjective + delimiter + noun, e.g. 'small-bird'.
+    """
+    return random.choice(ADJECTIVES) + delimiter + random.choice(NOUNS)
+
 
 ADJECTIVES: List[str] = ['able', 'acid', 'acidic', 'acrid', 'adolescent', 'all', 'amazing',
                          'ancient', 'angelic', 'antique', 'appetizing', 'aromatic', 'automatic',
