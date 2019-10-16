@@ -30,8 +30,8 @@ const useWebsocket = (props) => {
   }
 
   function dispatchAllActions() {
-    dispatchAction(getUsers(roomTitle));
     dispatchAction(getVisibleText(roomTitle));
+    dispatchAction(getUsers(roomTitle));
     dispatchAction(getRoomStatus(roomTitle));
   }
 

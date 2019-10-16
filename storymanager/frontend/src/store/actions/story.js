@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM, CLEAR_STORY,
+  ADD_TEXT, GET_USERS, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM,
 } from './types';
 import { returnErrors } from './messages';
 import { setupTokenConfig } from './utils';
@@ -9,7 +9,7 @@ import { setupTokenConfig } from './utils';
 export const getVisibleText = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
-      const lastItem = res.data || {};
+      const lastItem = (res.data && res.data[0]) || {};
       dispatch({
         type: GET_VISIBLE_TEXT,
         payload: {

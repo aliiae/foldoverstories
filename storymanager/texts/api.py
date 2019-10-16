@@ -39,9 +39,7 @@ class TextsViewSet(viewsets.ModelViewSet):
         request_membership = get_user_room_membership(self.request.user, room)  # recalculate
         if not request_membership.can_write_now:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
-        texts = Text.objects.filter(room=room)
-        if texts:
-            return texts.order_by('-id')[0]
+        return Text.objects.filter(room=room)[:1]
 
     def perform_create(self, serializer: TextsFullSerializer):
         room = self.room
