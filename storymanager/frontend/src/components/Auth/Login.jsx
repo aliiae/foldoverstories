@@ -25,7 +25,7 @@ function Login(props) {
       setShowError(true);
       setMessage('Incorrect username or password.');
     }
-  }, [props]);
+  }, [error]);
   const handleClose = () => {
     setShowError(false);
   };
@@ -105,7 +105,6 @@ Login.propTypes = {
   loginConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
-  history: PropTypes.object.isRequired,
   error: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.shape({

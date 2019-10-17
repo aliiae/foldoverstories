@@ -18,17 +18,6 @@ def get_user_room_membership(user: User, room: 'Room') -> Optional['Membership']
     return Membership.objects.get(room=room, user=user)
 
 
-def leave_room(room_title: str, user_membership: 'Membership'):
-    user_membership.has_stopped = True
-    user_membership.can_write_now = False
-    user_membership.save()
-    send_channel_message(room_title, {
-        'type': WEBSOCKET_MSG_LEAVE,
-        'room_title': room_title,
-        'username': user_membership.user.username,
-    })
-
-
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
     """
     Tries to generate a unique adjective-noun pair for n (5) times, otherwise returns a random UUID.
@@ -142,9 +131,22 @@ class Room(models.Model):
             'username': user.username,
         })
 
+    def leave_room(self, user: User):
+        user_membership = get_user_room_membership(user, self)
+        if not user_membership:
+            return
+        user_membership.has_stopped = True
+        user_membership.can_write_now = False
+        user_membership.save()
+        send_channel_message(self.room_title, {
+            'type': WEBSOCKET_MSG_LEAVE,
+            'room_title': self.room_title,
+            'username': user.username,
+        })
+
     def close(self):
         self.is_finished = True
-        self.close_all_memberships_except()
+        self.close_all_memberships_except(None)
         self.save()
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_FINISH,

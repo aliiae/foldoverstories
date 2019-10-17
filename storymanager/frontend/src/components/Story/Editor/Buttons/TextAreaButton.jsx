@@ -129,7 +129,7 @@ TextAreaButton.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  userCanWriteNow: state.room.user_can_write_now,
+  userCanWriteNow: state.room.userCanWriteNow,
 });
 
 const mapDispatchToProps = {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter, Route, Switch, Redirect,
+  BrowserRouter, Route, Switch,
 } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
@@ -25,7 +25,7 @@ if (false && process.env.NODE_ENV !== 'production') {
   whyDidYouRender(React, {
     collapseGroups: true,
     include: [/.*/],
-    exclude: [/^Link/, /^Route/, /^BrowserRouter/],
+    // exclude: [/^Link/, /^Route/, /^BrowserRouter/],
   });
 }
 
@@ -42,7 +42,6 @@ function App() {
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route exact path="/story/:id" component={Editor} />
-            <Route exact path="/story" component={() => (<Redirect to="/" />)} />
             <Route exact path="/how-to-play" component={HowToPlay} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -10,10 +10,11 @@ import { getRooms } from '../../store/actions/room';
 import Status from '../Story/Status';
 import { formatTimeStamp } from '../dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
+import { authPropType } from '../commonPropTypes';
 
 function RoomDashboard(props) {
   const { getRoomsConnect, rooms } = props;
-  React.useEffect(() => getRoomsConnect(), []);
+  useEffect(() => getRoomsConnect(), [getRoomsConnect]);
   const [activePageNumber, setActivePageNumber] = React.useState('1');
 
   const onClickPage = (e) => {

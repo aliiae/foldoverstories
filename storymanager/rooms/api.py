@@ -10,7 +10,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from accounts.serializers import RoomUsersSerializer
-from rooms.models import Room, Membership, leave_room
+from rooms.models import Room, Membership
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
 from .serializers import (RoomsSerializer, RoomReadSerializer, RoomsReadOnlySerializer,
@@ -39,6 +39,8 @@ class RoomsViewSet(viewsets.ModelViewSet):
         return super(RoomsViewSet, self).get_serializer_class()
 
     def get_queryset(self) -> QueryType[Room]:
+        if not self.request.user.is_authenticated:
+            return Room.objects.none()
         return self.request.user.rooms.all().order_by('-modified_at')
 
     def retrieve(self, request, room_title=None, *args, **kwargs) -> HttpResponse:
@@ -63,7 +65,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
             raise ValidationError(detail='User has not joined the room')
         if user_membership.has_stopped:  # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
-        leave_room(room_title, user_membership)
+        room.leave_room(request.user)
         room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
         return Response(status=status.HTTP_200_OK)
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import Card from 'react-bootstrap/Card';
 
-import { getUsers } from '../../store/actions/story';
+import { getUsers } from '../../store/actions/room';
 import Status from './Status';
 
 const propTypes = {
@@ -62,8 +62,8 @@ RoomUsers.propTypes = propTypes;
 RoomUsers.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
-  users: state.story.users,
-  roomIsFinished: state.room.finished_at !== null,
+  users: state.room.users,
+  roomIsFinished: state.room.finishedAt !== null,
 });
 
 export default connect(mapStateToProps, { getUsersConnect: getUsers })(RoomUsers);

@@ -14,7 +14,7 @@ function StartButton(props) {
     if (isAuthenticated && roomTitle) {
       history.push(`/story/${roomTitle}`);
     }
-  }, [roomTitle, isAuthenticated]);
+  }, [roomTitle, isAuthenticated, history]);
   const onClick = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
@@ -53,7 +53,7 @@ StartButton.defaultProps = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  roomTitle: state.room.room_title,
+  roomTitle: state.room.roomTitle,
 });
 
 export default withRouter(connect(mapStateToProps,

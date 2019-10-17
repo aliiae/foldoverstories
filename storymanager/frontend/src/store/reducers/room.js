@@ -6,16 +6,17 @@ import {
   GET_ROOM_STATUS,
   GET_ROOMS, LEAVE_ROOM,
   READ_ROOM_TEXTS,
-  CLEAR_ROOM_TITLE,
+  CLEAR_ROOM_TITLE, GET_USERS,
 } from '../actions/types';
 
 const initialState = {
   rooms: null,
-  user_left_room: null,
+  users: null,
+  userLeftRoom: null,
   texts: null,
-  finished_at: null,
-  room_title: null,
-  current_turn_username: null,
+  finishedAt: null,
+  roomTitle: null,
+  currentTurnUsername: null,
 };
 
 export default function (state = initialState, action) {
@@ -24,18 +25,50 @@ export default function (state = initialState, action) {
     case ADD_USER_INTO_ROOM:
     case GET_ROOM_STATUS:
       return { ...state, ...action.payload };
+    case GET_USERS:
+      if (JSON.stringify(state.users) === JSON.stringify(action.payload)) {
+        return state;
+      }
+      return {
+        ...state,
+        users: action.payload,
+      };
     case LEAVE_ROOM:
-      return { ...state, user_left_room: true };
+      if (state.userLeftRoom) {
+        return state;
+      }
+      return {
+        ...state,
+        userLeftRoom: true,
+      };
     case READ_ROOM_TEXTS:
-      return { ...state, texts: action.payload };
+      if (state.texts === action.payload) {
+        return state;
+      }
+      return {
+        ...state,
+        texts: action.payload,
+      };
     case GET_ROOMS:
-      return { ...state, rooms: action.payload };
+      if (state.rooms === action.payload) {
+        return state;
+      }
+      return {
+        ...state,
+        rooms: action.payload,
+      };
     case ADD_ROOM_FAIL:
-      return { ...state, status: action.payload };
+      return state;
     case CLEAR_ROOMS:
-      return { ...state, rooms: [] };
+      return {
+        ...state,
+        rooms: [],
+      };
     case CLEAR_ROOM_TITLE:
-      return { ...state, room_title: null };
+      return {
+        ...state,
+        roomTitle: null,
+      };
     default:
       return state;
   }

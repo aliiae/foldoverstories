@@ -55,9 +55,9 @@ VisibleTextDisplay.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  visibleText: state.story.visible_text,
-  userCanWriteNow: state.room.user_can_write_now,
-  userFinished: state.room.user_left_room,
+  visibleText: state.story.visibleText,
+  userCanWriteNow: state.room.userCanWriteNow,
+  userFinished: state.room.userLeftRoom,
   wsStatus: state.websockets.ws.status,
 });
 

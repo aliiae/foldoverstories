@@ -7,17 +7,24 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS,
 } from './types';
-import { setupTokenConfig } from './utils';
+import setupTokenConfig from './setupTokenConfig';
+
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
+  const { token } = getState().auth;
+  if (token === null) {
+    dispatch({ type: AUTH_ERROR });
+    return null;
+  }
   return axios.get('/api/auth/user', setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: USER_LOADED,
         payload: res.data,
       });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({ type: AUTH_ERROR });
     });
@@ -29,7 +36,10 @@ export const login = (username, password) => (dispatch) => {
       'Content-Type': 'application/json',
     },
   };
-  const body = JSON.stringify({ username, password });
+  const body = JSON.stringify({
+    username,
+    password,
+  });
   return axios.post('/api/auth/login', body, config)
     .then((res) => {
       dispatch({
@@ -39,7 +49,10 @@ export const login = (username, password) => (dispatch) => {
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({ type: LOGIN_FAIL, payload: err.response.data });
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: err.response.data,
+      });
     });
 };
 
@@ -49,24 +62,30 @@ export const logout = () => (dispatch, getState) => {
     .then(() => {
       dispatch({ type: CLEAR_ROOMS });
       dispatch({ type: LOGOUT_SUCCESS });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
     });
 };
 
 export const register = ({ username, password }) => (dispatch) => {
   const config = { headers: { 'Content-Type': 'application/json' } };
-  const body = JSON.stringify({ username, password });
+  const body = JSON.stringify({
+    username,
+    password,
+  });
   return axios.post('/api/auth/register', body, config)
     .then((res) => {
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
-        type: REGISTER_FAIL, payload: err.response.data,
+        type: REGISTER_FAIL,
+        payload: err.response.data,
       });
     });
 };

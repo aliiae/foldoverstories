@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { LinkContainer } from 'react-router-bootstrap';
+import NavItem from 'react-bootstrap/NavItem';
 
+import { LinkContainer } from 'react-router-bootstrap';
 import StartNewStoryButton from '../../Landing/StartNewStoryButton';
 import { logout } from '../../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../../commonPropTypes';
@@ -32,10 +33,10 @@ export function Header(props) {
 
   const guestLinks = (
     <Nav className="ml-auto">
-      <LinkContainer to="/register">
+      <LinkContainer exact to="/register">
         <Nav.Link className="mr-3" data-test="register-link">Register</Nav.Link>
       </LinkContainer>
-      <LinkContainer to="/login">
+      <LinkContainer exact to="/login">
         <Nav.Link data-test="login-link">Login</Nav.Link>
       </LinkContainer>
     </Nav>

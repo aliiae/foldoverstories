@@ -1,4 +1,4 @@
-export const setupTokenConfig = (getState) => {
+export default function setupTokenConfig(getState) {
   const { token } = getState().auth;
   const config = {
     headers: {
@@ -10,3 +10,5 @@ export const setupTokenConfig = (getState) => {
   }
   return config;
 };
+
+

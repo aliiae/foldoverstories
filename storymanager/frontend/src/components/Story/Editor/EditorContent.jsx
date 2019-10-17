@@ -18,7 +18,7 @@ function EditorContent({ roomTitle, ...props }) {
     auth, users, currentTurnUsername, userFinished, userCanWriteNow, isLastTurn, roomIsFinished,
   } = props;
   const { isLoading: userIsLoading, isAuthenticated, user } = auth;
-  if (roomIsFinished || isLastTurn) {
+  if (users && (roomIsFinished || isLastTurn)) {
     return <FinishedTextViewer roomTitle={roomTitle} />;
   }
   // if (isLastTurn) {
@@ -34,9 +34,9 @@ function EditorContent({ roomTitle, ...props }) {
   // }
 
   let content;
-  const isNewUser = userIsLoading === false && (isAuthenticated === false
-    || (users.length > 0 && !users.map((u) => u.username)
-      .includes(user.username)));
+  const isNewUser = (userIsLoading === false
+    && (isAuthenticated === false
+      || (users !== null && !users.map((u) => u.username).includes(user.username))));
   if (userFinished) {
     content = <LeftRoomMessage />;
   } else if (userCanWriteNow || isNewUser) {
@@ -69,13 +69,13 @@ function EditorContent({ roomTitle, ...props }) {
 }
 
 const mapStateToProps = (state) => ({
-  roomIsFinished: state.room.finished_at !== null,
+  roomIsFinished: state.room.finishedAt !== null,
   auth: state.auth,
-  isLastTurn: state.story.last_turn,
-  userCanWriteNow: state.room.user_can_write_now,
-  users: state.story.users,
-  currentTurnUsername: state.room.current_turn_username,
-  userFinished: state.room.user_left_room,
+  isLastTurn: state.story.isLastTurn,
+  userCanWriteNow: state.room.userCanWriteNow,
+  users: state.room.users,
+  currentTurnUsername: state.room.currentTurnUsername,
+  userFinished: state.room.userLeftRoom,
 });
 
 EditorContent.propTypes = {

@@ -1,13 +1,10 @@
 import {
-  ADD_TEXT, CLEAR_STORY, GET_USERS, GET_VISIBLE_TEXT, LAST_TURN, WRONG_TURN,
+  ADD_TEXT, CLEAR_STORY, GET_VISIBLE_TEXT, LAST_TURN,
 } from '../actions/types';
 
 const initialState = {
-  visible_text: null,
-  users: [],
-  correct_turn: null,
-  room: null,
-  last_turn: null,
+  visibleText: null,
+  isLastTurn: null,
 };
 
 export default function (state = initialState, action) {
@@ -18,26 +15,16 @@ export default function (state = initialState, action) {
         ...state,
         ...action.payload,
       };
-    case GET_USERS:
-      return {
-        ...state,
-        users: action.payload,
-      };
-    case WRONG_TURN:
-      return {
-        ...state,
-        correct_turn: false,
-      };
     case LAST_TURN:
+      if (state.isLastTurn === true) {
+        return state;
+      }
       return {
         ...state,
-        last_turn: true,
+        isLastTurn: true,
       };
     case CLEAR_STORY:
-      return {
-        ...state,
-        ...initialState,
-      };
+      return initialState;
     default:
       return state;
   }

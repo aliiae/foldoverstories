@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
-import { authPropType, matchPropType } from '../../commonPropTypes';
+import { authPropType, matchPropType, usersPropType } from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/room';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInternetStatus from '../../../hooks/useInternetStatus';
@@ -13,11 +13,12 @@ import RoomUsers from '../RoomUsers';
 
 function Editor(props) {
   const {
-    getRoomStatusConnect, match, roomIsFinished, auth, usernames,
+    getRoomStatusConnect, match, roomIsFinished, auth, users,
   } = props;
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
+  const usernames = users ? users.map((user) => user.username) : null;
   useWebsocket({
     isOnline,
     user: auth.user,
@@ -45,21 +46,21 @@ function Editor(props) {
 Editor.propTypes = {
   match: matchPropType.isRequired,
   getRoomStatusConnect: PropTypes.func.isRequired,
-  roomIsFinished: PropTypes.bool,
   auth: authPropType,
-  usernames: PropTypes.arrayOf(PropTypes.string),
+  roomIsFinished: PropTypes.bool,
+  users: usersPropType,
 };
 
 Editor.defaultProps = {
-  roomIsFinished: null,
   auth: null,
-  usernames: null,
+  roomIsFinished: null,
+  users: null,
 };
 
 const mapStateToProps = (state) => ({
-  roomIsFinished: state.room.finished_at !== null,
   auth: state.auth,
-  usernames: state.story.users.map((user) => user.username),
+  roomIsFinished: state.room.finishedAt !== null,
+  users: state.room.users,
 });
 
 export default connect(mapStateToProps, { getRoomStatusConnect: getRoomStatus })(Editor);

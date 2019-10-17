@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from accounts.tests import create_user, login_user_into_client
-from rooms.models import get_user_room_membership, leave_room
+from rooms.models import get_user_room_membership
 from storymanager.tests_utils import create_user_room, create_user_room_text
 
 User = get_user_model()
@@ -144,6 +144,6 @@ class HttpTextsTest(APITestCase):
 
     def test_user_cannot_write_after_leaving_room(self):
         membership = get_user_room_membership(self.user, self.room)
-        leave_room(self.room.room_title, membership)
+        self.room.leave_room(self.user)
         membership.refresh_from_db()
         self.assertFalse(membership.can_write_now)

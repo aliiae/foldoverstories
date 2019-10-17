@@ -16,9 +16,6 @@ import { register } from '../../store/actions/auth';
 
 function Register(props) {
   const { registerConnect, isAuthenticated, error } = props;
-  if (isAuthenticated) {
-    return <Redirect to="/" />;
-  }
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -26,7 +23,10 @@ function Register(props) {
       setShowError(true);
       setMessage('Sorry, this username is already taken. Please choose another one.');
     }
-  }, [props]);
+  }, [error]);
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
   const handleClose = () => {
     setShowError(false);
   };

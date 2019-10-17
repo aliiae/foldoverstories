@@ -5,7 +5,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import SvgFoldoverLogo from './SvgFoldoverLogo';
 import { clearRoomTitle } from '../../../store/actions/room';
-import './Logo.css';
 
 function Logo({ clearRoomTitleConnect }) {
   return (
