@@ -1,103 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Alert from 'react-bootstrap/Alert';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 
 import Col from 'react-bootstrap/Col';
 import { addText } from '../../store/actions/story';
-import { leaveRoom } from '../../store/actions/room';
-import JoinButton from './JoinButton';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { authDefaultPropType, authPropType } from '../commonPropTypes';
-import LeftRoomMessage from './LeftRoomMessage';
-import WaitingForTurnMessage from './WaitingForTurnMessage';
 import LeaveRoomButton from './LeaveRoomButton';
-
-function AlertMessage(props) {
-  const {
-    show, onHide, title, message,
-  } = props;
-  return (
-    <Alert show={show} onClose={onHide} variant="warning" dismissible>
-      <Alert.Heading>{title}</Alert.Heading>
-      <p>{message}</p>
-    </Alert>
-  );
-}
-
-AlertMessage.propTypes = {
-  show: PropTypes.bool.isRequired,
-  onHide: PropTypes.func.isRequired,
-  message: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-};
-
-function TextArea({ value, onChange }) {
-  const placeholder = 'Type your text here. Remember that only the last line will be visible!';
-  return (
-    <Form.Control
-      as="textarea"
-      rows="3"
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      name="text"
-      style={{ resize: 'none' }}
-      required
-      autoFocus
-      data-test="story-textarea"
-    />
-  );
-}
-
-TextArea.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+import TextArea from '../shared/TextArea';
+import AlertMessage from '../shared/AlertMessage';
+import JoinButton from './JoinButton';
+import { authPropType } from '../commonPropTypes';
 
 function TextAreaButton(props) {
-  const [text, setText] = useState('');
-  const {
-    addTextConnect, roomTitle, auth, usernames, correctTurn, leaveRoomConnect, userFinished,
-    currentTurnUsername, isLastTurn, roomFinished,
-  } = props;
+  const [userText, setUserText] = useState('');
   const [hiddenIsEmpty, setHiddenIsEmpty] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertWasShown, setAlertWasShown] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertTitle, setAlertTitle] = useState('');
-  const handleCloseAlert = () => {
-    setShowAlert(false);
-  };
-  const resetInputFields = () => {
-    setText('');
-    setAlertWasShown(false);
-  };
+  const [alertWasShown, setAlertWasShownOnce] = useState(false);
 
-  const messageHiddenIsEmpty = 'You seem to submit only one line of text. '
-    + 'Unless you want to make your whole input visible to the next author, '
-    + 'please check that you divided your text with Enter ⏎.';
+  const {
+    addTextConnect, roomTitle, userCanWriteNow, isNewUser
+  } = props;
 
   useEffect(() => {
     if (hiddenIsEmpty) {
       setShowAlert(true);
-      setAlertWasShown(true);
+      setAlertWasShownOnce(true);
     }
-  }, [hiddenIsEmpty, correctTurn]);
+  }, [hiddenIsEmpty, userCanWriteNow]);
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+  const resetInputFields = () => {
+    setUserText('');
+    setAlertWasShownOnce(false);
+  };
+
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const lastNewLineIndex = text.lastIndexOf('\n');
-    const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
-    const visibleText = text.slice(lastNewLineIndex + 1);
-    if (!hiddenText && !alertWasShown) {
+
+    function splitTextIntoHiddenVisible(text) {
+      // split into text before the newline character (hidden) and a line after (visible)
+      const lastNewLineIndex = text.lastIndexOf('\n');
+      const hiddenText = lastNewLineIndex > -1 ? text.slice(0, lastNewLineIndex) : '';
+      const visibleText = text.slice(lastNewLineIndex + 1);
+      return {
+        hiddenText,
+        visibleText,
+      };
+    }
+
+    const { hiddenText, visibleText } = splitTextIntoHiddenVisible(userText);
+    if (!hiddenText && !alertWasShown) { // show an alert once if the user entered visible text only
       setHiddenIsEmpty(true);
-      setAlertMessage(messageHiddenIsEmpty);
-      setAlertTitle('Only one line?');
-      setAlertWasShown(true);
+      setAlertWasShownOnce(true);
     } else {
       setHiddenIsEmpty(false);
       setShowAlert(false);
@@ -111,44 +70,25 @@ function TextAreaButton(props) {
   };
 
   const onChangeText = (e) => {
-    setText(e.target.value);
+    setUserText(e.target.value);
   };
-
-  const onClickLeave = () => {
-    leaveRoomConnect(roomTitle);
-  };
-  if (userFinished) {
-    return <LeftRoomMessage />;
-  }
-  if (auth === null || roomFinished === null || correctTurn === null) {
-    return <LoadingSpinner />;
-  }
-  const { isLoading, isAuthenticated, user } = auth;
-  if (isLoading || isAuthenticated === null) {
-    return <LoadingSpinner />;
-  }
-  if (!isLoading && (!isAuthenticated || !usernames.includes(user.username))) {
+  if (isNewUser) {
     return (<JoinButton roomTitle={roomTitle} />);
   }
-  if (isLastTurn) {
-    return (
-      <>
-        <p className="lead paper-top-message">This was the last turn!</p>
-        <p className="paper-bottom-message">
-          The other authors have finished their parts, so simply
-          refresh this page to read the completed story.
-        </p>
-      </>
-    );
-  }
-
+  const alertMessageHiddenIsEmpty = 'You seem to submit only one line of text. '
+    + 'Unless you want to make your whole input visible to the next author, '
+    + 'please check that you divided your text with Enter ⏎.';
   const submitForm = (
     <>
       <Form onSubmit={onSubmit} className="editor-form">
         <Form.Group controlId="formEnterText">
-          <TextArea value={text} onChange={onChangeText} />
+          <TextArea value={userText} onChange={onChangeText} />
         </Form.Group>
-        <Row style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Row style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+        >
           <Col>
             <Button
               type="submit"
@@ -161,68 +101,42 @@ function TextAreaButton(props) {
             </Button>
           </Col>
           <Col className="float-right text-right">
-            <LeaveRoomButton onClick={onClickLeave} />
+            <LeaveRoomButton roomTitle={roomTitle} />
           </Col>
         </Row>
       </Form>
       <AlertMessage
         show={showAlert}
         onHide={handleCloseAlert}
-        message={alertMessage}
-        title={alertTitle}
+        message={alertMessageHiddenIsEmpty}
+        title="Only one line?"
       />
-    </>
-  );
-
-  const waitingMessage = (
-    <>
-      <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
-      <Row>
-        <Col className="float-right text-right">
-          <LeaveRoomButton onClick={onClickLeave} />
-        </Col>
-      </Row>
     </>
   );
 
   return (
     <>
-      {correctTurn ? submitForm : waitingMessage}
+      {userCanWriteNow && submitForm}
     </>
   );
 }
 
 TextAreaButton.propTypes = {
   addTextConnect: PropTypes.func.isRequired,
-  leaveRoomConnect: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
-  userFinished: PropTypes.bool,
-  roomFinished: PropTypes.bool,
-  auth: authPropType,
-  usernames: PropTypes.arrayOf(PropTypes.string),
-  currentTurnUsername: PropTypes.string,
-  isLastTurn: PropTypes.bool,
-  correctTurn: PropTypes.bool,
+  userCanWriteNow: PropTypes.bool,
+  isNewUser: PropTypes.bool.isRequired,
 };
 TextAreaButton.defaultProps = {
-  usernames: [],
-  userFinished: null,
-  roomFinished: null,
-  auth: authDefaultPropType,
-  currentTurnUsername: null,
-  isLastTurn: null,
-  correctTurn: null,
+  userCanWriteNow: null,
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
-  correctTurn: state.story.correct_turn,
-  usernames: state.story.users.map((user) => user.username),
-  userFinished: state.room.user_left_room,
-  roomFinished: state.room.finished_at !== null,
-  isLastTurn: state.story.last_turn,
-  currentTurnUsername: state.story.current_turn_username,
+  userCanWriteNow: state.room.user_can_write_now,
 });
 
-export default connect(mapStateToProps,
-  { addTextConnect: addText, leaveRoomConnect: leaveRoom })(TextAreaButton);
+const mapDispatchToProps = {
+  addTextConnect: addText,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextAreaButton);

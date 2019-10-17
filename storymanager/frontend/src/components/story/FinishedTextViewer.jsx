@@ -58,17 +58,17 @@ function TextLines({ texts }) {
     <div className="finished-text-container paper p-2">
       <Table className="table-sm text-viewer-table">
         <tbody>
-        {texts.map((text) => (
-          <tr key={text.username + text.id}>
-            <td
-              className="text-muted"
-              style={{ width: '4em', border: 'none' }}
-            >
-              {`${text.username}:`}
-            </td>
-            <td style={{ border: 'none' }}>{text.full_text}</td>
-          </tr>
-        ))}
+          {texts.map((text) => (
+            <tr key={text.username + text.id}>
+              <td
+                className="text-muted"
+                style={{ width: '4em', border: 'none' }}
+              >
+                {`${text.username}:`}
+              </td>
+              <td style={{ border: 'none' }}>{text.full_text}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
@@ -125,9 +125,9 @@ FinishedTextViewer.propTypes = {
 };
 
 FinishedTextViewer.defaultProps = {
-  texts: [],
+  texts: null,
   finishedAt: null,
-  usernames: [],
+  usernames: null,
 };
 
 TextTabs.propTypes = {

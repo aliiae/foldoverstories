@@ -7,7 +7,6 @@ const initialState = {
   users: [],
   correct_turn: null,
   room: null,
-  current_turn_username: null,
   last_turn: null,
 };
 
@@ -27,7 +26,6 @@ export default function (state = initialState, action) {
     case WRONG_TURN:
       return {
         ...state,
-        current_turn_username: action.payload,
         correct_turn: false,
       };
     case LAST_TURN:

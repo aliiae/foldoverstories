@@ -7,7 +7,7 @@ export default function WaitingForTurnMessage({ currentTurnUsername }) {
       <p className="lead paper-top-message">
         Now it&apos;s the next author
         <strong>
-        {` ${currentTurnUsername}` || ''}
+          {` ${currentTurnUsername}` || ''}
         </strong>
         &apos;s turn to contribute to the story.
       </p>

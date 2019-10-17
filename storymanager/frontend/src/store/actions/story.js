@@ -15,7 +15,6 @@ export const getVisibleText = (roomTitle) => (dispatch, getState) => {
         payload: {
           visible_text: lastItem.visible_text ? lastItem.visible_text : '',
           correct_turn: true,
-          current_turn_username: null,
         },
       });
     }).catch((err) => {

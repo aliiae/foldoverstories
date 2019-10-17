@@ -7,7 +7,7 @@ import { getUsers, getVisibleText } from '../store/actions/story';
 import { getRoomStatus } from '../store/actions/room';
 import { addNotification } from '../store/actions/notifications';
 
-const NUM_WS_RECONNECTING_ATTEMPTS = 5;
+const MAX_WS_RECONNECTING_ATTEMPTS = 5;
 const useWebsocket = (props) => {
   const opened = useSelector((state) => state.websockets.ws.opened);
   const wsRef = useRef(null);
@@ -73,8 +73,8 @@ const useWebsocket = (props) => {
   const initWebsocket = (accessToken) => {
     if (wsRef.current) wsRef.current.close();
     wsRef.current = new ReconnectingWebSocket(`${SOCKET_URL}ws/room/${roomTitle}`,
-      ['access_token', accessToken]);
-    wsRef.current.maxReconnectAttempts = NUM_WS_RECONNECTING_ATTEMPTS;
+      ['access_token', accessToken],
+      { maxRetries: MAX_WS_RECONNECTING_ATTEMPTS });
     wsRef.current.addEventListener('message', onMessage);
   };
 
@@ -93,8 +93,9 @@ const useWebsocket = (props) => {
     if (!user || !usernames || !usernames.includes(user.username)) {
       return;
     }
+    console.log('initialising websocket');
     initWebsocket(token);
-  }, [roomIsFinished, usernames]);
+  }, [initWebsocket, roomIsFinished, usernames]);
 
   return {
     ws: wsRef.current,

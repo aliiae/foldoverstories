@@ -4,30 +4,19 @@ import PropTypes from 'prop-types';
 import { getVisibleText } from '../../store/actions/story';
 import LoadingSpinner from '../shared/LoadingSpinner';
 
-const propTypes = {
-  visibleText: PropTypes.string,
-  getVisibleTextConnect: PropTypes.func.isRequired,
-  roomTitle: PropTypes.string.isRequired,
-  correctTurn: PropTypes.bool,
-  userFinished: PropTypes.bool,
-  wsStatus: PropTypes.string,
-};
 
-const defaultProps = {
-  visibleText: null,
-  correctTurn: true,
-  userFinished: false,
-  wsStatus: null,
-};
-
-function VisibleTextDisplay(props) {
-  const { getVisibleTextConnect, roomTitle, wsStatus } = props;
+function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
+  const {
+    getVisibleTextConnect, userCanWriteNow, visibleText, userFinished,
+  } = props;
+  const correctTurn = userCanWriteNow || isNewUser;
   useEffect(() => {
-    getVisibleTextConnect(roomTitle);
-  }, [roomTitle, wsStatus]);
-  const { visibleText, correctTurn, userFinished } = props;
+    if (correctTurn) {
+      getVisibleTextConnect(roomTitle);
+    }
+  }, [getVisibleTextConnect, roomTitle]);
 
-  if (userFinished) {
+  if (userFinished || correctTurn === false) {
     return null;
   }
   if (correctTurn && visibleText === null) {
@@ -42,22 +31,32 @@ function VisibleTextDisplay(props) {
       </div>
     );
   }
-  if (visibleText) {
+  if (correctTurn && visibleText) {
     return (
       <div className="visible-text pl-2">
         <p className="visible-text-lead lead" data-test="visible-text">{visibleText}</p>
       </div>
     );
   }
-  return null;
 }
 
-VisibleTextDisplay.propTypes = propTypes;
-VisibleTextDisplay.defaultProps = defaultProps;
+VisibleTextDisplay.propTypes = {
+  isNewUser: PropTypes.bool.isRequired,
+  visibleText: PropTypes.string,
+  getVisibleTextConnect: PropTypes.func.isRequired,
+  roomTitle: PropTypes.string.isRequired,
+  userFinished: PropTypes.bool,
+  userCanWriteNow: PropTypes.bool,
+};
+VisibleTextDisplay.defaultProps = {
+  visibleText: null,
+  userFinished: null,
+  userCanWriteNow: null,
+};
 
 const mapStateToProps = (state) => ({
   visibleText: state.story.visible_text,
-  correctTurn: state.story.correct_turn,
+  userCanWriteNow: state.room.user_can_write_now,
   userFinished: state.room.user_left_room,
   wsStatus: state.websockets.ws.status,
 });

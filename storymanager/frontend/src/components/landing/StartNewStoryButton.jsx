@@ -41,7 +41,6 @@ function StartButton(props) {
 
 StartButton.propTypes = {
   addRoomConnect: PropTypes.func.isRequired,
-  clearRoomTitleConnect: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   roomTitle: PropTypes.string,
   classNames: PropTypes.string,

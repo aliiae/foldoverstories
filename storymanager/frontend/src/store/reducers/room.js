@@ -12,9 +12,10 @@ import {
 const initialState = {
   rooms: null,
   user_left_room: null,
-  texts: [],
+  texts: null,
   finished_at: null,
   room_title: null,
+  current_turn_username: null,
 };
 
 export default function (state = initialState, action) {

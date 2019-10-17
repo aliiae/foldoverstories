@@ -2,43 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Button from 'react-bootstrap/Button';
+import StartNewStoryButton from '../landing/StartNewStoryButton';
 import { logout } from '../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../commonPropTypes';
-import SvgFoldoverLogo from '../shared/SvgFoldoverLogo';
-import StartNewStoryButton from '../landing/StartNewStoryButton';
-
-const propTypes = {
-  auth: authPropType,
-  logoutConnect: PropTypes.func.isRequired,
-};
-const defaultProps = {
-  auth: authDefaultPropType,
-};
-
-function Logo() {
-  return (
-    <LinkContainer to="/">
-      <Navbar.Brand className="align-items-center">
-        <div style={{ display: 'flex' }}>
-          <SvgFoldoverLogo width="32" height="32" />
-          <span
-            style={{ display: 'flex', flexFlow: 'column', lineHeight: '0.9' }}
-            className="mr-1 ml-1"
-          >
-            <span>FOLD</span>
-            <span>-OVER</span>
-          </span>
-          <span>STORIES</span>
-        </div>
-      </Navbar.Brand>
-    </LinkContainer>
-  );
-}
+import Logo from './Logo';
 
 export function Header(props) {
   const { auth: { isAuthenticated, user }, logoutConnect } = props;
@@ -80,7 +52,7 @@ export function Header(props) {
               <Nav.Link data-test="how-to-play-link">How to Play</Nav.Link>
             </LinkContainer>
           </Nav>
-          <Nav className="ml-1">
+          <Nav className="ml-md-1">
             <StartNewStoryButton classNames="nav-link bg-transparent border-0 nav-start-button" />
           </Nav>
           {isAuthenticated ? authLinks : guestLinks}
@@ -90,8 +62,13 @@ export function Header(props) {
   );
 }
 
-Header.propTypes = propTypes;
-Header.defaultProps = defaultProps;
+Header.propTypes = {
+  auth: authPropType,
+  logoutConnect: PropTypes.func.isRequired,
+};
+Header.defaultProps = {
+  auth: authDefaultPropType,
+};
 
 const mapStateToProps = (state) => ({
   auth: state.auth,

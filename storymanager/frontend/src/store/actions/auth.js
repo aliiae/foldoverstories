@@ -7,7 +7,6 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS,
 } from './types';
-import { getRooms } from './room';
 import { setupTokenConfig } from './utils';
 
 export const loadUser = () => (dispatch, getState) => {

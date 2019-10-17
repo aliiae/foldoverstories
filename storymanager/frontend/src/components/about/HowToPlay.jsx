@@ -12,7 +12,7 @@ export default function HowToPlay() {
             <h1 className="text-center mb-3 display-4">How to Play</h1>
             <section>
               <h2>What is Fold-over Stories?</h2>
-              <SvgFoldoverLogo width="4rem" height="4rem" />
+              {/*<SvgFoldoverLogo width="4rem" height="4rem" />*/}
               <p>
                 Fold-over Stories implements a creative storytelling game
                 similar to the parlour game called &ldquo;consequences&rdquo;
