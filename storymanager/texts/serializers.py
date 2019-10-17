@@ -1,23 +1,17 @@
 from rest_framework import serializers
 
-from rooms.models import Room
-from rooms.serializers import RoomUsersSerializer
+from accounts.serializers import RoomUsersSerializer
+from rooms.serializers import RoomsReadOnlySerializer
 from .models import Text
 
 
-class TextsRoomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Room
-        fields = ('room_title', 'is_finished')
-
-
 class TextsFullSerializer(serializers.ModelSerializer):
-    room = TextsRoomSerializer(read_only=True)
+    room = RoomsReadOnlySerializer(read_only=True)
     author = RoomUsersSerializer(read_only=True)
 
     class Meta:
         model = Text
-        fields = ('visible_text', 'author', 'room', 'hidden_text')
+        fields = ('room', 'author', 'hidden_text', 'visible_text')
 
 
 class TextsVisibleOnlySerializer(serializers.ModelSerializer):

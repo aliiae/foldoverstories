@@ -1,5 +1,5 @@
 from typing import Optional
-
+import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
@@ -12,7 +12,9 @@ from websockets.server_send import (send_channel_message, WEBSOCKET_MSG_JOIN,
 User = get_user_model()
 
 
-def get_user_room_membership(user: User, room: 'Room') -> 'Membership':
+def get_user_room_membership(user: User, room: 'Room') -> Optional['Membership']:
+    if user not in room.users.all():
+        return None
     return Membership.objects.get(room=room, user=user)
 
 
@@ -28,13 +30,19 @@ def leave_room(room_title: str, user_membership: 'Membership'):
 
 
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
-    """Tries to generate a unique adjective-noun pair for 5 times, else returns a random number."""
+    """
+    Tries to generate a unique adjective-noun pair for n (5) times, otherwise returns a random UUID.
+    Example: 'steel-fish' or '513a3445-8ac4-425e-97c9-8152571bb682'.
+
+    :param attempts: Number of attempts to generate a unique id.
+    :return: A unique id string.
+    """
     attempts = attempts or 1
     for _ in range(attempts):
         adj_noun_pair = random_adj_noun_pair()
         if not Room.objects.filter(room_title=adj_noun_pair).exists():
             return adj_noun_pair
-    return str(random.randint(10000, 99999))
+    return str(uuid.uuid4())
 
 
 class Room(models.Model):
@@ -56,20 +64,24 @@ class Room(models.Model):
         super(Room, self).save(*args, **kwargs)
 
     def calculate_current_turn_user(self, request_user: User) -> Optional[User]:
-        """
-        Returns the curr_user allowed to post, the one next after the prev poster in self.users.
+        """Calculates the user allowed to post, the one chronologically next after the prev poster.
+
         Allows the current turn curr_user write, prohibits others.
         Closes the room if no active (.has_stopped = False) users left.
-
         Returns None if the room is closed.
+
+        :param request_user: The request user (i.e. currently browsing the page).
+        :return: A current turn User object, or None if the room is closed.
         """
 
         def index_of(target, items) -> int:
             index = next(idx for idx, item in enumerate(items) if item == target)
             return -1 if index is None else index
 
-        def marked_curr_user(curr_user=request_user, update_others=False) -> User:
+        def marked_curr_user(curr_user=request_user, update_others=False) -> Optional[User]:
             curr_membership = get_user_room_membership(curr_user, self)
+            if curr_membership is None:  # it is a guest user, they can view anything
+                return None
             if not curr_membership.can_write_now:
                 curr_membership.can_write_now = True
                 curr_membership.save()
@@ -149,3 +161,6 @@ class Membership(models.Model):
 
     def __str__(self):
         return f'{self.user}_{self.room}'
+
+    class Meta:
+        ordering = ('joined_at',)

@@ -1,5 +1,10 @@
+from typing import Optional
+
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
+
+from rooms.models import Membership, Room
 
 User = get_user_model()
 
@@ -31,3 +36,27 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
+
+
+class RoomUsersSerializer(serializers.ModelSerializer):
+    texts_count = serializers.IntegerField(read_only=True)
+    user_left_room = serializers.SerializerMethodField('get_user_left_room')
+    user_can_write_now = serializers.SerializerMethodField('get_user_can_write_now')
+
+    def get_user_left_room(self, obj: User) -> Optional[bool]:
+        user_membership = self._get_user_membership(obj)
+        return user_membership.has_stopped if user_membership else None
+
+    def get_user_can_write_now(self, obj: User) -> Optional[bool]:
+        user_membership = self._get_user_membership(obj)
+        return user_membership.can_write_now if user_membership else None
+
+    def _get_user_membership(self, obj: User) -> Membership:
+        if 'room_title' in self.context.get('view').kwargs:
+            room = get_object_or_404(Room, room_title=self.context.get('view').kwargs['room_title'])
+            user_membership = Membership.objects.get(room=room, user=obj)
+            return user_membership
+
+    class Meta:
+        model = User
+        fields = ('username', 'texts_count', 'user_left_room', 'user_can_write_now')

@@ -1,56 +1,22 @@
+from typing import Optional
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
+from accounts.serializers import UserSerializer
 from texts.models import Text
 from .models import Room, Membership
 
 User = get_user_model()
 
 
-class RoomUsersSerializer(serializers.ModelSerializer):
-    texts_count = serializers.IntegerField(read_only=True)
-    user_left_room = serializers.SerializerMethodField('did_user_leave_room')
-    user_can_write_now = serializers.SerializerMethodField('can_user_write_now')
+class RoomUserStatusSerializer(serializers.ModelSerializer):
+    """A base serializer used for introducing user_left_room and user_can_write fields."""
+    user_left_room = serializers.SerializerMethodField('get_user_left_room')
+    user_can_write_now = serializers.SerializerMethodField('get_user_can_write_now')
 
-    def did_user_leave_room(self, obj: User) -> bool:  # => user_left_room
-        user_membership = self._get_user_membership(obj)
-        if user_membership:
-            return user_membership.has_stopped
-
-    def can_user_write_now(self, obj: User) -> bool:  # => user_can_write_now
-        user_membership = self._get_user_membership(obj)
-        if user_membership:
-            return user_membership.can_write_now
-
-    def _get_user_membership(self, obj):
-        if 'room_title' in self.context.get('view').kwargs:
-            room = get_object_or_404(Room, room_title=self.context.get('view').kwargs['room_title'])
-            user_membership = Membership.objects.get(room=room, user=obj)
-            return user_membership
-
-    class Meta:
-        model = User
-        fields = ('username', 'texts_count', 'user_left_room', 'user_can_write_now')
-
-
-class RoomsReadOnlySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Room
-        fields = ('room_title', 'finished_at')
-
-
-class UserUsernameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username',)
-
-
-class SingleRoomSerializer(serializers.ModelSerializer):
-    user_left_room = serializers.SerializerMethodField('did_user_leave_room')
-    user_can_write_now = serializers.SerializerMethodField('can_user_write_now')
-
-    def did_user_leave_room(self, obj, *args, **kwargs):  # => user_left_room
+    def get_user_left_room(self, obj: Room, *args, **kwargs) -> Optional[bool]:
         if 'request' not in self.context:
             return None
         user = self.context['request'].user
@@ -59,7 +25,7 @@ class SingleRoomSerializer(serializers.ModelSerializer):
         user_membership = get_object_or_404(Membership, room=obj, user=user)
         return user_membership.has_stopped
 
-    def can_user_write_now(self, obj, *args, **kwargs):  # => user_can_write_now
+    def get_user_can_write_now(self, obj: Room, *args, **kwargs) -> Optional[bool]:
         if 'request' not in self.context:
             return None
         user = self.context['request'].user
@@ -68,18 +34,36 @@ class SingleRoomSerializer(serializers.ModelSerializer):
         user_membership = get_object_or_404(Membership, room=obj, user=user)
         return user_membership.can_write_now
 
+
+class SingleRoomSerializer(RoomUserStatusSerializer):
+    current_turn_username = serializers.SerializerMethodField('get_current_turn_username')
+
+    def get_current_turn_username(self, obj: Room, *args, **kwargs) -> Optional[str]:
+        if 'request' not in self.context:
+            return None
+        request_user = self.context['request'].user
+        current_turn_user = obj.calculate_current_turn_user(request_user)
+        return current_turn_user.username if current_turn_user else None
+
     class Meta:
         model = Room
-        fields = ('room_title', 'finished_at', 'user_left_room', 'user_can_write_now')
+        fields = ('room_title', 'finished_at', 'user_left_room', 'user_can_write_now',
+                  'current_turn_username')
 
 
-class RoomsSerializer(SingleRoomSerializer):
-    users = UserUsernameSerializer(many=True)
+class RoomsSerializer(RoomUserStatusSerializer):
+    users = UserSerializer(read_only=True, many=True)
 
     class Meta:
         model = Room
         fields = ('room_title', 'users', 'finished_at', 'modified_at',
                   'user_left_room', 'user_can_write_now')
+
+
+class RoomsReadOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('room_title', 'finished_at')
 
 
 class RoomReadSerializer(serializers.ModelSerializer):

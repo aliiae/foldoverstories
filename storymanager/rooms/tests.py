@@ -39,6 +39,12 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(room.room_title, response.data.get('room_title'))
 
+    def test_current_turn_username_is_equal_to_authors_username_in_new_room(self):
+        room = create_user_room(self.user, self.room_title)
+        response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(self.user.username, response.data.get('current_turn_username'))
+
     def test_user_can_retrieve_another_users_room_before_joining(self):
         another_user = create_user('another-user')
         room = create_user_room(another_user, self.room_title)

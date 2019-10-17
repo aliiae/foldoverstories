@@ -51,13 +51,13 @@ class HttpTextsTest(APITestCase):
         response = post_text_from_client_to_room(text_data, self.client, self.room)
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
-    def test_user_can_list_room_texts(self):
+    def test_user_can_view_last_visible_text_in_open_room(self):
         texts = [create_user_room_text(self.user, self.room, visible_text=str(i))
                  for i in range(10)]
         response = self.client.get(
             reverse('texts-list', kwargs={'room_title': self.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertListEqual([t.visible_text for t in texts],
+        self.assertListEqual([texts[-1].visible_text],
                              [t['visible_text'] for t in response.data])
 
     def test_user_can_list_empty_room_with_no_texts(self):
@@ -96,8 +96,7 @@ class HttpTextsTest(APITestCase):
     def test_current_turn_user_is_chronologically_after_previous_author(self):
         authors_count = 10
         other_usernames = [f'user-{i}' for i in range(1, authors_count)]
-        # first_author_index = authors_count // 2
-        first_author_index = 0
+        first_author_index = authors_count // 2
         users = []
         for i, another_username in enumerate(other_usernames):
             another_user = create_user(another_username)
@@ -122,6 +121,11 @@ class HttpTextsTest(APITestCase):
                 self.assertTrue(membership.can_write_now)
                 response = post_text_from_client_to_room({'visible_text': 'x'}, self.client,
                                                          self.room)
+                # next user should be correctly named:
+                rooms_detail_response = self.client.get(
+                    reverse('rooms-detail', kwargs={'room_title': self.room.room_title}))
+                self.assertEqual(users[(i + 1) % len(users)].username,
+                                 rooms_detail_response.data.get('current_turn_username'))
                 self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_user_in_a_single_user_room_can_write_many_times(self):
@@ -141,6 +145,5 @@ class HttpTextsTest(APITestCase):
     def test_user_cannot_write_after_leaving_room(self):
         membership = get_user_room_membership(self.user, self.room)
         leave_room(self.room.room_title, membership)
-        membership = get_user_room_membership(self.user, self.room)
+        membership.refresh_from_db()
         self.assertFalse(membership.can_write_now)
-

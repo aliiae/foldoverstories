@@ -9,11 +9,12 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
+from accounts.serializers import RoomUsersSerializer
 from rooms.models import Room, Membership, leave_room
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from .serializers import (RoomsSerializer, RoomUsersSerializer, RoomReadSerializer,
-                          RoomsReadOnlySerializer, SingleRoomSerializer)
+from .serializers import (RoomsSerializer, RoomReadSerializer, RoomsReadOnlySerializer,
+                          SingleRoomSerializer)
 
 User = get_user_model()
 
@@ -46,7 +47,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
             return Response(RoomsReadOnlySerializer(room, context={'request': request}).data)
         return Response(SingleRoomSerializer(room, context={'request': request}).data)
 
-    def perform_create(self, serializer: SingleRoomSerializer):
+    def perform_create(self, serializer: RoomsSerializer):
         room: Room = serializer.save()
         room.add_user(self.request.user)
 
