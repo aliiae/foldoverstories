@@ -6,12 +6,11 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 
 import Col from 'react-bootstrap/Col';
-import { addText } from '../../store/actions/story';
+import { addText } from '../../../../store/actions/story';
 import LeaveRoomButton from './LeaveRoomButton';
-import TextArea from '../shared/TextArea';
-import AlertMessage from '../shared/AlertMessage';
+import TextArea from '../TextArea';
+import AlertMessage from '../../../UI/AlertMessage';
 import JoinButton from './JoinButton';
-import { authPropType } from '../commonPropTypes';
 
 function TextAreaButton(props) {
   const [userText, setUserText] = useState('');
@@ -20,9 +19,8 @@ function TextAreaButton(props) {
   const [alertWasShown, setAlertWasShownOnce] = useState(false);
 
   const {
-    addTextConnect, roomTitle, userCanWriteNow, isNewUser
+    addTextConnect, roomTitle, userCanWriteNow, isNewUser,
   } = props;
-
   useEffect(() => {
     if (hiddenIsEmpty) {
       setShowAlert(true);
@@ -72,8 +70,9 @@ function TextAreaButton(props) {
   const onChangeText = (e) => {
     setUserText(e.target.value);
   };
+
   if (isNewUser) {
-    return (<JoinButton roomTitle={roomTitle} />);
+    return <JoinButton roomTitle={roomTitle} />;
   }
   const alertMessageHiddenIsEmpty = 'You seem to submit only one line of text. '
     + 'Unless you want to make your whole input visible to the next author, '
@@ -81,9 +80,7 @@ function TextAreaButton(props) {
   const submitForm = (
     <>
       <Form onSubmit={onSubmit} className="editor-form">
-        <Form.Group controlId="formEnterText">
-          <TextArea value={userText} onChange={onChangeText} />
-        </Form.Group>
+        <TextArea value={userText} onChange={onChangeText} />
         <Row style={{
           display: 'flex',
           justifyContent: 'space-between',

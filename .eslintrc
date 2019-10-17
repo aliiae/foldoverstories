@@ -1,7 +1,8 @@
 {
   "plugins": [
     "babel",
-    "cypress"
+    "cypress",
+    "react-hooks"
   ],
   "parser": "babel-eslint",
   "extends": [
@@ -33,7 +34,9 @@
       {
         "devDependencies": true
       }
-    ]
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "env": {
     "browser": true,

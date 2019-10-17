@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 
-import { Emoji } from '../shared/Status';
+import { Emoji } from '../../Story/Status';
 
 export default function Footer() {
   return (

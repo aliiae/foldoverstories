@@ -6,16 +6,16 @@ import {
 
 import { Provider } from 'react-redux';
 
-import Header from './layout/Header';
-import HowToPlay from './about/HowToPlay';
-import Login from './accounts/Login';
-import Register from './accounts/Register';
-import NotificationToasts from './shared/NotificationToasts';
-import Landing from './landing/Landing';
-import Editor from './story/Editor';
-import PageNotFound from './common/PageNotFound';
-import Footer from './layout/Footer';
-import Main from './layout/Main';
+import Header from './UI/Layout/Header';
+import HowToPlay from './About/HowToPlay';
+import Login from './Auth/Login';
+import Register from './Auth/Register';
+import NotificationToasts from './UI/Notifications/NotificationToasts';
+import Landing from './Landing/Landing';
+import Editor from './Story/Editor/Editor';
+import PageNotFound from './UI/PageNotFound';
+import Footer from './UI/Layout/Footer';
+import Main from './UI/Layout/Main';
 import store from '../store/store';
 import { loadUser } from '../store/actions/auth';
 

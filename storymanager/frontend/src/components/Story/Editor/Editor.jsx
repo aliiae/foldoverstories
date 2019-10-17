@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { authPropType, matchPropType } from '../commonPropTypes';
-import { getRoomStatus } from '../../store/actions/room';
-import LoadingSpinner from '../shared/LoadingSpinner';
-import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
-import useInternetStatus from '../../hooks/useInternetStatus';
-import useWebsocket from '../../hooks/useWebsocket';
-import EditorContainer from './EditorContainer';
+import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
+import { authPropType, matchPropType } from '../../commonPropTypes';
+import { getRoomStatus } from '../../../store/actions/room';
+import LoadingSpinner from '../../UI/LoadingSpinner';
+import useInternetStatus from '../../../hooks/useInternetStatus';
+import useWebsocket from '../../../hooks/useWebsocket';
+import EditorContainerTwoCols from './EditorContainerTwoCols';
 import EditorContent from './EditorContent';
+import RoomUsers from '../RoomUsers';
 
 function Editor(props) {
   const {
-    getRoomStatusConnect, match, roomIsFinished, auth, isLastTurn, usernames,
+    getRoomStatusConnect, match, roomIsFinished, auth, usernames,
   } = props;
-  const { isLoading: userIsLoading } = auth;
+  const { isLoading: userIsLoading, isAuthenticated } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
   useWebsocket({
@@ -26,19 +27,18 @@ function Editor(props) {
     usernames,
   });
   useEffect(() => {
-    console.log('status');
     getRoomStatusConnect(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
-  }, [roomTitle, isLastTurn, roomIsFinished]);
-
-  if (userIsLoading) {
+  }, [getRoomStatusConnect, roomTitle]);
+  if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }
-
+  // EditorContainerTwoCols needs two children: a side panel and main content
   return (
-    <EditorContainer roomTitle={roomTitle}>
+    <EditorContainerTwoCols>
+      <RoomUsers roomTitle={roomTitle} />
       <EditorContent roomTitle={roomTitle} />
-    </EditorContainer>
+    </EditorContainerTwoCols>
   );
 }
 
@@ -46,14 +46,12 @@ Editor.propTypes = {
   match: matchPropType.isRequired,
   getRoomStatusConnect: PropTypes.func.isRequired,
   roomIsFinished: PropTypes.bool,
-  isLastTurn: PropTypes.bool,
   auth: authPropType,
   usernames: PropTypes.arrayOf(PropTypes.string),
 };
 
 Editor.defaultProps = {
   roomIsFinished: null,
-  isLastTurn: null,
   auth: null,
   usernames: null,
 };
@@ -61,7 +59,6 @@ Editor.defaultProps = {
 const mapStateToProps = (state) => ({
   roomIsFinished: state.room.finished_at !== null,
   auth: state.auth,
-  lastTurn: state.story.last_turn,
   usernames: state.story.users.map((user) => user.username),
 });
 

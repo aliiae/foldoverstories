@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Toast from 'react-bootstrap/Toast';
 import PropTypes from 'prop-types';
-import { formatTimeStampTimeOnly } from '../dateFormatters';
-import { NOTIFICATION_DURATION } from '../../settings';
+import { formatTimeStampTimeOnly } from '../../dateFormatters';
+import { NOTIFICATION_DURATION } from '../../../settings';
 
 const NotificationToast = React.memo((props) => {
   const [show, setShow] = useState(true);

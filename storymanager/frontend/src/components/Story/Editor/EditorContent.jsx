@@ -3,28 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import FinishedTextViewer from './FinishedTextViewer';
+import FinishedTextViewer from '../Finished/FinishedTextViewer';
 import PaperContainer from './PaperContainer';
-import LeftRoomMessage from './LeftRoomMessage';
+import LeftRoomMessage from './Messages/LeftRoomMessage';
 import VisibleTextDisplay from './VisibleTextDisplay';
-import TextAreaButton from './TextAreaButton';
-import WaitingForTurnMessage from './WaitingForTurnMessage';
-import LeaveRoomButton from './LeaveRoomButton';
-import { getRoomStatus } from '../../store/actions/room';
-import { authPropType } from '../commonPropTypes';
-import LoadingSpinner from '../shared/LoadingSpinner';
+import TextAreaButton from './Buttons/TextAreaButton';
+import WaitingForTurnMessage from './Messages/WaitingForTurnMessage';
+import LeaveRoomButton from './Buttons/LeaveRoomButton';
+import { getRoomStatus } from '../../../store/actions/room';
+import { authPropType, usersPropType } from '../../commonPropTypes';
 
 function EditorContent({ roomTitle, ...props }) {
   const {
-    auth, usernames, currentTurnUsername, userFinished, userCanWriteNow, isLastTurn, roomIsFinished,
+    auth, users, currentTurnUsername, userFinished, userCanWriteNow, isLastTurn, roomIsFinished,
   } = props;
-  if (auth === null || roomIsFinished === null) {
-    return <LoadingSpinner />;
-  }
   const { isLoading: userIsLoading, isAuthenticated, user } = auth;
-  if (userIsLoading || isAuthenticated === null) {
-    return <LoadingSpinner />;
-  }
   if (roomIsFinished || isLastTurn) {
     return <FinishedTextViewer roomTitle={roomTitle} />;
   }
@@ -40,18 +33,10 @@ function EditorContent({ roomTitle, ...props }) {
   //   );
   // }
 
-  const waitingMessageAndButton = (
-    <>
-      <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
-      <Row>
-        <Col className="float-right text-right">
-          <LeaveRoomButton roomTitle={roomTitle} />
-        </Col>
-      </Row>
-    </>
-  );
   let content;
-  const isNewUser = !userIsLoading && (!isAuthenticated || !usernames.includes(user.username));
+  const isNewUser = userIsLoading === false && (isAuthenticated === false
+    || (users.length > 0 && !users.map((u) => u.username)
+      .includes(user.username)));
   if (userFinished) {
     content = <LeftRoomMessage />;
   } else if (userCanWriteNow || isNewUser) {
@@ -61,15 +46,26 @@ function EditorContent({ roomTitle, ...props }) {
         <TextAreaButton roomTitle={roomTitle} isNewUser={isNewUser} />
       </>
     );
-  } else {
-    content = waitingMessageAndButton;
+  } else if (userCanWriteNow === false && currentTurnUsername) {
+    content = (
+      <>
+        <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
+        <Row>
+          <Col className="float-right text-right">
+            <LeaveRoomButton roomTitle={roomTitle} />
+          </Col>
+        </Row>
+      </>
+    );
   }
-
-  return (
-    <PaperContainer>
-      {content}
-    </PaperContainer>
-  );
+  if (content) {
+    return (
+      <PaperContainer>
+        {content}
+      </PaperContainer>
+    );
+  }
+  return null;
 }
 
 const mapStateToProps = (state) => ({
@@ -77,7 +73,7 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   isLastTurn: state.story.last_turn,
   userCanWriteNow: state.room.user_can_write_now,
-  usernames: state.story.users.map((user) => user.username),
+  users: state.story.users,
   currentTurnUsername: state.room.current_turn_username,
   userFinished: state.room.user_left_room,
 });
@@ -88,7 +84,7 @@ EditorContent.propTypes = {
   auth: authPropType,
   isLastTurn: PropTypes.bool,
   userCanWriteNow: PropTypes.bool,
-  usernames: PropTypes.arrayOf(PropTypes.string),
+  users: usersPropType,
   currentTurnUsername: PropTypes.string,
   userFinished: PropTypes.bool,
 };
@@ -98,7 +94,7 @@ EditorContent.defaultProps = {
   auth: null,
   isLastTurn: null,
   userCanWriteNow: null,
-  usernames: null,
+  users: null,
   currentTurnUsername: null,
   userFinished: null,
 };

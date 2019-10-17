@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import CopyLinkButton from '../shared/CopyLinkButton';
-import SvgLinkIcon from '../shared/SvgLinkIcon';
+import CopyLinkButton from '../../UI/ShareLink/CopyLinkButton';
+import SvgLinkIcon from '../../UI/ShareLink/SvgLinkIcon';
 
 export default function InviteLink(props) {
   const { url } = props;

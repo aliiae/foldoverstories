@@ -29,10 +29,21 @@ export const matchPropType = PropTypes.shape({
   url: PropTypes.string.isRequired,
 });
 
-export const authDefaultPropType = { isAuthenticated: false, token: null, user: null };
+export const authDefaultPropType = {
+  isAuthenticated: false,
+  token: null,
+  user: null,
+};
 
 export const historyPropType = PropTypes.shape({
   location: PropTypes.object,
   length: PropTypes.number,
   action: PropTypes.string,
 });
+
+export const usersPropType = PropTypes.arrayOf(PropTypes.shape({
+  username: PropTypes.string,
+  texts_count: PropTypes.number,
+  user_left_room: PropTypes.bool,
+  user_can_write_now: PropTypes.bool,
+}));

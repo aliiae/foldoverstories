@@ -442,3 +442,9 @@ $nav-height: 4rem;
 
   @extend %color-underline;
 }
+
+.logo-text {
+  display: flex;
+  flex-flow: column;
+  line-height: .9;
+}

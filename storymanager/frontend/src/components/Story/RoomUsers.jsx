@@ -5,7 +5,7 @@ import Pluralize from 'react-pluralize';
 import Card from 'react-bootstrap/Card';
 
 import { getUsers } from '../../store/actions/story';
-import Status from '../shared/Status';
+import Status from './Status';
 
 const propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({

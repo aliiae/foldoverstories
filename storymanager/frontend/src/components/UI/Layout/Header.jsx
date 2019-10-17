@@ -7,10 +7,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import StartNewStoryButton from '../landing/StartNewStoryButton';
-import { logout } from '../../store/actions/auth';
-import { authDefaultPropType, authPropType } from '../commonPropTypes';
-import Logo from './Logo';
+import StartNewStoryButton from '../../Landing/StartNewStoryButton';
+import { logout } from '../../../store/actions/auth';
+import { authDefaultPropType, authPropType } from '../../commonPropTypes';
+import Logo from '../Figure/Logo';
 
 export function Header(props) {
   const { auth: { isAuthenticated, user }, logoutConnect } = props;

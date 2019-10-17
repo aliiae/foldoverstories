@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
-import SvgFoldoverLogo from '../shared/SvgFoldoverLogo';
-import { clearRoomTitle } from '../../store/actions/room';
+import SvgFoldoverLogo from './SvgFoldoverLogo';
+import { clearRoomTitle } from '../../../store/actions/room';
+import './Logo.css';
 
 function Logo({ clearRoomTitleConnect }) {
   return (
@@ -12,14 +13,7 @@ function Logo({ clearRoomTitleConnect }) {
       <Navbar.Brand className="align-items-center">
         <div style={{ display: 'flex' }}>
           <SvgFoldoverLogo width="32" height="32" />
-          <span
-            style={{
-              display: 'flex',
-              flexFlow: 'column',
-              lineHeight: '0.9',
-            }}
-            className="mr-1 ml-1"
-          >
+          <span className="mr-1 ml-1 logo-text">
             <span>FOLD</span>
             <span>-OVER</span>
           </span>

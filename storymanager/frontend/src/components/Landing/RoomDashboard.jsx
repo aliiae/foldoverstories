@@ -7,7 +7,7 @@ import Pagination from 'react-bootstrap/Pagination';
 import Container from 'react-bootstrap/Container';
 
 import { getRooms } from '../../store/actions/room';
-import Status from '../shared/Status';
+import Status from '../Story/Status';
 import { formatTimeStamp } from '../dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
 
