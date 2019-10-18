@@ -20,4 +20,4 @@ class Text(models.Model):
         self.room.save()  # to also update the room's "modified_at" timestamp
 
     class Meta:
-        ordering = ('created_at',)
+        ordering = ('created_at', 'room__room_title')

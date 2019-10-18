@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { SOCKET_URL, TITLE_DELIMITER } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
-import { getUsers, getRoomStatus } from '../store/actions/room';
+import { getRoomStatus } from '../store/actions/room';
 import { addNotification } from '../store/actions/notifications';
 
 const MAX_WS_RECONNECTING_ATTEMPTS = 5;
@@ -30,7 +30,6 @@ const useWebsocket = (props) => {
 
   function dispatchAllActions() {
     dispatchAction(getRoomStatus(roomTitle));
-    dispatchAction(getUsers(roomTitle));
   }
 
   const receiveMessage = (messageObject) => {

@@ -52,19 +52,19 @@ function RoomDashboard(props) {
           <tbody>
             {results.map((room) => (
               <tr
-                key={room.room_title}
-                className={!room.user_left_room && room.user_can_write_now ? 'table-success'
-                  : !room.finished_at ? 'table-warning' : ''}
+                key={room.roomTitle}
+                className={!room.userLeftRoom && room.userCanWriteNow ? 'table-success'
+                  : !room.finishedAt ? 'table-warning' : ''}
               >
                 <td className="room-link-td">
-                  {<Link to={`/story/${room.room_title}`}>{room.room_title}</Link>}
+                  {<Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>}
                 </td>
                 <td>
                   {room.users.map((user) => user.username)
                     .reduce((prev, curr) => [prev, ', ', curr])}
                 </td>
                 <td className="text-center"><Status item={room} /></td>
-                <td>{formatTimeStamp(room.modified_at)}</td>
+                <td>{formatTimeStamp(room.modifiedAt)}</td>
               </tr>
             ))}
           </tbody>

@@ -9,13 +9,14 @@ function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
   const {
     getVisibleTextConnect, userCanWriteNow, visibleText, userFinished,
   } = props;
-  const correctTurn = userCanWriteNow || isNewUser;
   useEffect(() => {
+    const correctTurn = userCanWriteNow || isNewUser;
     if (correctTurn) {
       getVisibleTextConnect(roomTitle);
     }
-  }, [getVisibleTextConnect, roomTitle]);
+  }, [getVisibleTextConnect, roomTitle, isNewUser, userCanWriteNow]);
 
+  const correctTurn = userCanWriteNow || isNewUser;
   if (userFinished || correctTurn === false) {
     return null;
   }

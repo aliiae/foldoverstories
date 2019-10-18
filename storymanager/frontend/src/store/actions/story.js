@@ -10,16 +10,16 @@ import setupTokenConfig from './setupTokenConfig';
 export const getVisibleText = (roomTitle) => (dispatch, getState) => {
   axios.get(`/api/texts/${roomTitle}/`, setupTokenConfig(getState))
     .then((res) => {
-      const lastItem = res.data ? res.data[0] : {};
+      const lastItem = res.data.length > 0 ? res.data[0] : {};
       dispatch({
         type: GET_VISIBLE_TEXT,
         payload: {
-          visibleText: lastItem.visible_text || '',
+          visibleText: lastItem.visibleText || '',
         },
       });
     }).catch((err) => {
-      if (err.response.data.current_turn_username) {
-        dispatch({ type: WRONG_TURN, payload: err.response.data.current_turn_username });
+      if (err.response.data.currentTurnUsername) {
+        dispatch({ type: WRONG_TURN, payload: err.response.data.currentTurnUsername });
       } else if (err.response.data.isLastTurn) {
         dispatch({ type: LAST_TURN });
         dispatch({ type: LEAVE_ROOM });
@@ -37,7 +37,6 @@ export const addText = (text, roomTitle) => (dispatch, getState) => {
         type: ADD_TEXT,
         payload: res.data,
       });
-      // dispatch(getUsers(roomTitle)); // updates users' text count
     }).catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };
 

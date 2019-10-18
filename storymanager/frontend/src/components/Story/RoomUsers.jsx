@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
@@ -10,10 +10,8 @@ import Status from './Status';
 const propTypes = {
   users: PropTypes.arrayOf(PropTypes.shape({
     username: PropTypes.string,
-    texts_count: PropTypes.number,
+    textsCount: PropTypes.number,
   })),
-  roomTitle: PropTypes.string.isRequired,
-  getUsersConnect: PropTypes.func.isRequired,
   roomIsFinished: PropTypes.bool,
 };
 
@@ -23,11 +21,7 @@ const defaultProps = {
 };
 
 function RoomUsers(props) {
-  const { getUsersConnect, roomTitle, roomIsFinished } = props;
-  useEffect(() => {
-    getUsersConnect(roomTitle);
-  }, []);
-  const { users } = props;
+  const { roomIsFinished, users } = props;
   if (!users || users.length === 0) {
     return null;
   }
@@ -44,7 +38,7 @@ function RoomUsers(props) {
                 (
                 <Pluralize
                   singular="contribution"
-                  count={u.texts_count}
+                  count={u.textsCount}
                   zero="no contributions"
                 />
                 {' '}

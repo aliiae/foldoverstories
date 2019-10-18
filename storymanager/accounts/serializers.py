@@ -52,9 +52,13 @@ class RoomUsersSerializer(serializers.ModelSerializer):
         return user_membership.can_write_now if user_membership else None
 
     def _get_user_membership(self, obj: User) -> Membership:
-        if 'room_title' in self.context.get('view').kwargs:
-            room = get_object_or_404(Room, room_title=self.context.get('view').kwargs['room_title'])
-            user_membership = Membership.objects.get(room=room, user=obj)
+        room_title = None
+        if 'view' in self.context and 'room_title' in self.context.get('view').kwargs:
+            room_title = self.context.get('view').kwargs['room_title']
+        elif 'room_title' in self.context:
+            room_title = self.context['room_title']
+        if room_title:
+            user_membership = Membership.objects.get(room__room_title=room_title, user=obj)
             return user_membership
 
     class Meta:

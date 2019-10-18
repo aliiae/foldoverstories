@@ -44,6 +44,9 @@ class Room(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ('-modified_at', 'room_title')
+
     def __str__(self):
         return self.room_title
 

@@ -27,13 +27,13 @@ export default function Status({ item }) {
   const writingEmoji = <Emoji emoji="️️✍️" label="writing hand" title="Time to write!" />;
   const hourglassEmoji = <Emoji emoji="⏳" label="hourglass" title="Waiting for turn..." />;
   const bookEmoji = <Emoji emoji="📗" label="closed book" title="Story is finished!" />;
-  if (item.finished_at) {
+  if (item.finishedAt) {
     return bookEmoji;
   }
-  if (item.user_left_room) {
+  if (item.userLeftRoom) {
     return flagEmoji;
   }
-  if (item.user_can_write_now) {
+  if (item.userCanWriteNow) {
     return writingEmoji;
   }
   return hourglassEmoji;

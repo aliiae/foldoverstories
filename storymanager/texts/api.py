@@ -65,12 +65,12 @@ class TextsViewSet(viewsets.ModelViewSet):
         })
 
     @property
-    def room_title(self) -> str:
-        return self.kwargs['room_title']
-
-    @property
     def room(self) -> Room:
         return get_object_or_404(Room, room_title=self.room_title)
+
+    @property
+    def room_title(self) -> str:
+        return self.kwargs['room_title']
 
     @staticmethod
     def _wrong_turn_error_detail(current_turn_user: User) -> Dict[str, str]:

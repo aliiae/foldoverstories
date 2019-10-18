@@ -40,7 +40,7 @@ export default function TextTabs({ texts, usernames, finishedAt }) {
             <div className="finished-text-container paper p-2">
               <p className="full-text">
                 {isEmpty && emptyStoryMessage}
-                {!isEmpty && texts.map((text) => text.full_text)
+                {!isEmpty && texts.map((text) => text.fullText)
                   .join(' ')}
               </p>
             </div>

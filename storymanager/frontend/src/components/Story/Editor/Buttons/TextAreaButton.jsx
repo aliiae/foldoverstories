@@ -59,8 +59,8 @@ function TextAreaButton(props) {
       setHiddenIsEmpty(false);
       setShowAlert(false);
       const textPost = {
-        hidden_text: hiddenText,
-        visible_text: visibleText,
+        hiddenText,
+        visibleText,
       };
       addTextConnect(textPost, roomTitle);
       resetInputFields();

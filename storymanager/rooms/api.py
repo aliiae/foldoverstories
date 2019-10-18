@@ -13,7 +13,7 @@ from accounts.serializers import RoomUsersSerializer
 from rooms.models import Room, Membership
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
-from .serializers import (RoomsSerializer, RoomReadSerializer, RoomsReadOnlySerializer,
+from .serializers import (RoomsListSerializer, RoomReadSerializer, RoomsReadOnlySerializer,
                           SingleRoomSerializer)
 
 User = get_user_model()
@@ -29,7 +29,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = RoomsPagination
     lookup_field = 'room_title'
-    serializer_class = RoomsSerializer
+    serializer_class = RoomsListSerializer
     detail_serializer_class = SingleRoomSerializer
 
     def get_serializer_class(self):
@@ -41,7 +41,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> QueryType[Room]:
         if not self.request.user.is_authenticated:
             return Room.objects.none()
-        return self.request.user.rooms.all().order_by('-modified_at')
+        return self.request.user.rooms.all()
 
     def retrieve(self, request, room_title=None, *args, **kwargs) -> HttpResponse:
         room: Room = get_object_or_404(Room, room_title=room_title)
@@ -49,7 +49,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
             return Response(RoomsReadOnlySerializer(room, context={'request': request}).data)
         return Response(SingleRoomSerializer(room, context={'request': request}).data)
 
-    def perform_create(self, serializer: RoomsSerializer):
+    def perform_create(self, serializer: RoomsListSerializer):
         room: Room = serializer.save()
         room.add_user(self.request.user)
 

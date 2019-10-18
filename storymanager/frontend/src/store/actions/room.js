@@ -46,16 +46,9 @@ export const addRoom = (room) => (dispatch, getState) => {
   dispatch(clearStory());
   axios.post('/api/rooms/', room, setupTokenConfig(getState))
     .then((res) => {
-      dispatch(getUsers(res.data.room_title));
       dispatch({
         type: ADD_ROOM_SUCCESS,
-        payload: {
-          roomTitle: res.data.room_title,
-          finishedAt: res.data.finished_at,
-          modifiedAt: res.data.modified_at,
-          userLeftRoom: res.data.user_left_room,
-          userCanWriteNow: res.data.user_can_write_now,
-        },
+        payload: res.data,
       });
     })
     .catch((err) => {
@@ -72,13 +65,7 @@ export const getRoomStatus = (roomTitle) => (dispatch, getState) => {
     .then((res) => {
       dispatch({
         type: GET_ROOM_STATUS,
-        payload: {
-          roomTitle: res.data.room_title,
-          finishedAt: res.data.finished_at,
-          userLeftRoom: res.data.user_left_room,
-          userCanWriteNow: res.data.user_can_write_now,
-          currentTurnUsername: res.data.current_turn_username,
-        },
+        payload: res.data,
       });
     })
     .catch((err) => {
@@ -95,7 +82,6 @@ export const addUserIntoRoom = (roomTitle) => (dispatch, getState) => {
         type: ADD_USER_INTO_ROOM,
         payload: res.data,
       });
-      dispatch(getUsers(roomTitle));
       dispatch(getRoomStatus(roomTitle));
     })
     .catch((err) => {

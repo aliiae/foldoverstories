@@ -12,7 +12,7 @@ export const authPropType = PropTypes.shape(
 
 export const textsPropType = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.number,
-  full_text: PropTypes.string,
+  fullText: PropTypes.string,
   username: PropTypes.string,
 }));
 
@@ -43,7 +43,7 @@ export const historyPropType = PropTypes.shape({
 
 export const usersPropType = PropTypes.arrayOf(PropTypes.shape({
   username: PropTypes.string,
-  texts_count: PropTypes.number,
-  user_left_room: PropTypes.bool,
-  user_can_write_now: PropTypes.bool,
+  textsCount: PropTypes.number,
+  userLeftRoom: PropTypes.bool,
+  userCanWriteNow: PropTypes.bool,
 }));

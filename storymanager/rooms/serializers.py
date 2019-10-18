@@ -3,8 +3,9 @@ from typing import Optional
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
+from rest_framework.utils.serializer_helpers import ReturnList
 
-from accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer, RoomUsersSerializer
 from texts.models import Text
 from .models import Room, Membership
 
@@ -36,7 +37,15 @@ class RoomUserStatusSerializer(serializers.ModelSerializer):
 
 
 class SingleRoomSerializer(RoomUserStatusSerializer):
+    users = serializers.SerializerMethodField('get_users')
     current_turn_username = serializers.SerializerMethodField('get_current_turn_username')
+
+    @staticmethod
+    def get_users(obj: Room, *args, **kwargs) -> ReturnList:
+        serializer = RoomUsersSerializer(
+            User.objects.filter(membership__room=obj).order_by('membership__joined_at'),
+            read_only=True, many=True, context={'room_title': obj.room_title})
+        return serializer.data
 
     def get_current_turn_username(self, obj: Room, *args, **kwargs) -> Optional[str]:
         if 'request' not in self.context:
@@ -47,11 +56,11 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
 
     class Meta:
         model = Room
-        fields = ('room_title', 'finished_at', 'user_left_room', 'user_can_write_now',
+        fields = ('room_title', 'users', 'finished_at', 'user_left_room', 'user_can_write_now',
                   'current_turn_username')
 
 
-class RoomsSerializer(RoomUserStatusSerializer):
+class RoomsListSerializer(RoomUserStatusSerializer):
     users = UserSerializer(read_only=True, many=True)
 
     class Meta:

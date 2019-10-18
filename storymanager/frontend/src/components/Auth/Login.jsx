@@ -21,7 +21,7 @@ function Login(props) {
     history.goBack(); // redirects to the previous page
   }
   useEffect(() => {
-    if (error && error.non_field_errors && error.non_field_errors[0] === 'Incorrect Credentials') {
+    if (error && error.nonFieldErrors && error.nonFieldErrors[0] === 'Incorrect Credentials') {
       setShowError(true);
       setMessage('Incorrect username or password.');
     }
@@ -108,7 +108,7 @@ Login.propTypes = {
   error: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.shape({
-      non_field_errors: PropTypes.arrayOf(PropTypes.string),
+      nonFieldErrors: PropTypes.arrayOf(PropTypes.string),
     })]),
 };
 Login.defaultProps = {
