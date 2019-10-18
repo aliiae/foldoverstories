@@ -59,7 +59,7 @@ class Room(models.Model):
         Closes the room if no active (.has_stopped = False) users left.
         Returns None if the room is closed.
 
-        :param request_user: The request user (i.e. currently browsing the page).
+        :param request_user: The currently logged in user.
         :return: A current turn User object, or None if the room is closed.
         """
 
