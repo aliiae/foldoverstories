@@ -43,10 +43,10 @@ class RegisterForm extends React.Component {
 
   handleValidation = (target) => {
     const { name, value } = target;
-    const { formErrors, formValidity } = this.state;
+    const { formValues, formErrors, formValidity } = this.state;
 
     formValidity[name] = value.length > 0;
-    formErrors[name] = formValidity[name] ? '' : `${name} is required and cannot be empty`;
+    formErrors[name] = formValidity[name] ? '' : 'This field is required';
 
     if (formValidity[name]) {
       if (name === 'username') {
@@ -59,8 +59,7 @@ class RegisterForm extends React.Component {
         formErrors[name] = formValidity[name] ? '' : 'Password should contain at least 6 characters';
       }
       if (name === 'password2') {
-        const { password } = this.state;
-        formValidity[name] = value === password;
+        formValidity[name] = value === formValues.password;
         formErrors[name] = formValidity[name] ? '' : 'Passwords should match';
       }
     }
