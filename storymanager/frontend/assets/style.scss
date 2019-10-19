@@ -434,15 +434,6 @@ $nav-height: 4rem;
   z-index: 5;
 }
 
-.nav-start-button,
-.nav-start-button:hover {
-  font-size: 1.15rem;
-  border-radius: 0;
-  text-align: left;
-
-  @extend %color-underline;
-}
-
 .logo-text {
   display: flex;
   flex-flow: column;

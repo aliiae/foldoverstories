@@ -7,7 +7,7 @@ export default function StartButton() {
     <StartNewStoryWrapper>
       <Button
         variant="primary"
-        className="start-button shadow-button"
+        className="start-button"
         size="lg"
         type="button"
       >

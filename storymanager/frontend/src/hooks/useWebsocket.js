@@ -34,7 +34,6 @@ const useWebsocket = (props) => {
 
   const receiveMessage = (messageObject) => {
     const message = JSON.parse(messageObject.data);
-    console.log(message);
     switch (message.type) {
       case 'room.text':
         dispatchAllActions();
@@ -90,7 +89,6 @@ const useWebsocket = (props) => {
     if (!user || !usernames || !usernames.includes(user.username)) {
       return;
     }
-    console.log('initialising websocket');
     initWebsocket(token);
   }, [initWebsocket, roomIsFinished, usernames, token, user]);
 
