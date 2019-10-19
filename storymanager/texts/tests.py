@@ -60,6 +60,17 @@ class HttpTextsTest(APITestCase):
         self.assertListEqual([texts[-1].visible_text],
                              [t['visible_text'] for t in response.data])
 
+    def test_logged_out_user_can_view_last_visible_text_in_open_room(self):
+        texts = [create_user_room_text(self.user, self.room, visible_text=str(i))
+                 for i in range(10)]
+        self.client.post(reverse('knox_logout'))
+        self.client.credentials(HTTP_AUTHORIZATION='')  # need to remove the token first
+        response = self.client.get(
+            reverse('texts-list', kwargs={'room_title': self.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertListEqual([texts[-1].visible_text],
+                             [t['visible_text'] for t in response.data])
+
     def test_user_can_list_empty_room_with_no_texts(self):
         texts = []
         response = self.client.get(

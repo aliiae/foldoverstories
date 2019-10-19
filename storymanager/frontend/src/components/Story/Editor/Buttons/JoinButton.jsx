@@ -9,19 +9,19 @@ function JoinButton(props) {
     dispatchAddUserIntoRoom, roomTitle, isAuthenticated,
   } = props;
   const onClick = () => {
-    dispatchAddUserIntoRoom(roomTitle);
+    if (isAuthenticated) {
+      dispatchAddUserIntoRoom(roomTitle);
+    }
   };
 
   return (
-    <>
-      <Link
-        className="btn btn-warning btn-sm mt-3 shadow-button"
-        onClick={onClick}
-        to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
-      >
-        Join
-      </Link>
-    </>
+    <Link
+      className="btn btn-warning btn-sm mt-3 shadow-button"
+      onClick={onClick}
+      to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
+    >
+      Join
+    </Link>
   );
 }
 

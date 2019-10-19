@@ -29,7 +29,7 @@ class TextsViewSet(viewsets.ModelViewSet):
         if room.is_finished:
             raise PermissionDenied(detail='Story is finished')
         is_new_user: bool = self.request.user not in room.users.all()
-        if is_new_user:  # new users can view anything
+        if is_new_user:  # new users & guests can view anything
             return Text.objects.filter(room=room)
         user_membership = get_user_room_membership(self.request.user, room)
         if user_membership.has_stopped:  # user has previously left the room, cannot view anymore
