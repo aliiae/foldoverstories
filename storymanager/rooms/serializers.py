@@ -85,10 +85,10 @@ class RoomsListSerializer(RoomUserStatusSerializer):
                   'user_left_room', 'user_can_write_now')
 
 
-class RoomsReadOnlySerializer(RoomUserStatusSerializer):
+class RoomsReadOnlySerializer(SingleRoomSerializer):
     class Meta:
         model = Room
-        fields = ('room_title', 'finished_at', 'users')
+        fields = ('room_title', 'finished_at', 'users', 'visible_text')
 
 
 class RoomReadSerializer(serializers.ModelSerializer):
