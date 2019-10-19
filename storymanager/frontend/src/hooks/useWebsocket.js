@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { SOCKET_URL, TITLE_DELIMITER } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
-import { getRoomStatus } from '../store/actions/story';
+import { getRoomStatus, getVisibleText } from '../store/actions/story';
 import { addNotification } from '../store/actions/notifications';
 
 const MAX_WS_RECONNECTING_ATTEMPTS = 5;
@@ -38,19 +38,19 @@ const useWebsocket = (props) => {
       case 'room.text':
         dispatchAllActions();
         dispatchNotification(message, `${message.username} added text to the ${roomTitle} story`,
-          `${roomTitle} ${TITLE_DELIMITER} user has joined`);
+          `${roomTitle} ${TITLE_DELIMITER} new text`);
         break;
       case 'room.leave':
         dispatchAllActions();
         dispatchNotification(message,
           `${message.username} finished their part in the ${roomTitle} story`,
-          `${roomTitle} ${TITLE_DELIMITER} user has finished`);
+          `${roomTitle} ${TITLE_DELIMITER} user finished`);
         break;
       case 'room.join':
         dispatchAllActions();
         dispatchNotification(message,
           `${message.username} joined the ${roomTitle} story`,
-          `${roomTitle} ${TITLE_DELIMITER} user has joined`);
+          `${roomTitle} ${TITLE_DELIMITER} user joined`);
         break;
       case 'room.finish':
         dispatchAllActions();
