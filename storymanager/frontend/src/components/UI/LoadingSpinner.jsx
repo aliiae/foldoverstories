@@ -1,7 +1,7 @@
 import React from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 
-export default function LoadingSpinner(props) {
+function LoadingSpinner(props) {
   const minOptions = {
     role: 'status',
     animation: 'border',
@@ -15,3 +15,5 @@ export default function LoadingSpinner(props) {
     </div>
   );
 }
+
+export default React.memo(LoadingSpinner);

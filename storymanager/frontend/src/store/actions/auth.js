@@ -5,7 +5,7 @@ import {
   USER_LOADING,
   AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL,
   LOGOUT_SUCCESS,
-  REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS,
+  REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS, CLEAR_STORY,
 } from './types';
 import setupTokenConfig from './setupTokenConfig';
 
@@ -62,6 +62,7 @@ export const logout = () => (dispatch, getState) => {
   return axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
     .then(() => {
       dispatch({ type: CLEAR_ROOMS });
+      dispatch({ type: CLEAR_STORY });
       dispatch({ type: LOGOUT_SUCCESS });
     })
     .catch((err) => {

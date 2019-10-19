@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { leaveRoom } from '../../../../store/actions/room';
+import { leaveRoom } from '../../../../store/actions/story';
 
 function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
   const onClick = () => {

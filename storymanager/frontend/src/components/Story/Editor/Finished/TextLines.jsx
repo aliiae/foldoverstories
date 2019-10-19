@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import { textsPropType } from '../../commonPropTypes';
+import { textsPropType } from '../../../commonPropTypes';
 
 export default function TextLines({ texts }) {
   return (

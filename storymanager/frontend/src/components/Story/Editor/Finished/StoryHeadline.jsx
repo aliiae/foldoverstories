@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatTimeStampDateOnly } from '../../dateFormatters';
+import { formatTimeStampDateOnly } from '../../../dateFormatters';
 
 export default function StoryHeadline({ usernames, dateISOString }) {
   function getJoinedUsernames() { // format as "user1, user2 & user3"

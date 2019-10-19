@@ -81,7 +81,6 @@ function TextForm(props) {
       </Form>
       {showAlert && (
         <AlertMessage
-          show={showAlert}
           message={alertMessageHiddenIsEmpty}
           title="Only one line?"
         />
@@ -107,7 +106,7 @@ TextForm.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  userCanWriteNow: state.room.userCanWriteNow,
+  userCanWriteNow: state.story.userCanWriteNow,
 });
 const mapDispatchToProps = {
   dispatchAddText: addText,

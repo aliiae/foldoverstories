@@ -54,8 +54,8 @@ RoomUsers.propTypes = propTypes;
 RoomUsers.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
-  users: state.room.users,
-  roomIsFinished: state.room.finishedAt !== null,
+  users: state.story.users,
+  roomIsFinished: state.story.finishedAt !== null,
 });
 
 export default connect(mapStateToProps)(RoomUsers);

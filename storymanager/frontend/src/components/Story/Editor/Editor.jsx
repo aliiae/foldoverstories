@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 import { authPropType, matchPropType, usersPropType } from '../../commonPropTypes';
-import { getRoomStatus } from '../../../store/actions/room';
+import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInternetStatus from '../../../hooks/useInternetStatus';
 import useWebsocket from '../../../hooks/useWebsocket';
@@ -59,8 +59,8 @@ Editor.defaultProps = {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  roomIsFinished: state.room.finishedAt !== null,
-  users: state.room.users,
+  roomIsFinished: state.story.finishedAt !== null,
+  users: state.story.users,
 });
 const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };
 

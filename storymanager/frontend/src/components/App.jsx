@@ -6,7 +6,7 @@ import {
 
 import { Provider } from 'react-redux';
 
-import Header from './UI/Layout/Header';
+import Header from './UI/Layout/Nav/Header';
 import HowToPlay from './About/HowToPlay';
 import Login from './Auth/Login';
 import Register from './Auth/Register';

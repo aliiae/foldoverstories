@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import SvgFoldoverLogo from './SvgFoldoverLogo';
-import { clearRoomTitle } from '../../../store/actions/room';
+import { clearRoomTitle } from '../../../store/actions/story';
 
 function Logo({ dispatchClearRoomTitle }) {
   return (

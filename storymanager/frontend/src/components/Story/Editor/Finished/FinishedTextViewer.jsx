@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { readRoomTexts } from '../../../store/actions/room';
-import ShareButtons from '../../UI/ShareLink/ShareButtons';
-import { textsPropType, usersPropType } from '../../commonPropTypes';
+import { readRoomTexts } from '../../../../store/actions/story';
+import ShareButtons from '../../../UI/ShareLink/ShareButtons';
+import { textsPropType, usersPropType } from '../../../commonPropTypes';
 import TextTabs from './TextTabs';
 
 function FinishedTextViewer(props) {
@@ -39,10 +39,10 @@ FinishedTextViewer.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  roomIsFinished: state.room.finishedAt !== null,
-  texts: state.room.texts,
-  finishedAt: state.room.finishedAt,
-  users: state.room.users,
+  roomIsFinished: state.story.finishedAt !== null,
+  texts: state.story.texts,
+  finishedAt: state.story.finishedAt,
+  users: state.story.users,
 });
 const mapDispatchToProps = { dispatchReadRoomTexts: readRoomTexts };
 

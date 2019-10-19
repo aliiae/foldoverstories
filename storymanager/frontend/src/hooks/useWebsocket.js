@@ -1,9 +1,9 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { SOCKET_URL, TITLE_DELIMITER } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
-import { getRoomStatus } from '../store/actions/room';
+import { getRoomStatus } from '../store/actions/story';
 import { addNotification } from '../store/actions/notifications';
 
 const MAX_WS_RECONNECTING_ATTEMPTS = 5;
@@ -67,13 +67,13 @@ const useWebsocket = (props) => {
     receiveMessage(msg);
   };
 
-  const initWebsocket = (accessToken) => {
+  const initWebsocket = useCallback((accessToken) => {
     if (wsRef.current) wsRef.current.close();
     wsRef.current = new ReconnectingWebSocket(`${SOCKET_URL}ws/room/${roomTitle}`,
       ['access_token', accessToken],
       { maxRetries: MAX_WS_RECONNECTING_ATTEMPTS });
     wsRef.current.addEventListener('message', onMessage);
-  };
+  }, [onMessage, roomTitle]);
 
   useEffect(() => {
     if (isOnline && !opened) {
@@ -81,7 +81,7 @@ const useWebsocket = (props) => {
     } else if (!isOnline && opened) {
       dispatchAction(wsClosed());
     }
-  }, [dispatchAction, wsOpened, opened, isOnline]);
+  }, [dispatchAction, opened, isOnline]);
 
   useEffect(() => {
     if (wsRef.current || roomIsFinished) {

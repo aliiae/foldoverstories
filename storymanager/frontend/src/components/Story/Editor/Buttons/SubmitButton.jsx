@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 
-export default function SubmitButton() {
+function SubmitButton() {
   return (
     <Button
       type="submit"
@@ -14,3 +14,5 @@ export default function SubmitButton() {
     </Button>
   );
 }
+
+export default React.memo(SubmitButton);

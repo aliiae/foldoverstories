@@ -4,9 +4,9 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import TextLines from './TextLines';
 import StoryHeadline from './StoryHeadline';
-import LoadingSpinner from '../../UI/LoadingSpinner';
-import { Emoji } from '../Status';
-import { textsPropType } from '../../commonPropTypes';
+import LoadingSpinner from '../../../UI/LoadingSpinner';
+import { Emoji } from '../../Status';
+import { textsPropType } from '../../../commonPropTypes';
 
 export default function TextTabs({ texts, usernames, finishedAt }) {
   if (texts === null) {

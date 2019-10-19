@@ -57,8 +57,8 @@ VisibleTextDisplay.defaultProps = {
 
 const mapStateToProps = (state) => ({
   visibleText: state.story.visibleText,
-  userCanWriteNow: state.room.userCanWriteNow,
-  userFinished: state.room.userLeftRoom,
+  userCanWriteNow: state.story.userCanWriteNow,
+  userFinished: state.story.userLeftRoom,
   wsStatus: state.websockets.ws.status,
 });
 const mapDispatchToProps = { dispatchGetVisibleText: getVisibleText };

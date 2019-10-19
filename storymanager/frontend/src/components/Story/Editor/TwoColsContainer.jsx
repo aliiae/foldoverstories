@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 export default function TwoColsContainer({ children }) {
   return (
-    <Container className="editor" data-test="editor">
+    <Container className="editor">
       <Row className="justify-content-center">
         <Col md={3} className="order-2">
           {children[0]}

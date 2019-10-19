@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addRoom } from '../../../store/actions/room';
+import { addRoom } from '../../../store/actions/story';
 
 function StartNewStoryWrapper({ children, ...props }) {
   const {
@@ -44,7 +44,7 @@ StartNewStoryWrapper.defaultProps = {
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  roomTitle: state.room.roomTitle,
+  roomTitle: state.story.roomTitle,
 });
 const mapDispatchToProps = { dispatchAddRoom: addRoom };
 

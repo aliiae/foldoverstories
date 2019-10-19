@@ -56,8 +56,8 @@ class TextsViewSet(viewsets.ModelViewSet):
         if not request_membership.can_write_now:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         serializer.save(author=request_user, room=room)
-        # room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
-        room.save(user=self.request.user)
+        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
+        room.save()
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_ADD_TEXT,
             'room_title': self.room_title,

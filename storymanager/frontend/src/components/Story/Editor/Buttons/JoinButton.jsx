@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addUserIntoRoom } from '../../../../store/actions/room';
+import { addUserIntoRoom } from '../../../../store/actions/story';
 
 function JoinButton(props) {
   const {
@@ -39,4 +39,4 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = { dispatchAddUserIntoRoom: addUserIntoRoom };
 
-export default connect(mapStateToProps, mapDispatchToProps)(JoinButton);
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(JoinButton));
