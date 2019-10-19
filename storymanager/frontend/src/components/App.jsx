@@ -10,7 +10,7 @@ import Header from './UI/Layout/Nav/Header';
 import HowToPlay from './About/HowToPlay';
 import Login from './Auth/Login';
 import Register from './Auth/Register/Register';
-import NotificationToasts from './UI/Notifications/NotificationToasts';
+import NotificationToasts from './UI/Notifications/Toasts';
 import Landing from './Landing/Landing';
 import Editor from './Story/Editor/Editor';
 import PageNotFound from './UI/PageNotFound';

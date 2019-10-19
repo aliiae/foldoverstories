@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NotificationToast from './NotificationToast';
 import { removeNotification } from '../../../store/actions/notifications';
 
-const NotificationToasts = (props) => {
+const Toasts = (props) => {
   const { dispatchRemoveNotification, notifications } = props;
   const style = { position: 'relative' };
   return (
@@ -28,7 +28,7 @@ const NotificationToasts = (props) => {
   );
 };
 
-NotificationToasts.propTypes = {
+Toasts.propTypes = {
   dispatchRemoveNotification: PropTypes.func.isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
@@ -38,4 +38,4 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = { dispatchRemoveNotification: removeNotification };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationToasts);
+export default connect(mapStateToProps, mapDispatchToProps)(Toasts);

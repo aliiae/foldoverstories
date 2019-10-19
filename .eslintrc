@@ -11,6 +11,7 @@
     "airbnb"
   ],
   "rules": {
+    "react/jsx-one-expression-per-line": "off",
     "react/jsx-filename-extension": [
       1,
       {
