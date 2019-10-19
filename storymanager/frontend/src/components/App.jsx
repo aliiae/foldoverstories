@@ -21,7 +21,9 @@ import { loadUser } from '../store/actions/auth';
 
 function App() {
   useEffect(() => {
-    store.dispatch(loadUser());
+    if (store.getState().token) {
+      store.dispatch(loadUser());
+    }
   }, []);
   return (
     <Provider store={store}>

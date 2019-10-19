@@ -12,11 +12,6 @@ import setupTokenConfig from './setupTokenConfig';
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
-  const { token } = getState().auth;
-  if (token === null) {
-    dispatch({ type: AUTH_ERROR });
-    return null;
-  }
   return axios.get('/api/auth/user', setupTokenConfig(getState))
     .then((res) => {
       dispatch({
