@@ -18,11 +18,14 @@ import Footer from './UI/Layout/Footer';
 import Main from './UI/Layout/Main';
 import store from '../store/store';
 import { loadUser } from '../store/actions/auth';
+import { AUTH_ERROR } from '../store/actions/types';
 
 function App() {
   useEffect(() => {
     if (store.getState().token) {
       store.dispatch(loadUser());
+    } else {
+      store.dispatch({ type: AUTH_ERROR });
     }
   }, []);
   return (
