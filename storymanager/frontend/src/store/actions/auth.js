@@ -11,7 +11,6 @@ import {
   REGISTER_FAIL,
   REGISTER_SUCCESS,
   CLEAR_ROOMS,
-  CLEAR_STORY,
 } from './types';
 import setupTokenConfig from './setupTokenConfig';
 

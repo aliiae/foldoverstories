@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import RegisterFormik from './RegisterFormik';
 import ErrorModal from './ErrorModal';
+import RegisterForm from './RegisterForm';
 
 
 function Register(props) {
@@ -23,7 +23,7 @@ function Register(props) {
             <Card.Title>
               <h1 className="text-center">Register</h1>
             </Card.Title>
-            <RegisterFormik />
+            <RegisterForm />
           </Card.Body>
         </Card>
       </Col>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter, Route, Switch,
@@ -8,16 +8,18 @@ import { Provider } from 'react-redux';
 
 import Header from './UI/Layout/Nav/Header';
 import HowToPlay from './About/HowToPlay';
-import Login from './Auth/Login';
-import Register from './Auth/Register/Register';
 import NotificationToasts from './UI/Notifications/Toasts';
-import Landing from './Landing/Landing';
-import Editor from './Story/Editor/Editor';
 import PageNotFound from './UI/PageNotFound';
 import Footer from './UI/Layout/Footer';
 import Main from './UI/Layout/Main';
-import store from '../store/store';
+import Register from './Auth/Register/Main';
+import Login from './Auth/Login';
 import { loadUser } from '../store/actions/auth';
+import LoadingSpinner from './UI/LoadingSpinner';
+import Landing from './Landing/Main';
+import store from '../store/store';
+
+const Editor = lazy(() => import(/* webpackChunkName: "editor" */'./Story/Editor/Main'));
 
 function App() {
   useEffect(() => {
@@ -30,24 +32,26 @@ function App() {
         <Header key="navbar" />
         <NotificationToasts />
         <Main className="main-content">
-          <Switch>
-            <Route exact path="/">
-              <Landing />
-            </Route>
-            <Route exact path="/story/:id" component={Editor} />
-            <Route exact path="/how-to-play">
-              <HowToPlay />
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route path="*">
-              <PageNotFound />
-            </Route>
-          </Switch>
+          <Suspense fallback={<LoadingSpinner />}>
+            <Switch>
+              <Route exact path="/">
+                <Landing />
+              </Route>
+              <Route exact path="/story/:id" component={Editor} />
+              <Route exact path="/how-to-play">
+                <HowToPlay />
+              </Route>
+              <Route exact path="/register">
+                <Register />
+              </Route>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route path="*">
+                <PageNotFound />
+              </Route>
+            </Switch>
+          </Suspense>
         </Main>
         <Footer />
       </BrowserRouter>
