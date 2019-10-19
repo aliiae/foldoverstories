@@ -30,7 +30,7 @@ const CopyLinkButton = ({ url, children, ...props }) => {
         placement="bottom"
         rootClose
         overlay={(
-          <Tooltip>Copied!</Tooltip>
+          <Tooltip id="copied-link-tooltip">Copied!</Tooltip>
         )}
       >
         <button

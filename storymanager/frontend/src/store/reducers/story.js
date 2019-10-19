@@ -10,6 +10,13 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_VISIBLE_TEXT:
+      if (state.visibleText === action.payload) {
+        return state;
+      }
+      return {
+        ...state,
+        ...action.payload,
+      };
     case ADD_TEXT:
       return {
         ...state,

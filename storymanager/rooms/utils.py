@@ -160,7 +160,7 @@ def _filter_complex_words(words: List[str]) -> List[str]:
 
     def _has_n_conseq_letters(word: str, pattern: str,
                               num_conseq_letters: int = 3) -> (Optional[Match[str]]):
-        return re.search(f'\w*{pattern * num_conseq_letters}\w*', word)
+        return re.search(f'{pattern * num_conseq_letters}', word)
 
     simple_words = filter(lambda w: not _has_n_conseq_letters(w, r'[^aeiou]', 3), words)
     simple_words = list(filter(lambda w: not _has_n_conseq_letters(w, r'[aeiou]', 3), simple_words))

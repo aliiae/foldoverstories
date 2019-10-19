@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import NavItem from 'react-bootstrap/NavItem';
 
-import { LinkContainer } from 'react-router-bootstrap';
-import StartNewStoryButton from '../../Landing/StartNewStoryButton';
+import StartNewStoryWrapper from '../../Story/Editor/StartNewStoryWrapper';
 import { logout } from '../../../store/actions/auth';
 import { authDefaultPropType, authPropType } from '../../commonPropTypes';
 import Logo from '../Figure/Logo';
 
 export function Header(props) {
-  const { auth: { isAuthenticated, user }, logoutConnect } = props;
+  const { auth: { isAuthenticated, user }, dispatchLogout } = props;
 
   const authLinks = (
     <Nav className="ml-auto mt-2 mt-lg-0 align-items-center">
@@ -26,19 +24,17 @@ export function Header(props) {
         </Navbar.Text>
       </Nav.Item>
       <Nav.Item>
-        <Button type="button" variant="info" size="sm" onClick={logoutConnect}>Logout</Button>
+        <Button type="button" variant="info" size="sm" onClick={dispatchLogout}>Logout</Button>
       </Nav.Item>
     </Nav>
   );
 
   const guestLinks = (
     <Nav className="ml-auto">
-      <LinkContainer exact to="/register">
-        <Nav.Link className="mr-3" data-test="register-link">Register</Nav.Link>
-      </LinkContainer>
-      <LinkContainer exact to="/login">
-        <Nav.Link data-test="login-link">Login</Nav.Link>
-      </LinkContainer>
+      <Nav.Link as={Link} exact="true" to="/register" className="mr-md-3" data-test="register-link">
+        Register
+      </Nav.Link>
+      <Nav.Link as={Link} exact="true" to="/login" data-test="register-link">Login</Nav.Link>
     </Nav>
   );
 
@@ -49,12 +45,14 @@ export function Header(props) {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav>
-            <LinkContainer to="/how-to-play">
-              <Nav.Link data-test="how-to-play-link">How to Play</Nav.Link>
-            </LinkContainer>
+            <Nav.Link as={Link} exact="true" to="/how-to-play" data-test="how-to-play-link">
+              How to Play
+            </Nav.Link>
           </Nav>
           <Nav className="ml-md-1">
-            <StartNewStoryButton classNames="nav-link bg-transparent border-0 nav-start-button" />
+            <StartNewStoryWrapper>
+              <Nav.Link>Start a New Story</Nav.Link>
+            </StartNewStoryWrapper>
           </Nav>
           {isAuthenticated ? authLinks : guestLinks}
         </Navbar.Collapse>
@@ -65,7 +63,7 @@ export function Header(props) {
 
 Header.propTypes = {
   auth: authPropType,
-  logoutConnect: PropTypes.func.isRequired,
+  dispatchLogout: PropTypes.func.isRequired,
 };
 Header.defaultProps = {
   auth: authDefaultPropType,
@@ -74,5 +72,6 @@ Header.defaultProps = {
 const mapStateToProps = (state) => ({
   auth: state.auth,
 });
+const mapDispatchToProps = { dispatchLogout: logout };
 
-export default withRouter(connect(mapStateToProps, { logoutConnect: logout })(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

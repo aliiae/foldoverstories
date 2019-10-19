@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.contrib.auth import get_user_model
+from django.db.models import Count, Q
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 from rest_framework.utils.serializer_helpers import ReturnList
@@ -14,8 +15,18 @@ User = get_user_model()
 
 class RoomUserStatusSerializer(serializers.ModelSerializer):
     """A base serializer used for introducing user_left_room and user_can_write fields."""
+    users = serializers.SerializerMethodField('get_users')
     user_left_room = serializers.SerializerMethodField('get_user_left_room')
     user_can_write_now = serializers.SerializerMethodField('get_user_can_write_now')
+
+    @staticmethod
+    def get_users(obj: Room, *args, **kwargs) -> ReturnList:
+        serializer = RoomUsersSerializer(
+            User.objects.filter(membership__room=obj)
+                .annotate(texts_count=Count('texts', filter=Q(texts__room=obj)))
+                .order_by('membership__joined_at'),
+            read_only=True, many=True, context={'room_title': obj.room_title})
+        return serializer.data
 
     def get_user_left_room(self, obj: Room, *args, **kwargs) -> Optional[bool]:
         if 'request' not in self.context:
@@ -37,15 +48,7 @@ class RoomUserStatusSerializer(serializers.ModelSerializer):
 
 
 class SingleRoomSerializer(RoomUserStatusSerializer):
-    users = serializers.SerializerMethodField('get_users')
     current_turn_username = serializers.SerializerMethodField('get_current_turn_username')
-
-    @staticmethod
-    def get_users(obj: Room, *args, **kwargs) -> ReturnList:
-        serializer = RoomUsersSerializer(
-            User.objects.filter(membership__room=obj).order_by('membership__joined_at'),
-            read_only=True, many=True, context={'room_title': obj.room_title})
-        return serializer.data
 
     def get_current_turn_username(self, obj: Room, *args, **kwargs) -> Optional[str]:
         if 'request' not in self.context:
@@ -56,23 +59,21 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
 
     class Meta:
         model = Room
-        fields = ('room_title', 'users', 'finished_at', 'user_left_room', 'user_can_write_now',
-                  'current_turn_username')
+        fields = ('room_title', 'users', 'finished_at',
+                  'user_left_room', 'user_can_write_now', 'current_turn_username')
 
 
 class RoomsListSerializer(RoomUserStatusSerializer):
-    users = UserSerializer(read_only=True, many=True)
-
     class Meta:
         model = Room
         fields = ('room_title', 'users', 'finished_at', 'modified_at',
                   'user_left_room', 'user_can_write_now')
 
 
-class RoomsReadOnlySerializer(serializers.ModelSerializer):
+class RoomsReadOnlySerializer(RoomUserStatusSerializer):
     class Meta:
         model = Room
-        fields = ('room_title', 'finished_at')
+        fields = ('room_title', 'finished_at', 'users')
 
 
 class RoomReadSerializer(serializers.ModelSerializer):

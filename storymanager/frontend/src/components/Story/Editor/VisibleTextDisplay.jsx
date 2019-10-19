@@ -7,14 +7,14 @@ import LoadingSpinner from '../../UI/LoadingSpinner';
 
 function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
   const {
-    getVisibleTextConnect, userCanWriteNow, visibleText, userFinished,
+    dispatchGetVisibleText, userCanWriteNow, visibleText, userFinished,
   } = props;
   useEffect(() => {
     const correctTurn = userCanWriteNow || isNewUser;
     if (correctTurn) {
-      getVisibleTextConnect(roomTitle);
+      dispatchGetVisibleText(roomTitle);
     }
-  }, [getVisibleTextConnect, roomTitle, isNewUser, userCanWriteNow]);
+  }, [dispatchGetVisibleText, roomTitle, isNewUser, userCanWriteNow]);
 
   const correctTurn = userCanWriteNow || isNewUser;
   if (userFinished || correctTurn === false) {
@@ -44,7 +44,7 @@ function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
 VisibleTextDisplay.propTypes = {
   isNewUser: PropTypes.bool.isRequired,
   visibleText: PropTypes.string,
-  getVisibleTextConnect: PropTypes.func.isRequired,
+  dispatchGetVisibleText: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   userFinished: PropTypes.bool,
   userCanWriteNow: PropTypes.bool,
@@ -61,6 +61,6 @@ const mapStateToProps = (state) => ({
   userFinished: state.room.userLeftRoom,
   wsStatus: state.websockets.ws.status,
 });
+const mapDispatchToProps = { dispatchGetVisibleText: getVisibleText };
 
-export default connect(mapStateToProps,
-  { getVisibleTextConnect: getVisibleText })(VisibleTextDisplay);
+export default connect(mapStateToProps, mapDispatchToProps)(VisibleTextDisplay);

@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 
-from rooms.models import Room, Membership, get_user_room_membership
+from rooms.models import Room, get_user_room_membership
 from storymanager.django_types import QueryType
 from texts.models import Text
 from websockets.server_send import send_channel_message, WEBSOCKET_MSG_ADD_TEXT
@@ -56,8 +56,8 @@ class TextsViewSet(viewsets.ModelViewSet):
         if not request_membership.can_write_now:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         serializer.save(author=request_user, room=room)
-        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
-        room.save()
+        # room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
+        room.save(user=self.request.user)
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_ADD_TEXT,
             'room_title': self.room_title,

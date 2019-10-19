@@ -6,10 +6,10 @@ import { addUserIntoRoom } from '../../../../store/actions/room';
 
 function JoinButton(props) {
   const {
-    addUserIntoRoomConnect, roomTitle, isAuthenticated,
+    dispatchAddUserIntoRoom, roomTitle, isAuthenticated,
   } = props;
   const onClick = () => {
-    addUserIntoRoomConnect(roomTitle);
+    dispatchAddUserIntoRoom(roomTitle);
   };
 
   return (
@@ -26,11 +26,10 @@ function JoinButton(props) {
 }
 
 JoinButton.propTypes = {
-  addUserIntoRoomConnect: PropTypes.func.isRequired,
+  dispatchAddUserIntoRoom: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool,
 };
-
 JoinButton.defaultProps = {
   isAuthenticated: false,
 };
@@ -38,5 +37,6 @@ JoinButton.defaultProps = {
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
+const mapDispatchToProps = { dispatchAddUserIntoRoom: addUserIntoRoom };
 
-export default connect(mapStateToProps, { addUserIntoRoomConnect: addUserIntoRoom })(JoinButton);
+export default connect(mapStateToProps, mapDispatchToProps)(JoinButton);

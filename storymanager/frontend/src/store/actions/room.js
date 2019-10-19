@@ -8,7 +8,7 @@ import {
   GET_ROOM_STATUS,
   LEAVE_ROOM, GET_USERS,
 } from './types';
-import { returnErrors } from './messages';
+import returnErrors from './messages';
 import { clearStory } from './story';
 import setupTokenConfig from './setupTokenConfig';
 
@@ -42,14 +42,15 @@ export const getUsers = (roomTitle) => (dispatch, getState) => {
 };
 
 // ADD NEW ROOM
-export const addRoom = (room) => (dispatch, getState) => {
+export const addRoom = () => (dispatch, getState) => {
   dispatch(clearStory());
-  axios.post('/api/rooms/', room, setupTokenConfig(getState))
+  return axios.post('/api/rooms/', null, setupTokenConfig(getState))
     .then((res) => {
       dispatch({
         type: ADD_ROOM_SUCCESS,
         payload: res.data,
       });
+      return res.data.roomTitle;
     })
     .catch((err) => {
       dispatch(returnErrors(err.response.data, err.response.status));

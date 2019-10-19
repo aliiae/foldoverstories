@@ -7,13 +7,13 @@ import { getRoomStatus } from '../../../store/actions/room';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInternetStatus from '../../../hooks/useInternetStatus';
 import useWebsocket from '../../../hooks/useWebsocket';
-import EditorContainerTwoCols from './EditorContainerTwoCols';
-import EditorContent from './EditorContent';
+import TwoColsContainer from './TwoColsContainer';
 import RoomUsers from '../RoomUsers';
+import Content from './Content';
 
 function Editor(props) {
   const {
-    getRoomStatusConnect, match, roomIsFinished, auth, users,
+    dispatchGetRoomStatus, match, roomIsFinished, auth, users,
   } = props;
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   const roomTitle = match.params.id;
@@ -28,24 +28,24 @@ function Editor(props) {
     usernames,
   });
   useEffect(() => {
-    getRoomStatusConnect(roomTitle);
+    dispatchGetRoomStatus(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
-  }, [getRoomStatusConnect, roomTitle]);
+  }, [dispatchGetRoomStatus, roomTitle]);
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }
-  // EditorContainerTwoCols needs two children: a side panel and main content
+  // TwoColsContainer needs two children: a side panel and main content
   return (
-    <EditorContainerTwoCols>
+    <TwoColsContainer>
       <RoomUsers roomTitle={roomTitle} />
-      <EditorContent roomTitle={roomTitle} />
-    </EditorContainerTwoCols>
+      <Content roomTitle={roomTitle} />
+    </TwoColsContainer>
   );
 }
 
 Editor.propTypes = {
   match: matchPropType.isRequired,
-  getRoomStatusConnect: PropTypes.func.isRequired,
+  dispatchGetRoomStatus: PropTypes.func.isRequired,
   auth: authPropType,
   roomIsFinished: PropTypes.bool,
   users: usersPropType,
@@ -62,5 +62,6 @@ const mapStateToProps = (state) => ({
   roomIsFinished: state.room.finishedAt !== null,
   users: state.room.users,
 });
+const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };
 
-export default connect(mapStateToProps, { getRoomStatusConnect: getRoomStatus })(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor);

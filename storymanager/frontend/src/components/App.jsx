@@ -19,13 +19,13 @@ import Main from './UI/Layout/Main';
 import store from '../store/store';
 import { loadUser } from '../store/actions/auth';
 
-if (false && process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render');
 
   whyDidYouRender(React, {
     collapseGroups: true,
     include: [/.*/],
-    // exclude: [/^Link/, /^Route/, /^BrowserRouter/],
+    // exclude: [/^Switch/, /^Router/, /^Route/, /^Connect/],
   });
 }
 
@@ -36,16 +36,26 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Header />
+        <Header key="navbar" />
         <NotificationToasts />
         <Main className="main-content">
           <Switch>
-            <Route exact path="/" component={Landing} />
+            <Route exact path="/">
+              <Landing />
+            </Route>
             <Route exact path="/story/:id" component={Editor} />
-            <Route exact path="/how-to-play" component={HowToPlay} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route path="*" component={PageNotFound} />
+            <Route exact path="/how-to-play">
+              <HowToPlay />
+            </Route>
+            <Route exact path="/register">
+              <Register />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+            <Route path="*">
+              <PageNotFound />
+            </Route>
           </Switch>
         </Main>
         <Footer />

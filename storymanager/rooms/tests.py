@@ -22,6 +22,7 @@ class HttpRoomsTest(APITestCase):
     def test_user_can_create_room(self):
         response = self.client.post(reverse('rooms-list'))
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertTrue('modified_at' not in response.data)
         list_response = self.client.get(reverse('rooms-list'))
         self.assertEqual(status.HTTP_200_OK, list_response.status_code)
         self.assertEqual(len(list_response.data['results']), 1)
@@ -87,6 +88,7 @@ class HttpRoomsTest(APITestCase):
             login_user_into_client(another_user, self.client)
             response = self.client.post(
                 reverse('room_users', kwargs={'room_title': room.room_title}))
+            self.assertIsNone(response.data)
             responses.append(response)
         self.assertTrue(all(r.status_code == status.HTTP_200_OK for r in responses))
         usernames = [self.user.username] + usernames

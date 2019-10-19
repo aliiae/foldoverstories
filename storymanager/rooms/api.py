@@ -33,7 +33,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
     detail_serializer_class = SingleRoomSerializer
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
+        if self.action == 'retrieve' or self.action == 'create':
             if hasattr(self, 'detail_serializer_class'):
                 return self.detail_serializer_class
         return super(RoomsViewSet, self).get_serializer_class()

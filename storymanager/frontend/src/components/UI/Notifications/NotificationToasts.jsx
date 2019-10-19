@@ -5,7 +5,7 @@ import NotificationToast from './NotificationToast';
 import { removeNotification } from '../../../store/actions/notifications';
 
 const NotificationToasts = (props) => {
-  const { removeNotificationConnect, notifications } = props;
+  const { dispatchRemoveNotification, notifications } = props;
   const style = { position: 'relative' };
   return (
     <div aria-live="polite" aria-atomic="true" style={style}>
@@ -18,7 +18,7 @@ const NotificationToasts = (props) => {
               <NotificationToast
                 {...notification}
                 key={id}
-                removeNotification={removeNotificationConnect}
+                removeNotification={dispatchRemoveNotification}
                 if={id}
               />
             );
@@ -29,13 +29,13 @@ const NotificationToasts = (props) => {
 };
 
 NotificationToasts.propTypes = {
-  removeNotificationConnect: PropTypes.func.isRequired,
+  dispatchRemoveNotification: PropTypes.func.isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   notifications: state.notifications,
 });
+const mapDispatchToProps = { dispatchRemoveNotification: removeNotification };
 
-export default connect(mapStateToProps,
-  { removeNotificationConnect: removeNotification })(NotificationToasts);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationToasts);

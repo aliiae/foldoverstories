@@ -87,7 +87,7 @@ class Room(models.Model):
         if active_users.count() == 0:  # everyone stopped
             self.close()
             return None
-        if self.texts.count() == 0:  # the room is empty
+        if self.texts.count() == 0:  # the room is empty, return the currently logged in user
             return marked_curr_user(request_user)
         all_users = self.get_all_room_users()
         if all_users.count() == 1:  # return the room's owner if they're alone

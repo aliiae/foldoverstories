@@ -1,3 +1,4 @@
+import equal from 'fast-deep-equal';
 import {
   ADD_ROOM_FAIL,
   ADD_ROOM_SUCCESS,
@@ -13,6 +14,7 @@ const initialState = {
   rooms: null,
   users: null,
   userLeftRoom: null,
+  userCanWriteNow: null,
   texts: null,
   finishedAt: null,
   roomTitle: null,
@@ -22,11 +24,18 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case ADD_ROOM_SUCCESS:
-    case ADD_USER_INTO_ROOM:
-    case GET_ROOM_STATUS:
       return { ...state, ...action.payload };
+    case ADD_USER_INTO_ROOM: // no response
+      return state;
+    case GET_ROOM_STATUS: {
+      const { rooms, texts, ...oldState } = state;
+      if (equal(oldState, action.payload)) {
+        return state;
+      }
+      return { ...state, ...action.payload };
+    }
     case GET_USERS:
-      if (JSON.stringify(state.users) === JSON.stringify(action.payload)) {
+      if (equal(state.users, action.payload)) {
         return state;
       }
       return {
@@ -42,7 +51,7 @@ export default function (state = initialState, action) {
         userLeftRoom: true,
       };
     case READ_ROOM_TEXTS:
-      if (state.texts === action.payload) {
+      if (equal(state.texts, action.payload)) {
         return state;
       }
       return {
@@ -50,7 +59,7 @@ export default function (state = initialState, action) {
         texts: action.payload,
       };
     case GET_ROOMS:
-      if (state.rooms === action.payload) {
+      if (equal(state.rooms, action.payload)) {
         return state;
       }
       return {
@@ -62,7 +71,7 @@ export default function (state = initialState, action) {
     case CLEAR_ROOMS:
       return {
         ...state,
-        rooms: [],
+        rooms: null,
       };
     case CLEAR_ROOM_TITLE:
       return {

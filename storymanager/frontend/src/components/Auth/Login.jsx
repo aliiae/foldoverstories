@@ -15,7 +15,7 @@ function Login(props) {
   const [form, setValues] = useState({ username: '', password: '' });
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
-  const { loginConnect, isAuthenticated, error } = props;
+  const { dispatchLogin, isAuthenticated, error } = props;
   const history = useHistory();
   if (isAuthenticated) {
     history.goBack(); // redirects to the previous page
@@ -48,7 +48,7 @@ function Login(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     const { username, password } = form;
-    loginConnect(username, password);
+    dispatchLogin(username, password);
   };
 
   const onChange = (e) => {
@@ -102,7 +102,7 @@ function Login(props) {
 }
 
 Login.propTypes = {
-  loginConnect: PropTypes.func.isRequired,
+  dispatchLogin: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   error: PropTypes.oneOfType([
@@ -120,5 +120,6 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.auth.error,
 });
+const mapDispatchToProps = { dispatchLogin: login };
 
-export default connect(mapStateToProps, { loginConnect: login })(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

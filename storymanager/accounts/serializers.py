@@ -2,9 +2,8 @@ from typing import Optional
 
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
 
-from rooms.models import Membership, Room
+from rooms.models import Membership
 
 User = get_user_model()
 

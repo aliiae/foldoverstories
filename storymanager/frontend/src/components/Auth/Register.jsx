@@ -15,7 +15,7 @@ import { register } from '../../store/actions/auth';
 
 
 function Register(props) {
-  const { registerConnect, isAuthenticated, error } = props;
+  const { dispatchRegister, isAuthenticated, error } = props;
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -47,14 +47,20 @@ function Register(props) {
   );
 
   const onSubmit = ({ username, password }) => {
-    registerConnect({ username, password });
+    dispatchRegister({
+      username,
+      password,
+    });
   };
 
   const schema = yupObject({
-    username: string().required('Please choose a username'),
-    password: string().min(6, 'Password must be at least 6 characters')
+    username: string()
+      .required('Please choose a username'),
+    password: string()
+      .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
-    password2: string().oneOf([yupRef('password'), null], 'Passwords must match')
+    password2: string()
+      .oneOf([yupRef('password'), null], 'Passwords must match')
       .required('Please confirm your password'),
   });
   const formik = (
@@ -145,7 +151,7 @@ function Register(props) {
 
 Register.propTypes = {
   isAuthenticated: PropTypes.bool,
-  registerConnect: PropTypes.func.isRequired,
+  dispatchRegister: PropTypes.func.isRequired,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.shape({
     username: PropTypes.arrayOf(PropTypes.string),
   })]),
@@ -159,6 +165,6 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
   error: state.auth.error,
 });
+const mapDispatchToProps = { dispatchRegister: register };
 
-export default connect(mapStateToProps,
-  { registerConnect: register })(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

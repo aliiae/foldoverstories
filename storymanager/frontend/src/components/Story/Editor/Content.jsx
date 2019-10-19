@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import TextForm from './TextForm';
 import FinishedTextViewer from '../Finished/FinishedTextViewer';
 import PaperContainer from './PaperContainer';
 import LeftRoomMessage from './Messages/LeftRoomMessage';
 import VisibleTextDisplay from './VisibleTextDisplay';
-import TextAreaButton from './Buttons/TextAreaButton';
 import WaitingForTurnMessage from './Messages/WaitingForTurnMessage';
 import LeaveRoomButton from './Buttons/LeaveRoomButton';
-import { getRoomStatus } from '../../../store/actions/room';
 import { authPropType, usersPropType } from '../../commonPropTypes';
 
-function EditorContent({ roomTitle, ...props }) {
+function Content({ roomTitle, ...props }) {
   const {
     auth, users, currentTurnUsername, userFinished, userCanWriteNow, isLastTurn, roomIsFinished,
   } = props;
@@ -43,7 +42,7 @@ function EditorContent({ roomTitle, ...props }) {
     content = (
       <>
         <VisibleTextDisplay roomTitle={roomTitle} isNewUser={isNewUser} />
-        <TextAreaButton roomTitle={roomTitle} isNewUser={isNewUser} />
+        <TextForm roomTitle={roomTitle} isNewUser={isNewUser} />
       </>
     );
   } else if (userCanWriteNow === false && currentTurnUsername) {
@@ -78,7 +77,7 @@ const mapStateToProps = (state) => ({
   userFinished: state.room.userLeftRoom,
 });
 
-EditorContent.propTypes = {
+Content.propTypes = {
   roomTitle: PropTypes.string.isRequired,
   roomIsFinished: PropTypes.bool,
   auth: authPropType,
@@ -89,7 +88,7 @@ EditorContent.propTypes = {
   userFinished: PropTypes.bool,
 };
 
-EditorContent.defaultProps = {
+Content.defaultProps = {
   roomIsFinished: null,
   auth: null,
   isLastTurn: null,
@@ -99,4 +98,4 @@ EditorContent.defaultProps = {
   userFinished: null,
 };
 
-export default connect(mapStateToProps, { getRoomStatusConnect: getRoomStatus })(EditorContent);
+export default connect(mapStateToProps)(Content);

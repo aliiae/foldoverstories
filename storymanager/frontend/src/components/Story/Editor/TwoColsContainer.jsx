@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-export default function EditorContainerTwoCols({ children }) {
+export default function TwoColsContainer({ children }) {
   return (
     <Container className="editor" data-test="editor">
       <Row className="justify-content-center">
@@ -19,6 +19,6 @@ export default function EditorContainerTwoCols({ children }) {
   );
 }
 
-EditorContainerTwoCols.propTypes = {
+TwoColsContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };

@@ -8,11 +8,11 @@ import TextTabs from './TextTabs';
 
 function FinishedTextViewer(props) {
   const {
-    readRoomTextsConnect, roomTitle, texts, finishedAt, users,
+    dispatchReadRoomTexts, roomTitle, texts, finishedAt, users,
   } = props;
   useEffect(() => {
-    readRoomTextsConnect(roomTitle);
-  }, [readRoomTextsConnect, roomTitle]);
+    dispatchReadRoomTexts(roomTitle);
+  }, [dispatchReadRoomTexts, roomTitle]);
   if (users) {
     const usernames = users.map((user) => user.username);
     return (
@@ -26,7 +26,7 @@ function FinishedTextViewer(props) {
 
 FinishedTextViewer.propTypes = {
   roomTitle: PropTypes.string.isRequired,
-  readRoomTextsConnect: PropTypes.func.isRequired,
+  dispatchReadRoomTexts: PropTypes.func.isRequired,
   finishedAt: PropTypes.string,
   users: usersPropType,
   texts: textsPropType,
@@ -44,6 +44,6 @@ const mapStateToProps = (state) => ({
   finishedAt: state.room.finishedAt,
   users: state.room.users,
 });
+const mapDispatchToProps = { dispatchReadRoomTexts: readRoomTexts };
 
-export default connect(mapStateToProps,
-  { readRoomTextsConnect: readRoomTexts })(FinishedTextViewer);
+export default connect(mapStateToProps, mapDispatchToProps)(FinishedTextViewer);

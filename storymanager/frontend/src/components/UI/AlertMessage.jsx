@@ -1,11 +1,15 @@
-import Alert from 'react-bootstrap/Alert';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import React from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 export default function AlertMessage(props) {
   const {
-    show, onHide, title, message,
+    show: showProp, title, message,
   } = props;
+  const [show, setShow] = useState(showProp);
+  const onHide = () => {
+    setShow(false);
+  };
   return (
     <Alert show={show} onClose={onHide} variant="warning" dismissible>
       <Alert.Heading>{title}</Alert.Heading>
@@ -16,7 +20,6 @@ export default function AlertMessage(props) {
 
 AlertMessage.propTypes = {
   show: PropTypes.bool.isRequired,
-  onHide: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
   title: PropTypes.string,
 };

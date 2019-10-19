@@ -10,17 +10,16 @@ import { getRooms } from '../../store/actions/room';
 import Status from '../Story/Status';
 import { formatTimeStamp } from '../dateFormatters';
 import { ROOMS_PER_PAGE } from '../../settings';
-import { authPropType } from '../commonPropTypes';
 
 function RoomDashboard(props) {
-  const { getRoomsConnect, rooms } = props;
-  useEffect(() => getRoomsConnect(), [getRoomsConnect]);
+  const { dispatchGetRooms, rooms } = props;
+  useEffect(() => dispatchGetRooms(), [dispatchGetRooms]);
   const [activePageNumber, setActivePageNumber] = React.useState('1');
 
   const onClickPage = (e) => {
     const newPageNumber = e.target.text;
     setActivePageNumber(newPageNumber);
-    getRoomsConnect(newPageNumber);
+    dispatchGetRooms(newPageNumber);
   };
   if (!rooms || !('results' in rooms) || rooms.results.length === 0) return null;
   const { count, results } = rooms;
@@ -82,7 +81,7 @@ function RoomDashboard(props) {
 }
 
 const propTypes = {
-  getRoomsConnect: PropTypes.func.isRequired,
+  dispatchGetRooms: PropTypes.func.isRequired,
   rooms: PropTypes.shape({
     count: PropTypes.number,
     next: PropTypes.string,
@@ -101,5 +100,6 @@ RoomDashboard.defaultProps = defaultProps;
 const mapStateToProps = (state) => ({
   rooms: state.room.rooms,
 });
+const mapDispatchToProps = { dispatchGetRooms: getRooms };
 
-export default connect(mapStateToProps, { getRoomsConnect: getRooms })(RoomDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(RoomDashboard);

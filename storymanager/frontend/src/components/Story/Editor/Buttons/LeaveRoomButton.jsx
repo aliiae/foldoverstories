@@ -6,9 +6,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { leaveRoom } from '../../../../store/actions/room';
 
-function LeaveRoomButton({ leaveRoomConnect, roomTitle }) {
+function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
   const onClick = () => {
-    leaveRoomConnect(roomTitle);
+    dispatchLeaveRoom(roomTitle);
   };
   return (
     <OverlayTrigger
@@ -35,12 +35,12 @@ function LeaveRoomButton({ leaveRoomConnect, roomTitle }) {
 }
 
 LeaveRoomButton.propTypes = {
-  leaveRoomConnect: PropTypes.func.isRequired,
+  dispatchLeaveRoom: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = {
-  leaveRoomConnect: leaveRoom,
+  dispatchLeaveRoom: leaveRoom,
 };
 
 export default connect(null, mapDispatchToProps)(LeaveRoomButton);

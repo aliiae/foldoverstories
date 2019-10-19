@@ -2,7 +2,7 @@ import axios from 'axios';
 import {
   ADD_TEXT, GET_VISIBLE_TEXT, WRONG_TURN, LAST_TURN, LEAVE_ROOM,
 } from './types';
-import { returnErrors } from './messages';
+import returnErrors from './messages';
 import setupTokenConfig from './setupTokenConfig';
 
 

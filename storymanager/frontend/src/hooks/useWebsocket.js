@@ -81,7 +81,7 @@ const useWebsocket = (props) => {
     } else if (!isOnline && opened) {
       dispatchAction(wsClosed());
     }
-  }, [isOnline]);
+  }, [dispatchAction, wsOpened, opened, isOnline]);
 
   useEffect(() => {
     if (wsRef.current || roomIsFinished) {
@@ -92,7 +92,7 @@ const useWebsocket = (props) => {
     }
     console.log('initialising websocket');
     initWebsocket(token);
-  }, [initWebsocket, roomIsFinished, usernames]);
+  }, [initWebsocket, roomIsFinished, usernames, token, user]);
 
   return {
     ws: wsRef.current,

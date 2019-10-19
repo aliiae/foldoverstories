@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors } from './messages';
+import returnErrors from './messages';
 import {
   USER_LOADED,
   USER_LOADING,
@@ -57,6 +57,7 @@ export const login = (username, password) => (dispatch) => {
 };
 
 
+// eslint-disable-next-line arrow-body-style
 export const logout = () => (dispatch, getState) => {
   return axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
     .then(() => {

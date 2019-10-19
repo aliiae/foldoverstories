@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
 import Card from 'react-bootstrap/Card';
-
-import { getUsers } from '../../store/actions/room';
 import Status from './Status';
 
 const propTypes = {
@@ -60,4 +58,4 @@ const mapStateToProps = (state) => ({
   roomIsFinished: state.room.finishedAt !== null,
 });
 
-export default connect(mapStateToProps, { getUsersConnect: getUsers })(RoomUsers);
+export default connect(mapStateToProps)(RoomUsers);

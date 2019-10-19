@@ -31,5 +31,6 @@ class TokenAuthMiddleware:
         return self.inner(scope)
 
 
+# noinspection PyPep8Naming
 def TokenAuthMiddlewareStack(inner):
     return TokenAuthMiddleware(AuthMiddlewareStack(inner))

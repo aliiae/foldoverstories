@@ -1,8 +1,7 @@
 import Form from 'react-bootstrap/Form';
-import PropTypes from 'prop-types';
 import React from 'react';
 
-export default function TextArea({ value, onChange }) {
+const TextArea = React.forwardRef((props, ref) => {
   const placeholder = 'Type your text here. Remember that only the last line will be visible!';
   return (
     <Form.Group controlId="formEnterText">
@@ -10,8 +9,7 @@ export default function TextArea({ value, onChange }) {
         as="textarea"
         rows="3"
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        ref={ref}
         name="text"
         style={{ resize: 'none' }}
         required
@@ -20,9 +18,6 @@ export default function TextArea({ value, onChange }) {
       />
     </Form.Group>
   );
-}
+});
 
-TextArea.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+export default TextArea;

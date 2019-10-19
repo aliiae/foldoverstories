@@ -9,6 +9,4 @@ export default function setupTokenConfig(getState) {
     config.headers.Authorization = `Token ${token}`;
   }
   return config;
-};
-
-
+}

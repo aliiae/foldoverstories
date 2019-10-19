@@ -14,7 +14,7 @@ function Landing({ auth }) {
   return (
     <>
       <Container className="align-center">
-        <WelcomeJumbotron data-test="welcome-jumbotron" />
+        <WelcomeJumbotron />
       </Container>
       {auth && auth.isAuthenticated && <RoomDashboard />}
     </>
