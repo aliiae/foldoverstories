@@ -19,7 +19,7 @@ function Header() {
               How to Play
             </Nav.Link>
           </Nav>
-          <Nav className="ml-md-1">
+          <Nav className="ml-sm-1">
             <StartNewStoryWrapper>
               <Nav.Link>Start a New Story</Nav.Link>
             </StartNewStoryWrapper>
