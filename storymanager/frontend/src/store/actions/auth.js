@@ -66,7 +66,6 @@ export const logout = () => (dispatch, getState) => {
   return axios.post('/api/auth/logout/', null, setupTokenConfig(getState))
     .then(() => {
       dispatch({ type: CLEAR_ROOMS });
-      dispatch({ type: CLEAR_STORY });
       dispatch({ type: LOGOUT_SUCCESS });
     })
     .catch((err) => {

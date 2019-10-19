@@ -6,9 +6,9 @@ from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 from rest_framework.utils.serializer_helpers import ReturnList
 
-from accounts.serializers import UserSerializer, RoomUsersSerializer
+from accounts.serializers import RoomUsersSerializer
 from texts.models import Text
-from .models import Room, Membership
+from .models import Room, Membership, get_user_room_membership
 
 User = get_user_model()
 
@@ -49,6 +49,21 @@ class RoomUserStatusSerializer(serializers.ModelSerializer):
 
 class SingleRoomSerializer(RoomUserStatusSerializer):
     current_turn_username = serializers.SerializerMethodField('get_current_turn_username')
+    visible_text = serializers.SerializerMethodField('get_visible_text', read_only=True)
+
+    def get_visible_text(self, obj: Room) -> Optional[str]:
+        if obj.is_finished:
+            return None
+        if not obj.texts.exists():
+            return ''
+        if 'request' not in self.context:  # user is not logged in, can view anything
+            return obj.texts.last().visible_text
+        request_user = self.context['request'].user
+        obj.calculate_current_turn_user(request_user)
+        request_user_membership = get_user_room_membership(request_user, obj)
+        if not request_user_membership.can_write_now:
+            return ''
+        return obj.texts.last().visible_text
 
     def get_current_turn_username(self, obj: Room, *args, **kwargs) -> Optional[str]:
         if 'request' not in self.context:
@@ -59,7 +74,7 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
 
     class Meta:
         model = Room
-        fields = ('room_title', 'users', 'finished_at',
+        fields = ('room_title', 'users', 'finished_at', 'visible_text',
                   'user_left_room', 'user_can_write_now', 'current_turn_username')
 
 

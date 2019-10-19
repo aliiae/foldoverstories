@@ -1,20 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getVisibleText } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-
 
 function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
   const {
-    dispatchGetVisibleText, userCanWriteNow, visibleText, userFinished,
+    userCanWriteNow, visibleText, userFinished,
   } = props;
-  useEffect(() => {
-    const correctTurn = userCanWriteNow || isNewUser;
-    if (correctTurn) {
-      dispatchGetVisibleText(roomTitle);
-    }
-  }, [dispatchGetVisibleText, roomTitle, isNewUser, userCanWriteNow]);
 
   const correctTurn = userCanWriteNow || isNewUser;
   if (userFinished || correctTurn === false) {
@@ -44,7 +36,6 @@ function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
 VisibleTextDisplay.propTypes = {
   isNewUser: PropTypes.bool.isRequired,
   visibleText: PropTypes.string,
-  dispatchGetVisibleText: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
   userFinished: PropTypes.bool,
   userCanWriteNow: PropTypes.bool,
@@ -61,6 +52,5 @@ const mapStateToProps = (state) => ({
   userFinished: state.story.userLeftRoom,
   wsStatus: state.websockets.ws.status,
 });
-const mapDispatchToProps = { dispatchGetVisibleText: getVisibleText };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VisibleTextDisplay);
+export default connect(mapStateToProps)(VisibleTextDisplay);

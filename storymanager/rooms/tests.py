@@ -62,6 +62,19 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(room.room_title, response.data.get('room_title'))
 
+    def test_user_can_get_empty_visible_text_from_empty_room_detail(self):
+        room = create_user_room(self.user, self.room_title)
+        response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual('', response.data['visible_text'])
+
+    def test_user_can_get_visible_text_from_room_detail(self):
+        room = create_user_room(self.user, self.room_title)
+        create_user_room_text(self.user, room, visible_text='test_text')
+        response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual('test_text', response.data['visible_text'])
+
     def test_user_can_read_room_texts_by_title(self):
         room = create_user_room(self.user, self.room_title, is_finished=True)
         texts = [create_user_room_text(self.user, room, visible_text=str(i))
