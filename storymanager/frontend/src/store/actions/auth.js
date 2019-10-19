@@ -3,15 +3,24 @@ import returnErrors from './messages';
 import {
   USER_LOADED,
   USER_LOADING,
-  AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL,
+  AUTH_ERROR,
+  AUTH_GUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
   LOGOUT_SUCCESS,
-  REGISTER_FAIL, REGISTER_SUCCESS, CLEAR_ROOMS, CLEAR_STORY,
+  REGISTER_FAIL,
+  REGISTER_SUCCESS,
+  CLEAR_ROOMS,
+  CLEAR_STORY,
 } from './types';
 import setupTokenConfig from './setupTokenConfig';
 
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
+  if (!getState().auth.token) {
+    return dispatch({ type: AUTH_GUEST });
+  }
   return axios.get('/api/auth/user', setupTokenConfig(getState))
     .then((res) => {
       dispatch({
