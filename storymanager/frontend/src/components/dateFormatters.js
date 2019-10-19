@@ -8,7 +8,7 @@ dayjs.extend(RelativeTime);
 
 // e.g. 1 hour ago
 export const formatTimeStamp = (dateISOString) => (
-  dayjs().fromNow(dayjs(dateISOString))
+  dayjs(dayjs(dateISOString)).fromNow()
 );
 
 // e.g. 6th October 2019
