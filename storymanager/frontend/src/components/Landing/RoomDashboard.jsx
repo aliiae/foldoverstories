@@ -39,35 +39,37 @@ function RoomDashboard(props) {
   return (
     <div className="dark-bg">
       <Container className="pt-3 pb-2">
-        <Table hover responsive className="dashboard" data-test="dashboard">
-          <thead>
-            <tr>
-              <th scope="col" width="40%">Story</th>
-              <th scope="col" width="20%">Authors</th>
-              <th scope="col" className="text-center" width="10%">Status</th>
-              <th scope="col" width="30%">Last Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.map((room) => (
-              <tr
-                key={room.roomTitle}
-                className={!room.userLeftRoom && room.userCanWriteNow ? 'table-success'
-                  : !room.finishedAt ? 'table-warning' : ''}
-              >
-                <td className="room-link-td">
-                  {<Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>}
-                </td>
-                <td>
-                  {room.users.map((user) => user.username)
-                    .reduce((prev, curr) => [prev, ', ', curr])}
-                </td>
-                <td className="text-center"><Status item={room} /></td>
-                <td>{formatTimeStamp(room.modifiedAt)}</td>
+        <div className="responsive d-block d-md-table">
+          <Table hover className="dashboard" data-test="dashboard">
+            <thead>
+              <tr>
+                <th scope="col" width="40%">Story</th>
+                <th scope="col" width="20%">Authors</th>
+                <th scope="col" className="text-center" width="10%">Status</th>
+                <th scope="col" width="30%">Last Updated</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {results.map((room) => (
+                <tr
+                  key={room.roomTitle}
+                  className={!room.userLeftRoom && room.userCanWriteNow ? 'table-success'
+                    : !room.finishedAt ? 'table-warning' : ''}
+                >
+                  <td className="room-link-td">
+                    {<Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>}
+                  </td>
+                  <td>
+                    {room.users.map((user) => user.username)
+                      .reduce((prev, curr) => [prev, ', ', curr])}
+                  </td>
+                  <td className="text-center"><Status item={room} /></td>
+                  <td>{formatTimeStamp(room.modifiedAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
         {numPages > 1 && (
           <div className="pagination-center">
             <Pagination className="flex-wrap">

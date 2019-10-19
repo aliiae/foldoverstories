@@ -6,13 +6,6 @@ $cursive-font-family: 'Neucha', sans-serif;
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #eee !default;
-$gray-300: #dee2e6 !default;
-$gray-400: #ced4da !default;
-$gray-500: #aaa !default;
-$gray-600: #777 !default;
-$gray-700: #495057 !default;
-$gray-800: #333 !default;
-$gray-900: #222 !default;
 $black: #000 !default;
 
 $primary: #EB6864;
@@ -22,14 +15,7 @@ $info: #369;
 $warning: #F5E625;
 $danger: #F57A00;
 
-$purple: #786ea1 !default;
-$pink: #d6456b !default;
-$red: #860202 !default;
 $yellow: #ffed02 !default;
-$green: #6a950e !default;
-$teal: #abcf84 !default;
-$cyan: #039343 !default;
-$gray: #424242 !default;
 
 $nav-height: 4rem;
 
@@ -118,6 +104,11 @@ nav {
 
 .dashboard {
   transition: all .2s ease-in-out;
+}
+
+.responsive {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .text-viewer-table {
