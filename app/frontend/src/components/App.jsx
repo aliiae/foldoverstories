@@ -12,14 +12,18 @@ import NotificationToasts from './UI/Notifications/Toasts';
 import PageNotFound from './UI/PageNotFound';
 import Footer from './UI/Layout/Footer';
 import Main from './UI/Layout/Main';
-import Register from './Auth/Register/Main';
 import Login from './Auth/Login';
 import { loadUser } from '../store/actions/auth';
 import LoadingSpinner from './UI/LoadingSpinner';
 import Landing from './Landing/Main';
 import store from '../store/store';
 
-const Editor = lazy(() => import(/* webpackChunkName: "editor" */'./Story/Editor/Main'));
+const pages = {
+  editor: import('./Story/Editor/Main'),
+  register: import('./Auth/Register/Main'),
+};
+const Editor = lazy(() => pages.editor);
+const Register = lazy(() => pages.register);
 
 function App() {
   useEffect(() => {
@@ -47,7 +51,7 @@ function App() {
               <Route exact path="/login">
                 <Login />
               </Route>
-              <Route path="*">
+              <Route path="/404">
                 <PageNotFound />
               </Route>
             </Switch>
