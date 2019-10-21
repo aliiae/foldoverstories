@@ -20,6 +20,7 @@ hyperlink==19.0.0
 idna==2.8
 incremental==17.5.0
 msgpack==0.6.2
+psycopg2==2.8.4
 pycparser==2.19
 pyhamcrest==1.9.0
 pytz==2019.3

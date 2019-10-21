@@ -14,10 +14,9 @@ User = get_user_model()
 
 
 class RoomUserStatusSerializer(serializers.ModelSerializer):
-    """A base serializer used for introducing user_left_room and user_can_write fields."""
-    users = serializers.SerializerMethodField('get_users')
-    user_left_room = serializers.SerializerMethodField('get_user_left_room')
-    user_can_write_now = serializers.SerializerMethodField('get_user_can_write_now')
+    """A base serializer used for reusing the users and user_status fields."""
+    users = serializers.SerializerMethodField('get_users', read_only=True)
+    user_status = serializers.SerializerMethodField('get_user_status', read_only=True)
 
     @staticmethod
     def get_users(obj: Room, *args, **kwargs) -> ReturnList:
@@ -28,23 +27,14 @@ class RoomUserStatusSerializer(serializers.ModelSerializer):
             read_only=True, many=True, context={'room_title': obj.room_title})
         return serializer.data
 
-    def get_user_left_room(self, obj: Room, *args, **kwargs) -> Optional[bool]:
+    def get_user_status(self, obj: Room, *args, **kwargs) -> Optional[str]:
         if 'request' not in self.context:
             return None
         user = self.context['request'].user
         if not obj.has_user(user):
             return None
         user_membership = get_object_or_404(Membership, room=obj, user=user)
-        return user_membership.has_stopped
-
-    def get_user_can_write_now(self, obj: Room, *args, **kwargs) -> Optional[bool]:
-        if 'request' not in self.context:
-            return None
-        user = self.context['request'].user
-        if not obj.has_user(user):
-            return None
-        user_membership = get_object_or_404(Membership, room=obj, user=user)
-        return user_membership.can_write_now
+        return user_membership.status
 
 
 class SingleRoomSerializer(RoomUserStatusSerializer):
@@ -61,8 +51,10 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
         request_user = self.context['request'].user
         obj.calculate_current_turn_user(request_user)
         request_user_membership = get_user_room_membership(request_user, obj)
-        if not request_user_membership.can_write_now:
-            return ''
+        if not request_user_membership:
+            return obj.texts.last().visible_text  # user is not logged in
+        if not request_user_membership.status == Membership.CAN_WRITE:  # wrong turn
+            return None
         return obj.texts.last().visible_text
 
     def get_current_turn_username(self, obj: Room, *args, **kwargs) -> Optional[str]:
@@ -75,14 +67,14 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
     class Meta:
         model = Room
         fields = ('room_title', 'users', 'finished_at', 'visible_text',
-                  'user_left_room', 'user_can_write_now', 'current_turn_username')
+                  'user_status', 'current_turn_username')
 
 
 class RoomsListSerializer(RoomUserStatusSerializer):
     class Meta:
         model = Room
         fields = ('room_title', 'users', 'finished_at', 'modified_at',
-                  'user_left_room', 'user_can_write_now')
+                  'user_status')
 
 
 class RoomsReadOnlySerializer(SingleRoomSerializer):

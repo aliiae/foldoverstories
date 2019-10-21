@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CAN_WRITE, STOPPED } from '../userStatus';
 
 export function Emoji({ emoji, label, title }) {
   if (!label) { // emoji is purely decorative
@@ -22,6 +23,17 @@ export function Emoji({ emoji, label, title }) {
   );
 }
 
+Emoji.propTypes = {
+  emoji: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  title: PropTypes.string,
+};
+Emoji.defaultProps = {
+  label: null,
+  title: '',
+};
+
+
 export default function Status({ item }) {
   const flagEmoji = <Emoji emoji="🏁" label="finished" title="Finished turns" />;
   const writingEmoji = <Emoji emoji="️️✍️" label="writing hand" title="Time to write!" />;
@@ -30,22 +42,11 @@ export default function Status({ item }) {
   if (item.finishedAt) {
     return bookEmoji;
   }
-  if (item.userLeftRoom) {
+  if (item.userStatus === STOPPED) {
     return flagEmoji;
   }
-  if (item.userCanWriteNow) {
+  if (item.userStatus === CAN_WRITE) {
     return writingEmoji;
   }
   return hourglassEmoji;
 }
-
-Emoji.propTypes = {
-  emoji: PropTypes.string.isRequired,
-  label: PropTypes.string,
-  title: PropTypes.string,
-};
-
-Emoji.defaultProps = {
-  label: null,
-  title: '',
-};

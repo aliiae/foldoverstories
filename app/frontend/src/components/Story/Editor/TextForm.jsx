@@ -11,6 +11,7 @@ import TextArea from './TextArea';
 import AlertMessage from '../../UI/AlertMessage';
 import JoinButton from './Buttons/JoinButton';
 import SubmitButton from './Buttons/SubmitButton';
+import { CAN_WRITE } from '../../userStatus';
 
 function TextForm(props) {
   let userTextRef = useRef(null);
@@ -106,7 +107,7 @@ TextForm.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  userCanWriteNow: state.story.userCanWriteNow,
+  userCanWriteNow: state.story.userStatus === CAN_WRITE,
 });
 const mapDispatchToProps = {
   dispatchAddText: addText,

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
-import { authPropType, matchPropType, usersPropType } from '../../commonPropTypes';
+import { authPropType, errorsPropType, matchPropType, usersPropType } from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInternetStatus from '../../../hooks/useInternetStatus';
@@ -13,8 +14,11 @@ import Content from './Content';
 
 function Editor(props) {
   const {
-    dispatchGetRoomStatus, match, roomIsFinished, auth, users,
+    errors, dispatchGetRoomStatus, match, roomIsFinished, auth, users,
   } = props;
+  if (errors && errors.status === 404) {
+    return <Redirect to="/not-found" />;
+  }
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
@@ -49,18 +53,21 @@ Editor.propTypes = {
   auth: authPropType,
   roomIsFinished: PropTypes.bool,
   users: usersPropType,
+  errors: errorsPropType,
 };
 
 Editor.defaultProps = {
   auth: null,
   roomIsFinished: null,
   users: null,
+  errors: null,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
   roomIsFinished: state.story.finishedAt !== null,
   users: state.story.users,
+  errors: state.errors,
 });
 const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };
 

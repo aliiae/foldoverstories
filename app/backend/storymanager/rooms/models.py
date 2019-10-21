@@ -35,10 +35,8 @@ def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
 
 
 class Room(models.Model):
-    room_title = models.SlugField(unique=True, default=attempt_random_adj_noun_pair,
-                                  primary_key=True)
-    users = models.ManyToManyField(User, related_name='rooms', blank=True,
-                                   through='Membership')
+    room_title = models.SlugField(unique=True, default=attempt_random_adj_noun_pair)
+    users = models.ManyToManyField(User, related_name='rooms', blank=True, through='Membership')
     is_finished = models.BooleanField(default=False)
     finished_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -59,7 +57,7 @@ class Room(models.Model):
         """Calculates the user allowed to post, the one chronologically next after the prev poster.
 
         Allows the current turn curr_user write, prohibits others.
-        Closes the room if no active (.has_stopped = False) users left.
+        Closes the room if no active (those who have not stopped) users left.
         Returns None if the room is closed.
 
         :param request_user: The currently logged in user.
@@ -74,8 +72,8 @@ class Room(models.Model):
             curr_membership = get_user_room_membership(curr_user, self)
             if curr_membership is None:  # it is a guest user, they can view anything
                 return None
-            if not curr_membership.can_write_now:
-                curr_membership.can_write_now = True
+            if not curr_membership.status == Membership.CAN_WRITE:
+                curr_membership.status = Membership.CAN_WRITE
                 curr_membership.save()
             if update_others:
                 self.close_all_memberships_except(curr_user)
@@ -108,16 +106,18 @@ class Room(models.Model):
         """Marks all users who are not `curr_turn_user` as those who cannot write"""
         if excluded_user is None:
             not_curr_memberships = Membership.objects.filter(room=self)
+            not_curr_memberships.update(status=Membership.STOPPED)
         else:  # everyone
             not_curr_memberships = Membership.objects.filter(room=self).exclude(user=excluded_user)
-        not_curr_memberships.update(can_write_now=False)
+            not_curr_memberships.update(status=Membership.WAITING)
 
     def get_all_room_users(self) -> QueryType[User]:
         return self.users.all().order_by('membership__joined_at')
 
     def get_active_users(self) -> QueryType[User]:
         """Returns a subset of users who have not stopped yet"""
-        return self.users.exclude(membership__has_stopped=True).order_by('membership__joined_at')
+        return self.users.exclude(membership__status=Membership.STOPPED).order_by(
+            'membership__joined_at')
 
     def has_user(self, user: User) -> bool:
         return Membership.objects.filter(room=self, user=user).exists()
@@ -138,8 +138,7 @@ class Room(models.Model):
         user_membership = get_user_room_membership(user, self)
         if not user_membership:
             return
-        user_membership.has_stopped = True
-        user_membership.can_write_now = False
+        user_membership.status = Membership.STOPPED
         user_membership.save()
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_LEAVE,
@@ -158,10 +157,14 @@ class Room(models.Model):
 
 
 class Membership(models.Model):
+    STOPPED = 'STOPPED'
+    WAITING = 'WAITING'
+    CAN_WRITE = 'CAN_WRITE'
+    USER_STATUS_CHOICES = ((STOPPED, 'STOPPED'), (WAITING, 'WAITING'), (CAN_WRITE, 'CAN_WRITE'))
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    has_stopped = models.BooleanField(default=False)
-    can_write_now = models.BooleanField(default=False)
+    status = models.CharField(choices=USER_STATUS_CHOICES, default=WAITING, max_length=9)
     joined_at = models.DateField(auto_now_add=True)
 
     def __str__(self):

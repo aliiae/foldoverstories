@@ -41,9 +41,19 @@ export const historyPropType = PropTypes.shape({
   action: PropTypes.string,
 });
 
+export const userStatusPropType = PropTypes.oneOf([
+  'STOPPED', 'WAITING', 'CAN_WRITE',
+]);
+
 export const usersPropType = PropTypes.arrayOf(PropTypes.shape({
   username: PropTypes.string,
   textsCount: PropTypes.number,
-  userLeftRoom: PropTypes.bool,
-  userCanWriteNow: PropTypes.bool,
+  userStatus: userStatusPropType,
 }));
+
+export const errorsPropType = PropTypes.shape({
+  msg: PropTypes.oneOf([PropTypes.object, PropTypes.string, PropTypes.shape({
+    detail: PropTypes.string,
+  })]),
+  status: PropTypes.number,
+});

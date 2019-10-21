@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingSpinner from '../../UI/LoadingSpinner';
+import { CAN_WRITE, STOPPED } from '../../userStatus';
+import { userStatusPropType } from '../../commonPropTypes';
 
 function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
-  const {
-    userCanWriteNow, visibleText, userFinished,
-  } = props;
+  const { visibleText, userStatus } = props;
 
-  const correctTurn = userCanWriteNow || isNewUser;
-  if (userFinished || correctTurn === false) {
+  const correctTurn = userStatus === CAN_WRITE || isNewUser;
+  if (userStatus === STOPPED || correctTurn === false) {
     return null;
   }
   if (correctTurn && visibleText === null) {
@@ -37,19 +37,16 @@ VisibleTextDisplay.propTypes = {
   isNewUser: PropTypes.bool.isRequired,
   visibleText: PropTypes.string,
   roomTitle: PropTypes.string.isRequired,
-  userFinished: PropTypes.bool,
-  userCanWriteNow: PropTypes.bool,
+  userStatus: userStatusPropType,
 };
 VisibleTextDisplay.defaultProps = {
   visibleText: null,
-  userFinished: null,
-  userCanWriteNow: null,
+  userStatus: null,
 };
 
 const mapStateToProps = (state) => ({
   visibleText: state.story.visibleText,
-  userCanWriteNow: state.story.userCanWriteNow,
-  userFinished: state.story.userLeftRoom,
+  userStatus: state.story.userStatus,
   wsStatus: state.websockets.ws.status,
 });
 

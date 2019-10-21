@@ -10,13 +10,13 @@ import {
   GET_VISIBLE_TEXT,
   LAST_TURN, LEAVE_ROOM, READ_ROOM_TEXTS,
 } from '../actions/types';
+import { STOPPED } from '../../components/userStatus';
 
 const initialState = {
   visibleText: null,
   isLastTurn: null,
   users: null,
-  userLeftRoom: null,
-  userCanWriteNow: null,
+  userStatus: null,
   finishedAt: null,
   roomTitle: null,
   currentTurnUsername: null,
@@ -58,12 +58,12 @@ export default function (state = initialState, action) {
         users: action.payload,
       };
     case LEAVE_ROOM:
-      if (state.userLeftRoom) {
+      if (state.userStatus === STOPPED) {
         return state;
       }
       return {
         ...state,
-        userLeftRoom: true,
+        userStatus: STOPPED,
       };
     case READ_ROOM_TEXTS:
       if (equal(state.texts, action.payload)) {

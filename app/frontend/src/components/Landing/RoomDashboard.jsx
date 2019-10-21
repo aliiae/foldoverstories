@@ -21,7 +21,9 @@ function RoomDashboard(props) {
     setActivePageNumber(newPageNumber);
     dispatchGetRooms(newPageNumber);
   };
-  if (!rooms || !('results' in rooms) || rooms.results.length === 0) return null;
+  if (!rooms || !('results' in rooms) || rooms.results.length === 0) {
+    return null;
+  }
   const { count, results } = rooms;
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
   const paginationItems = [];
@@ -53,7 +55,8 @@ function RoomDashboard(props) {
               {results.map((room) => (
                 <tr
                   key={room.roomTitle}
-                  className={!room.userLeftRoom && room.userCanWriteNow ? 'table-success'
+                  className={room.userStatus !== 'STOPPED'
+                  && room.userStatus === 'CAN_WRITE' ? 'table-success'
                     : !room.finishedAt ? 'table-warning' : ''}
                 >
                   <td className="room-link-td">

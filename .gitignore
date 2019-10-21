@@ -16,3 +16,4 @@ package*
 /app/frontend/.cache/
 /app/frontend/dist/
 /app/backend/backend/
+/app/backend/postgres_data/

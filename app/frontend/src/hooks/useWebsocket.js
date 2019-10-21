@@ -1,12 +1,11 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import { SOCKET_URL } from '../settings';
+import { MAX_WS_RECONNECTING_ATTEMPTS, SOCKET_URL } from '../settings';
 import { wsClosed, wsOpened } from '../store/actions/websockets';
 import { getRoomStatus } from '../store/actions/story';
 import { addNotification } from '../store/actions/notifications';
 
-const MAX_WS_RECONNECTING_ATTEMPTS = 5;
 const useWebsocket = (props) => {
   const opened = useSelector((state) => state.websockets.ws.opened);
   const wsRef = useRef(null);

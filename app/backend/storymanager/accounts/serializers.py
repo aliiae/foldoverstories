@@ -39,16 +39,11 @@ class LoginSerializer(serializers.Serializer):
 
 class RoomUsersSerializer(serializers.ModelSerializer):
     texts_count = serializers.IntegerField(read_only=True)
-    user_left_room = serializers.SerializerMethodField('get_user_left_room')
-    user_can_write_now = serializers.SerializerMethodField('get_user_can_write_now')
+    user_status = serializers.SerializerMethodField('get_user_status')
 
-    def get_user_left_room(self, obj: User) -> Optional[bool]:
+    def get_user_status(self, obj: User) -> Optional[str]:
         user_membership = self._get_user_membership(obj)
-        return user_membership.has_stopped if user_membership else None
-
-    def get_user_can_write_now(self, obj: User) -> Optional[bool]:
-        user_membership = self._get_user_membership(obj)
-        return user_membership.can_write_now if user_membership else None
+        return user_membership.status if user_membership else None
 
     def _get_user_membership(self, obj: User) -> Membership:
         room_title = None
@@ -62,4 +57,4 @@ class RoomUsersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'texts_count', 'user_left_room', 'user_can_write_now')
+        fields = ('username', 'texts_count', 'user_status')

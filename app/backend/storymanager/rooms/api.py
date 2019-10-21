@@ -63,7 +63,8 @@ class RoomsViewSet(viewsets.ModelViewSet):
         user_membership: Membership = room_memberships.get(user=self.request.user)
         if not user_membership:
             raise ValidationError(detail='User has not joined the room')
-        if user_membership.has_stopped:  # user has previously left the room, nothing to do
+        if user_membership.status == Membership.STOPPED:
+            # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
         room.leave_room(request.user)
         room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
