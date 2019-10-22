@@ -69,6 +69,12 @@ class Room(models.Model):
             return -1 if index is None else index
 
         def marked_curr_user(curr_user=request_user, update_others=False) -> Optional[User]:
+            """
+            Allows `curr_user` to write now.
+
+            If `update_others=True`, forbids all other users to write now.
+            If the user is a not logged in or has not joined the room yet, returns None.
+            """
             curr_membership = get_user_room_membership(curr_user, self)
             if curr_membership is None:  # it is a guest user, they can view anything
                 return None
@@ -112,17 +118,20 @@ class Room(models.Model):
             not_curr_memberships.update(status=Membership.WAITING)
 
     def get_all_room_users(self) -> QueryType[User]:
+        """Returns all room's users."""
         return self.users.all().order_by('membership__joined_at')
 
     def get_active_users(self) -> QueryType[User]:
-        """Returns a subset of users who have not stopped yet"""
+        """Returns the subset of users who have not stopped yet."""
         return self.users.exclude(membership__status=Membership.STOPPED).order_by(
             'membership__joined_at')
 
     def has_user(self, user: User) -> bool:
+        """Checks whether the user has joined the room before."""
         return Membership.objects.filter(room=self, user=user).exists()
 
     def add_user(self, user: User):
+        """Adds a user into the room."""
         if self.has_user(user):
             return
         new_user_membership = Membership.objects.create(room=self, user=user)
@@ -135,6 +144,7 @@ class Room(models.Model):
         })
 
     def leave_room(self, user: User):
+        """Marks the user as finished in the room."""
         user_membership = get_user_room_membership(user, self)
         if not user_membership:
             return
@@ -147,6 +157,7 @@ class Room(models.Model):
         })
 
     def close(self):
+        """Closes the room and corresponding memberships."""
         self.is_finished = True
         self.close_all_memberships_except(None)
         self.save()
