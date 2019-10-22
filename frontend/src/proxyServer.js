@@ -9,9 +9,15 @@ const bundler = new Bundler('index.html', {
 const app = express();
 
 app.use(
-  '/api',
-  proxy({
+  proxy(['/api', '/__debug__'], {
     target: 'http://backend:8000',
+  }),
+);
+
+app.use(
+  proxy('/ws', {
+    target: 'http://daphne:9000',
+    ws: true,
   }),
 );
 

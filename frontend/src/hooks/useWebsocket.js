@@ -2,10 +2,9 @@ import { useRef, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { MAX_WS_RECONNECTING_ATTEMPTS, SOCKET_URL } from '../settings';
-import { setWsStatus, wsClosed, wsOpened } from '../store/actions/websockets';
+import { wsClosed, wsOpened } from '../store/actions/websockets';
 import { getRoomStatus } from '../store/actions/story';
 import { addNotification } from '../store/actions/notifications';
-import { SET_WS_STATUS } from '../store/actions/types';
 
 const useWebsocket = (props) => {
   const opened = useSelector((state) => state.websockets.ws.opened);
@@ -41,34 +40,30 @@ const useWebsocket = (props) => {
     const onMessage = (msg) => {
       receiveMessage(msg);
     };
-    const dispatchStatus = () => {
-      dispatchAction(setWsStatus(wsRef.current.readyState));
-    };
 
-    if (wsRef.current) wsRef.current.close();
-    wsRef.current = new ReconnectingWebSocket(`${SOCKET_URL}ws/room/${roomTitle}`,
+    if (wsRef.current && wsRef.current.readyState < 3) {
+      wsRef.current.close();
+    }
+    wsRef.current = new ReconnectingWebSocket(`${SOCKET_URL}/ws/room/${roomTitle}`,
       ['access_token', accessToken],
       { maxRetries: MAX_WS_RECONNECTING_ATTEMPTS });
-    wsRef.current.addEventListener('open', dispatchStatus);
-    wsRef.current.addEventListener('close', dispatchStatus);
     wsRef.current.addEventListener('message', onMessage);
-    wsRef.current.addEventListener('error', dispatchStatus);
-    dispatchAction(setWsStatus(wsRef.current.readyState));
   }, [roomTitle, user, dispatchAction]);
 
   useEffect(() => {
-    if (isOnline && !opened) {
+    if (isOnline) {
       dispatchAction(wsOpened());
     } else {
       dispatchAction(wsClosed());
     }
-  }, [dispatchAction, opened, isOnline, wsRef]);
+  }, [dispatchAction, isOnline]);
 
   useEffect(() => {
     if (wsRef.current || roomIsFinished) {
       return;
     }
-    if (!user || !usernames || !usernames.includes(user.username)) {
+    const isNewUser = !user || !usernames || !usernames.includes(user.username);
+    if (isNewUser) {
       return;
     }
     initWebsocket(token);

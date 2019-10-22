@@ -47,7 +47,7 @@ class RoomsViewSet(viewsets.ModelViewSet):
         room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             return Response(RoomsReadOnlySerializer(room, context={'request': request}).data)
-        return Response(SingleRoomSerializer(room, context={'request': request}).data)
+        return Response(self.detail_serializer_class(room, context={'request': request}).data)
 
     def perform_create(self, serializer: RoomsListSerializer):
         room: Room = serializer.save()

@@ -1,5 +1,5 @@
 # pull official base image
-FROM pypy:3-slim
+FROM python:3.7-slim
 
 # set work directory
 WORKDIR /usr/src/app
@@ -11,6 +11,7 @@ ENV PYTHONUNBUFFERED 1
 # install psycopg2
 RUN apt-get update \
     && apt-get -y --no-install-recommends install gcc libpq-dev libssl-dev python3-dev \
+    && apt-get update && apt-get install -y netcat \
     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
@@ -19,11 +20,13 @@ RUN pip install pipenv
 COPY ./Pipfile /usr/src/app/Pipfile
 RUN pipenv install --skip-lock --system
 
-# copy entrypoint-prod.sh
+RUN pip install django-debug-toolbar
+
+# copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 
 # copy project
 COPY . /usr/src/app/
 
-# run entrypoint.prod.sh
+# run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

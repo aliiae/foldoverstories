@@ -78,7 +78,7 @@ class Room(models.Model):
             curr_membership = get_user_room_membership(curr_user, self)
             if curr_membership is None:  # it is a guest user, they can view anything
                 return None
-            if not curr_membership.status == Membership.CAN_WRITE:
+            if curr_membership.status == Membership.WAITING:
                 curr_membership.status = Membership.CAN_WRITE
                 curr_membership.save()
             if update_others:
@@ -109,12 +109,15 @@ class Room(models.Model):
         return marked_curr_user(curr_turn_user, update_others=True)
 
     def close_all_memberships_except(self, excluded_user: User = None):
-        """Marks all users who are not `curr_turn_user` as those who cannot write"""
+        """Marks all users who are not `curr_turn_user` as those who cannot write now."""
         if excluded_user is None:
             not_curr_memberships = Membership.objects.filter(room=self)
             not_curr_memberships.update(status=Membership.STOPPED)
-        else:  # everyone
-            not_curr_memberships = Membership.objects.filter(room=self).exclude(user=excluded_user)
+        else:
+            not_curr_memberships = (Membership.objects
+                                    .filter(room=self)
+                                    .exclude(status=Membership.STOPPED)
+                                    .exclude(user=excluded_user))
             not_curr_memberships.update(status=Membership.WAITING)
 
     def get_all_room_users(self) -> QueryType[User]:
