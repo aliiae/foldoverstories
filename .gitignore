@@ -17,3 +17,13 @@ package*
 /app/frontend/dist/
 /app/backend/backend/
 /app/backend/postgres_data/
+/app/.env.prod
+/app/.env.prod.db
+/app/frontend/node_modules/
+/app/backend/Dockerfile.prod
+/app/backend/entrypoint.prod.sh
+/app/backend/Pipfile.lock
+/app/.dockerignore
+/app/frontend/Dockerfile.prod
+/dump.rdb
+/app/docker-compose.prod.yml

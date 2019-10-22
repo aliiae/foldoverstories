@@ -1,12 +1,13 @@
 from typing import Dict
 
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 
 from rooms.models import Room, get_user_room_membership, Membership
-from storymanager.django_types import QueryType
+from storymanager.django_types import QueryType, RequestType
 from texts.models import Text
 from websockets.server_send import send_channel_message, WEBSOCKET_MSG_ADD_TEXT
 from .serializers import TextsVisibleOnlySerializer, TextsFullSerializer
@@ -40,6 +41,17 @@ class TextsViewSet(viewsets.ModelViewSet):
         if not user_membership.status == Membership.CAN_WRITE:
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
         return Text.objects.filter(room=room).reverse()[:1]
+
+    def create(self, request: RequestType, *args, **kwargs) -> Response:
+        """Swaps the POST serializer's response with only visible text."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        visible_only_serializer = TextsVisibleOnlySerializer(data=request.data)
+        visible_only_serializer.is_valid(raise_exception=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(visible_only_serializer.data, status=status.HTTP_201_CREATED,
+                        headers=headers)
 
     def perform_create(self, serializer: TextsFullSerializer):
         room = self.room

@@ -17,7 +17,7 @@ export const wsOpened = () => ({
 export const wsClosed = () => ({
   type: WS_CLOSED,
 });
-export const setWsStatus = (message) => ({
+export const setWsStatus = (status) => ({
   type: SET_WS_STATUS,
-  payload: message.event,
+  payload: status,
 });

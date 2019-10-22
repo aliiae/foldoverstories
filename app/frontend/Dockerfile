@@ -1,13 +1,10 @@
-FROM node:12.12-buster-slim
+FROM node:12.12-slim
 
 WORKDIR /app/frontend
 
-COPY package.json package-lock.json /app/frontend/
-
-RUN npm install
-
 COPY . /app/frontend
 
-EXPOSE 1234
+RUN cd /app/frontend && npm install --no-audit
+CMD cd /app/frontend && npm run start
 
-CMD npm start
+EXPOSE 1234

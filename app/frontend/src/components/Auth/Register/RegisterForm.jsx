@@ -34,14 +34,14 @@ class RegisterForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = ({ target }) => {
+  handleChange({ target }) {
     const { formValues } = this.state;
     formValues[target.name] = target.value;
     this.setState({ formValues });
     this.handleValidation(target);
   };
 
-  handleValidation = (target) => {
+  handleValidation(target) {
     const { name, value } = target;
     const { formValues, formErrors, formValidity } = this.state;
 
@@ -70,7 +70,7 @@ class RegisterForm extends React.Component {
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
     this.setState({ isSubmitting: true });
     const { formValues, formValidity } = this.state;

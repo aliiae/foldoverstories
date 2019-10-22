@@ -5,13 +5,14 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { addText } from '../../../store/actions/story';
+import { addText, getRoomStatus, getVisibleText } from '../../../store/actions/story';
 import LeaveRoomButton from './Buttons/LeaveRoomButton';
 import TextArea from './TextArea';
 import AlertMessage from '../../UI/AlertMessage';
 import JoinButton from './Buttons/JoinButton';
 import SubmitButton from './Buttons/SubmitButton';
 import { CAN_WRITE } from '../../userStatus';
+import room from '../../../store/reducers/room';
 
 function TextForm(props) {
   let userTextRef = useRef(null);
@@ -19,6 +20,7 @@ function TextForm(props) {
   const [alertWasShown, setAlertWasShownOnce] = useState(false);
   const {
     dispatchAddText, roomTitle, userCanWriteNow, isNewUser,
+    websocketStatus, dispatchGetRoomStatus,
   } = props;
 
   const resetInputFields = () => {
@@ -50,6 +52,9 @@ function TextForm(props) {
         visibleText,
       };
       dispatchAddText(textPost, roomTitle);
+      if (websocketStatus !== 1) {
+        dispatchGetRoomStatus(roomTitle);
+      }
       resetInputFields();
     }
   };
@@ -98,19 +103,24 @@ function TextForm(props) {
 
 TextForm.propTypes = {
   dispatchAddText: PropTypes.func.isRequired,
+  dispatchGetRoomStatus: PropTypes.func.isRequired,
+  websocketStatus: PropTypes.number,
   roomTitle: PropTypes.string.isRequired,
   userCanWriteNow: PropTypes.bool,
   isNewUser: PropTypes.bool.isRequired,
 };
 TextForm.defaultProps = {
   userCanWriteNow: null,
+  websocketStatus: null,
 };
 
 const mapStateToProps = (state) => ({
   userCanWriteNow: state.story.userStatus === CAN_WRITE,
+  websocketStatus: state.websockets.ws.status,
 });
 const mapDispatchToProps = {
   dispatchAddText: addText,
+  dispatchGetRoomStatus: getRoomStatus,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextForm);

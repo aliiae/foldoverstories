@@ -1,22 +1,29 @@
-FROM python:3.7
+# pull official base image
+FROM pypy:3-slim
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client \
+# install psycopg2
+RUN apt-get update \
+    && apt-get -y --no-install-recommends install gcc libpq-dev libssl-dev python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/backend
+# install dependencies
+RUN pip install --upgrade pip
+RUN pip install pipenv
+COPY ./Pipfile /usr/src/app/Pipfile
+RUN pipenv install --skip-lock --system
 
-COPY requirements.txt /app/backend
-RUN pip3 install --upgrade pip -r requirements.txt
+# copy entrypoint-prod.sh
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 
-COPY . /app/backend
+# copy project
+COPY . /usr/src/app/
 
-EXPOSE 8000
-EXPOSE 443
-
-#RUN python3 ./storymanager/manage.py makemigrations
-#RUN python3 ./storymanager/manage.py migrate auth
-#RUN python3 ./storymanager/manage.py migrate rooms
-#RUN python3 ./storymanager/manage.py migrate texts
-
-CMD python3 ./storymanager/manage.py runserver 0.0.0.0:8000
+# run entrypoint.prod.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

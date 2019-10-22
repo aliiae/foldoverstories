@@ -4,42 +4,59 @@ services:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.dev.db
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - 8000
+    env_file:
+      - ./.env.dev
+    command: [sh, -c, "cd storymanager && gunicorn storymanager.wsgi:application --bind 0.0.0.0:8000"]
+    depends_on:
+      - db
+    links:
+      - db
 
   redis:
     image: redis:5.0.6-alpine
     expose:
       - 6379
 
-  backend:
-    build: ./backend
-    volumes:
-      - ./backend:/app/backend/
+  daphne:
+    image: "backend:latest"
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    working_dir: /usr/src/app
+    env_file:
+      - ./.env.dev
+    command: [sh, -c, "cd storymanager
+      && daphne storymanager.asgi:application -b 0.0.0.0 -p 9000"]
     ports:
-      - "8000:8000"
-      - "8081:443"
-    stdin_open: true
-    tty: true
-    command: python3 ./storymanager/manage.py runserver 0.0.0.0:8000
+      - "9000:9000"
     depends_on:
-      - db
       - redis
     links:
-      - db
       - redis
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     volumes:
       - ./frontend:/app/frontend/
-      - node-modules:/app/frontend/node_modules
+      - node_modules:/app/frontend/node_modules
+    env_file:
+      - ./.env.dev
     ports:
-      - "1234:1234"
-    environment:
-      - NODE_ENV=development
+      - "8080:80"
     depends_on:
       - backend
-    command: npm start
 
 volumes:
-  node-modules:
   postgres_data:
+  node_modules:
