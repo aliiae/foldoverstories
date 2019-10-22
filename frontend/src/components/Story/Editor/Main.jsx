@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
-import { authPropType, errorsPropType, matchPropType, usersPropType } from '../../commonPropTypes';
+import {
+  authPropType, errorsPropType, matchPropType, usersPropType,
+} from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInternetStatus from '../../../hooks/useInternetStatus';
@@ -16,12 +18,8 @@ function Editor(props) {
   const {
     errors, dispatchGetRoomStatus, match, roomIsFinished, auth, users,
   } = props;
-  if (errors && errors.status === 404) {
-    return <Redirect to="/not-found" />;
-  }
-  const { isLoading: userIsLoading, isAuthenticated } = auth;
-  const roomTitle = match.params.id;
   const { isOnline } = useInternetStatus();
+  const roomTitle = match.params.id;
   const usernames = users ? users.map((user) => user.username) : null;
   useWebsocket({
     isOnline,
@@ -35,6 +33,15 @@ function Editor(props) {
     dispatchGetRoomStatus(roomTitle);
     document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, [dispatchGetRoomStatus, roomTitle]);
+  if (errors) {
+    if (errors.status === 404) {
+      return <Redirect to="/not-found" />;
+    }
+    if (errors.status === 401) {
+      return <Redirect to="/login" />;
+    }
+  }
+  const { isLoading: userIsLoading, isAuthenticated } = auth;
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }

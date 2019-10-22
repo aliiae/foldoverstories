@@ -16,9 +16,11 @@ export default function TextLines({ texts }) {
                   border: 'none',
                 }}
               >
-                {`${text.username}:`}
+                <p>{`${text.username}:`}</p>
               </td>
-              <td style={{ border: 'none' }}>{text.fullText}</td>
+              <td style={{ border: 'none' }}>
+                <p>{text.fullText}</p>
+              </td>
             </tr>
           ))}
         </tbody>
