@@ -7,7 +7,8 @@ import StartButton from '../Story/Editor/Buttons/StartButton';
 function WelcomeJumbotron() {
   return (
     <Jumbotron className="text-center">
-      <h1 className="display-3">{`Welcome to ${WEBSITE_TITLE}!`}</h1>
+      <h1 className="display-3">{`Welcome to ${WEBSITE_TITLE}`}</h1>
+      <p className="lead text-muted text-monospace text-center">a creative, collaborative, storytelling game</p>
       <hr className="my-4 section-break" />
       <p className="lead text-center">
         Check out

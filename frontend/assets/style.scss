@@ -88,6 +88,11 @@ nav {
   }
 }
 
+mark {
+  background-color: $yellow;
+  color: $black;
+}
+
 .footer,
 .navbar-nav,
 .card,
@@ -414,10 +419,6 @@ nav {
   p {
     @extend %highlight;
   }
-}
-
-.highlight {
-
 }
 
 .unstyled-button,

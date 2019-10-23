@@ -61,7 +61,6 @@ const hourglassEmoji = (
     title="Waiting for turn..."
   />
 );
-
 const bookEmoji = (
   <Emoji
     emoji={mapStatusToEmoji.ROOM_FINISHED}

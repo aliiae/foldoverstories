@@ -6,6 +6,21 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { leaveRoom } from '../../../../store/actions/story';
 
+export function LeaveButton(props) {
+  return (
+    <Button
+      type="button"
+      variant="danger"
+      size="sm"
+      className="shadow-button"
+      data-test="story-leave-button"
+      {...props}
+    >
+      Leave this story
+    </Button>
+  );
+}
+
 function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
   const onClick = () => {
     dispatchLeaveRoom(roomTitle);
@@ -20,16 +35,7 @@ function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
         </Tooltip>
       )}
     >
-      <Button
-        type="button"
-        variant="danger"
-        size="sm"
-        onClick={onClick}
-        className="shadow-button"
-        data-test="story-leave-button"
-      >
-        Leave this story
-      </Button>
+      <LeaveButton onClick={onClick} />
     </OverlayTrigger>
   );
 }
