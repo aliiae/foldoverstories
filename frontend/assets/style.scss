@@ -19,11 +19,30 @@ $yellow: #ffed02 !default;
 
 $nav-height: 4rem;
 
-@mixin color-underline($border: 2px, $color: $yellow, $padding: 2px) {
+@mixin color-underline() {
   text-decoration: none !important;
-  transition: all .2s ease-in;
-  border-bottom: $border solid $color !important;
-  padding-bottom: $padding !important;
+  padding: 0;
+  background-image: linear-gradient(
+                  transparent 0%,
+                  transparent calc(50% - 8px),
+                  rgba(255, 237, 2, 0.35) calc(50% - 8px),
+                  rgba(255, 237, 2, 0.35) 100%
+  );
+  transition: background-position 120ms ease-in-out, padding 120ms ease-in-out;
+  background-size: 100% 200%;
+  background-position: 0 0;
+  word-break: break-word;
+}
+
+@mixin color-underline-hover() {
+  padding: 2px 0 4px 0;
+  background-image: linear-gradient(
+                  transparent 0%,
+                  transparent calc(50% - 8px),
+                  rgba(255, 237, 2, 1) calc(50% - 8px),
+                  rgba(255, 237, 2, 1) 100%
+  );
+  background-position: 0 100%;
 }
 
 %highlight {
@@ -35,6 +54,9 @@ $nav-height: 4rem;
   border: 1px solid $gray-200;
 }
 
+%dark-bg {
+  background-color: $gray-100;
+}
 
 .app {
   min-height: 100vh;
@@ -62,7 +84,7 @@ nav {
   @include color-underline;
 
   &:hover {
-    @include color-underline(5px, $yellow, 1px)
+    @include color-underline-hover;
   }
 }
 
@@ -91,7 +113,7 @@ nav {
 }
 
 .jumbotron {
-  background-color: transparent;
+  background-color: white;
   color: $black;
 }
 
@@ -126,6 +148,11 @@ nav {
   & th {
     padding: 0;
   }
+
+  p {
+    font-size: 1.2rem;
+    margin: .35rem 0;
+  }
 }
 
 .table {
@@ -139,14 +166,10 @@ nav {
 
     @include color-underline;
 
-    &:hover {
-      @include color-underline(5px, $yellow, 1px)
+    &:hover, &:active {
+      @include color-underline-hover;
     }
   }
-}
-
-%dark-bg {
-  background-color: $gray-100;
 }
 
 .dark-bg {
@@ -190,13 +213,6 @@ nav {
 
   &:hover {
     box-shadow: 1px 1px 0 #222 !important;
-  }
-}
-
-.tab-pill {
-
-  &:last-child { // TODO in mobile view
-    margin-bottom: 1rem;
   }
 }
 
@@ -273,7 +289,6 @@ nav {
 
 .finished-text-container {
   position: relative;
-  //font-family: $main-font-family;
   border-radius: .2rem;
 
   &::before {
