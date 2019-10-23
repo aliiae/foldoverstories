@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 import {
-  authPropType, errorsPropType, matchPropType, usersPropType,
+  authPropType, errorsPropType, matchPropType, usersPropType, userStatusPropType,
 } from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
@@ -13,10 +13,19 @@ import useWebsocket from '../../../hooks/useWebsocket';
 import TwoColsContainer from './TwoColsContainer';
 import RoomUsers from '../RoomUsers';
 import Content from './Content';
+import { mapStatusToEmoji } from '../Status';
+
+function getPageTitle(roomTitle, status) {
+  if (!status) {
+    return `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
+  }
+  const emoji = mapStatusToEmoji[status];
+  return `${emoji}${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
+}
 
 function Editor(props) {
   const {
-    errors, dispatchGetRoomStatus, match, roomIsFinished, auth, users,
+    errors, dispatchGetRoomStatus, match, roomIsFinished, auth, users, userStatus,
   } = props;
   const { isOnline } = useInternetStatus();
   const roomTitle = match.params.id;
@@ -31,8 +40,11 @@ function Editor(props) {
   });
   useEffect(() => {
     dispatchGetRoomStatus(roomTitle);
-    document.title = `${roomTitle} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, [dispatchGetRoomStatus, roomTitle]);
+  useEffect(() => {
+    document.title = getPageTitle(roomTitle, roomIsFinished ? 'ROOM_FINISHED' : userStatus);
+  }, [roomTitle, userStatus, roomIsFinished]);
+
   if (errors) {
     if (errors.status === 404) {
       return <Redirect to="/not-found" />;
@@ -45,7 +57,7 @@ function Editor(props) {
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }
-  // TwoColsContainer needs two children: a side panel and main content
+  // TwoColsContainer needs two ordered children: a side panel and main content
   return (
     <TwoColsContainer>
       <RoomUsers roomTitle={roomTitle} />
@@ -61,6 +73,7 @@ Editor.propTypes = {
   roomIsFinished: PropTypes.bool,
   users: usersPropType,
   errors: errorsPropType,
+  userStatus: userStatusPropType,
 };
 
 Editor.defaultProps = {
@@ -68,6 +81,7 @@ Editor.defaultProps = {
   roomIsFinished: null,
   users: null,
   errors: null,
+  userStatus: null,
 };
 
 const mapStateToProps = (state) => ({
@@ -75,6 +89,7 @@ const mapStateToProps = (state) => ({
   roomIsFinished: state.story.finishedAt !== null,
   users: state.story.users,
   errors: state.errors,
+  userStatus: state.story.userStatus,
 });
 const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };
 

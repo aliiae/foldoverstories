@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CAN_WRITE, STOPPED } from '../userStatus';
+import { CAN_WRITE, STOPPED, WAITING } from '../userStatus';
+
+export const mapStatusToEmoji = {
+  [STOPPED]: '🏁',
+  [CAN_WRITE]: '️️✍️',
+  [WAITING]: '⏳',
+  ROOM_FINISHED: '📗',
+};
 
 export function Emoji({ emoji, label, title }) {
   if (!label) { // emoji is purely decorative
@@ -33,12 +40,37 @@ Emoji.defaultProps = {
   title: '',
 };
 
+const flagEmoji = (
+  <Emoji
+    emoji={mapStatusToEmoji[STOPPED]}
+    label="finished"
+    title="Finished turns"
+  />
+);
+const writingEmoji = (
+  <Emoji
+    emoji={mapStatusToEmoji[CAN_WRITE]}
+    label="writing hand"
+    title="Time to write!"
+  />
+);
+const hourglassEmoji = (
+  <Emoji
+    emoji={mapStatusToEmoji[WAITING]}
+    label="hourglass"
+    title="Waiting for turn..."
+  />
+);
+
+const bookEmoji = (
+  <Emoji
+    emoji={mapStatusToEmoji.ROOM_FINISHED}
+    label="closed book"
+    title="Story is finished!"
+  />
+);
 
 export default function Status({ item }) {
-  const flagEmoji = <Emoji emoji="🏁" label="finished" title="Finished turns" />;
-  const writingEmoji = <Emoji emoji="️️✍️" label="writing hand" title="Time to write!" />;
-  const hourglassEmoji = <Emoji emoji="⏳" label="hourglass" title="Waiting for turn..." />;
-  const bookEmoji = <Emoji emoji="📗" label="closed book" title="Story is finished!" />;
   if (item.finishedAt) {
     return bookEmoji;
   }
