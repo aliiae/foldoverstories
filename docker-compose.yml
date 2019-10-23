@@ -47,6 +47,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    command: [sh, -c, "cd /app/frontend && npm run start"]
     volumes:
       - ./frontend:/app/frontend/
       - node_modules:/app/frontend/node_modules
@@ -54,6 +55,7 @@ services:
       - ./.env.dev
     ports:
       - "1234:1234"
+    restart: on-failure
     depends_on:
       - backend
 

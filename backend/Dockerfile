@@ -20,8 +20,6 @@ RUN pip install pipenv
 COPY ./Pipfile /usr/src/app/Pipfile
 RUN pipenv install --skip-lock --system
 
-RUN pip install django-debug-toolbar
-
 # copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
 

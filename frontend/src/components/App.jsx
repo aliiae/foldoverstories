@@ -19,8 +19,8 @@ import Landing from './Landing/Main';
 import store from '../store/store';
 
 const pages = {
-  editor: import('./Story/Editor/Main'),
-  register: import('./Auth/Register/Main'),
+  editor: import(/* webpackChunkName: "editor" */'./Story/Editor/Main'),
+  register: import(/* webpackChunkName: "register" */'./Auth/Register/Main'),
 };
 const Editor = lazy(() => pages.editor);
 const Register = lazy(() => pages.register);

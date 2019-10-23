@@ -1,4 +1,3 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import App from './components/App';
-import style from '../assets/style.scss';
+import './components/App';
+import '../assets/journal/bootstrap.scss';
+import '../assets/style.scss';

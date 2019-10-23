@@ -4,6 +4,7 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "entry",
+        "corejs": "3.3.2",
         "modules": false
       }
     ],
@@ -11,6 +12,7 @@
   ],
   "plugins": [
     "transform-class-properties",
+    "@babel/plugin-syntax-dynamic-import",
     [
       "@babel/plugin-transform-runtime",
       {
