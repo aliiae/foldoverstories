@@ -52,7 +52,7 @@ export const usersPropType = PropTypes.arrayOf(PropTypes.shape({
 }));
 
 export const errorsPropType = PropTypes.shape({
-  msg: PropTypes.oneOf([PropTypes.object, PropTypes.string, PropTypes.shape({
+  msg: PropTypes.oneOfType([PropTypes.object, PropTypes.string, PropTypes.shape({
     detail: PropTypes.string,
   })]),
   status: PropTypes.number,

@@ -16,7 +16,7 @@ const NotificationToast = (props) => {
     case 'room.text':
       text = (
         <>
-          <strong>{username}</strong> added text to <strong>{roomTitle}</strong>
+          <strong>{username}</strong> wrote to <strong>{roomTitle}</strong>
         </>
       );
       title = `${roomTitle} ${TITLE_DELIMITER} new text`;
