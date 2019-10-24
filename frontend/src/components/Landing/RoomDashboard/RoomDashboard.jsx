@@ -3,41 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
-import Pagination from 'react-bootstrap/Pagination';
 import Container from 'react-bootstrap/Container';
 
-import { getRooms } from '../../store/actions/room';
-import Status from '../Story/Status';
-import { formatTimeStamp } from '../dateFormatters';
-import { ROOMS_PER_PAGE } from '../../settings';
+import { getRooms } from '../../../store/actions/room';
+import Status from '../../Story/Status';
+import { formatTimeStamp } from '../../dateFormatters';
+import { ROOMS_PER_PAGE } from '../../../settings';
+import Paginator from './Paginator';
 
 function RoomDashboard(props) {
   const { dispatchGetRooms, rooms } = props;
   useEffect(() => dispatchGetRooms(), [dispatchGetRooms]);
-  const [activePageNumber, setActivePageNumber] = React.useState('1');
-
-  const onClickPage = (e) => {
-    const newPageNumber = e.target.text;
-    setActivePageNumber(newPageNumber);
-    dispatchGetRooms(newPageNumber);
-  };
   if (!rooms || !('results' in rooms) || rooms.results.length === 0) {
     return null;
   }
   const { count, results } = rooms;
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
-  const paginationItems = [];
-  for (let number = 1; number <= numPages; number++) {
-    paginationItems.push(
-      <Pagination.Item
-        key={number}
-        active={String(number) === activePageNumber}
-        onClick={onClickPage}
-      >
-        {number}
-      </Pagination.Item>,
-    );
-  }
+
   return (
     <div className="dark-bg">
       <Container className="pt-3 pb-2">
@@ -45,9 +27,9 @@ function RoomDashboard(props) {
           <Table hover className="dashboard" data-test="dashboard">
             <thead>
               <tr>
-                <th scope="col" width="40%">Story</th>
+                <th scope="col" width="45%">Story</th>
                 <th scope="col" width="20%">Authors</th>
-                <th scope="col" className="text-center" width="10%">Status</th>
+                <th scope="col" className="text-center" width="5%">Status</th>
                 <th scope="col" width="30%">Last Updated</th>
               </tr>
             </thead>
@@ -60,7 +42,7 @@ function RoomDashboard(props) {
                     : !room.finishedAt ? 'table-warning' : ''}
                 >
                   <td className="room-link-td">
-                    {<Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>}
+                    <Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>
                   </td>
                   <td>
                     {room.users.map((user) => user.username)
@@ -74,11 +56,7 @@ function RoomDashboard(props) {
           </Table>
         </div>
         {numPages > 1 && (
-          <div className="pagination-center">
-            <Pagination className="flex-wrap">
-              {paginationItems}
-            </Pagination>
-          </div>
+          <Paginator dispatchGetRooms={dispatchGetRooms} numPages={numPages} />
         )}
       </Container>
     </div>

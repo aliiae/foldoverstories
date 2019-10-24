@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import { WEBSITE_TITLE } from '../../settings';
-import RoomDashboard from './RoomDashboard';
+import RoomDashboard from './RoomDashboard/RoomDashboard';
 import WelcomeJumbotron from './WelcomeJumbotron';
 import { authPropType } from '../commonPropTypes';
 
