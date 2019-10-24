@@ -16,6 +16,7 @@ djangorestframework-camel-case = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 daphne = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.7"

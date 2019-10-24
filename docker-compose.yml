@@ -18,8 +18,10 @@ services:
     command: [sh, -c, "cd storymanager && python3 manage.py runserver 0.0.0.0:8000"]
     depends_on:
       - db
+      - daphne
     links:
       - db
+      - daphne
 
   redis:
     image: redis:5.0.6-alpine

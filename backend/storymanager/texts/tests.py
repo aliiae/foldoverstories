@@ -1,23 +1,21 @@
-from django.contrib.auth import get_user_model
+import django
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-
-from accounts.tests import create_user, login_user_into_client
-from rooms.models import get_user_room_membership, Membership
-from storymanager.tests_utils import create_user_room, create_user_room_text
-
-User = get_user_model()
 
 
 def post_text_from_client_to_room(text_data, client, room):
     return client.post(reverse('texts-list', kwargs={'room_title': room.room_title}),
                        data=text_data)
 
-
 class HttpTextsTest(APITestCase):
 
     def setUp(self):
+        django.setup()
+
+        from storymanager.tests_utils import create_user
+        from storymanager.tests_utils import login_user_into_client
+        from storymanager.tests_utils import create_user_room
         self.client = APIClient()
         self.user = create_user()
         login_user_into_client(self.user, self.client)
@@ -52,6 +50,7 @@ class HttpTextsTest(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_can_view_last_visible_text_in_open_room(self):
+        from storymanager.tests_utils import create_user_room_text
         texts = [create_user_room_text(self.user, self.room, visible_text=str(i))
                  for i in range(10)]
         response = self.client.get(
@@ -61,6 +60,7 @@ class HttpTextsTest(APITestCase):
                              [t['visible_text'] for t in response.data])
 
     def test_logged_out_user_can_view_last_visible_text_in_open_room(self):
+        from storymanager.tests_utils import create_user_room_text
         texts = [create_user_room_text(self.user, self.room, visible_text=str(i))
                  for i in range(10)]
         self.client.post(reverse('knox_logout'))
@@ -79,6 +79,8 @@ class HttpTextsTest(APITestCase):
         self.assertListEqual(texts, response.data)
 
     def test_user_with_prev_texts_cannot_write_after_another_user_joined(self):
+        from rooms.models import get_user_room_membership, Membership
+        from storymanager.tests_utils import login_user_into_client, create_user
         text_data = {'visible_text': 'visible_text', 'hidden_text': 'hidden_text'}
         post_text_from_client_to_room(text_data, self.client, self.room)
         this_user = self.user
@@ -94,6 +96,8 @@ class HttpTextsTest(APITestCase):
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
 
     def test_user_with_no_prev_texts_can_write_after_another_user_joined(self):
+        from storymanager.tests_utils import create_user
+        from rooms.models import get_user_room_membership, Membership
         text_data = {'visible_text': 'visible_text', 'hidden_text': 'hidden_text'}
         this_user = self.user
         self.assertTrue(
@@ -106,6 +110,8 @@ class HttpTextsTest(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_current_turn_user_is_chronologically_after_previous_author(self):
+        from rooms.models import get_user_room_membership, Membership
+        from storymanager.tests_utils import login_user_into_client, create_user
         authors_count = 10
         other_usernames = [f'user-{i}' for i in range(1, authors_count)]
         first_author_index = authors_count // 2
@@ -141,6 +147,7 @@ class HttpTextsTest(APITestCase):
                 self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_user_in_a_single_user_room_can_write_many_times(self):
+        from rooms.models import get_user_room_membership, Membership
         membership = get_user_room_membership(self.user, self.room)
         for _ in range(10):
             self.assertTrue(membership.status == Membership.CAN_WRITE)
@@ -150,11 +157,13 @@ class HttpTextsTest(APITestCase):
             self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_user_cannot_write_after_room_is_finished(self):
+        from rooms.models import get_user_room_membership, Membership
         self.room.close()
         membership = get_user_room_membership(self.user, self.room)
         self.assertFalse(membership.status == Membership.CAN_WRITE)
 
     def test_user_cannot_write_after_leaving_room(self):
+        from rooms.models import get_user_room_membership, Membership
         membership = get_user_room_membership(self.user, self.room)
         self.room.leave_room(self.user)
         membership.refresh_from_db()

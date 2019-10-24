@@ -1,19 +1,16 @@
-from django.contrib.auth import get_user_model
+import django
 from django.utils.dateparse import parse_datetime
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
-from rooms.models import Membership, get_user_room_membership
-from storymanager.tests_utils import (create_user, login_user_into_client, create_user_room,
-                                      create_user_room_text)
 from texts.tests import post_text_from_client_to_room
-
-User = get_user_model()
 
 
 class HttpRoomsTest(APITestCase):
 
     def setUp(self):
+        django.setup()
+        from storymanager.tests_utils import create_user, login_user_into_client
         self.client = APIClient()
         self.user = create_user()
         login_user_into_client(self.user, self.client)
@@ -28,6 +25,7 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual(len(list_response.data['results']), 1)
 
     def test_user_can_list_rooms(self):
+        from storymanager.tests_utils import create_user_room
         rooms = [create_user_room(self.user, self.room_title + str(i)) for i in range(10)]
         response = self.client.get(reverse('rooms-list'))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -36,6 +34,7 @@ class HttpRoomsTest(APITestCase):
         self.assertListEqual(exp_room_titles, act_room_titles)
 
     def test_rooms_are_listed_in_reversed_chronological_order(self):
+        from storymanager.tests_utils import create_user_room
         _ = [create_user_room(self.user, self.room_title + str(i)) for i in range(10)]
         response = self.client.get(reverse('rooms-list'))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -44,18 +43,21 @@ class HttpRoomsTest(APITestCase):
                             >= parse_datetime(second['modified_at']))
 
     def test_user_can_retrieve_own_room_by_title(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(room.room_title, response.data.get('room_title'))
 
     def test_current_turn_username_is_equal_to_authors_username_in_new_room(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(self.user.username, response.data.get('current_turn_username'))
 
     def test_user_can_retrieve_another_users_room_before_joining(self):
+        from storymanager.tests_utils import create_user_room, create_user
         another_user = create_user('another-user')
         room = create_user_room(another_user, self.room_title)
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
@@ -63,12 +65,14 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual(room.room_title, response.data.get('room_title'))
 
     def test_user_can_get_empty_visible_text_from_empty_room_detail(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual('', response.data['visible_text'])
 
     def test_user_can_get_visible_text_from_room_detail(self):
+        from storymanager.tests_utils import create_user_room, create_user_room_text
         room = create_user_room(self.user, self.room_title)
         create_user_room_text(self.user, room, visible_text='test_text')
         response = self.client.get(reverse('rooms-detail', kwargs={'room_title': room.room_title}))
@@ -76,6 +80,7 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual('test_text', response.data['visible_text'])
 
     def test_user_can_read_room_texts_by_title(self):
+        from storymanager.tests_utils import create_user_room, create_user_room_text
         room = create_user_room(self.user, self.room_title, is_finished=True)
         texts = [create_user_room_text(self.user, room, visible_text=str(i))
                  for i in range(10)]
@@ -86,6 +91,7 @@ class HttpRoomsTest(APITestCase):
                          [t['full_text'] for t in response.data])
 
     def test_user_can_read_empty_room_with_no_texts_by_title(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title, is_finished=True)
         response = self.client.get(
             reverse('room_read-list', kwargs={'room_title': room.room_title}))
@@ -93,6 +99,7 @@ class HttpRoomsTest(APITestCase):
         self.assertListEqual([], response.data)
 
     def test_user_can_join_room(self):
+        from storymanager.tests_utils import create_user_room, create_user, login_user_into_client
         room = create_user_room(self.user, self.room_title)
         usernames = list(map(str, range(10)))
         responses = []
@@ -110,6 +117,8 @@ class HttpRoomsTest(APITestCase):
         self.assertEqual(usernames, [u['username'] for u in response_users_list.data])
 
     def test_user_can_leave_room(self):
+        from rooms.models import Membership
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         response = self.client.post(
             reverse('rooms-leave', kwargs={'room_title': room.room_title}))
@@ -118,6 +127,7 @@ class HttpRoomsTest(APITestCase):
         self.assertTrue(user_membership.status == Membership.STOPPED)
 
     def test_room_closes_after_everyone_leaves(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         self.client.post(reverse('rooms-leave', kwargs={'room_title': room.room_title}))
         room.refresh_from_db()
@@ -125,6 +135,7 @@ class HttpRoomsTest(APITestCase):
         self.assertIsNotNone(room.finished_at)
 
     def test_user_can_list_room_users_thorough_users_list(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         usernames = self.create_many_users_in_room(room)
         response = self.client.get(
@@ -133,6 +144,7 @@ class HttpRoomsTest(APITestCase):
         self.assertListEqual(usernames, [u['username'] for u in response.data])
 
     def test_user_can_list_room_users_through_rooms_detail(self):
+        from storymanager.tests_utils import create_user_room
         room = create_user_room(self.user, self.room_title)
         usernames = self.create_many_users_in_room(room)
         response = self.client.get(
@@ -142,6 +154,8 @@ class HttpRoomsTest(APITestCase):
         self.assertTrue('texts_count' in response.data['users'][0])
 
     def test_user_list_updates_current_turn_user(self):
+        from storymanager.tests_utils import create_user_room, login_user_into_client, create_user
+        from rooms.models import get_user_room_membership, Membership
         room = create_user_room(self.user, self.room_title)
         usernames = list(map(str, range(3)))
         users = []
@@ -159,6 +173,7 @@ class HttpRoomsTest(APITestCase):
         self.assertTrue(expected_curr_membership.status == Membership.CAN_WRITE)
 
     def create_many_users_in_room(self, room):
+        from storymanager.tests_utils import login_user_into_client, create_user
         usernames = list(map(str, range(10)))
         for username in usernames:
             another_user = create_user(username)
