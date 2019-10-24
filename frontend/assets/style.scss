@@ -76,7 +76,7 @@ $nav-height: 4rem;
 }
 
 nav {
-  height: $nav-height;
+  min-height: $nav-height;
 }
 
 .color-underline,
@@ -283,6 +283,7 @@ mark {
   height: 100%;
   max-height: 100%;
   line-height: 1.5em;
+  overflow-x: hidden;
   padding: 0 10px;
   border: 0;
   outline: 0;
@@ -346,32 +347,34 @@ mark {
   flex-flow: column;
 }
 
-.illustrated-text-card section {
-
-  h2 {
-
-    &::before {
-      content: '\2026 '
-    }
+.card-about-title {
+  &::before {
+    content: '\2026 ';
+    font-weight: 100;
   }
+}
+
+.illustrated-text-card {
 
   img {
-
-    &:nth-of-type(even) {
-      vertical-align: middle;
-      float: left;
-      padding: 1em;
-      overflow: auto;
-      width: 20rem;
-    }
-
-    &:nth-of-type(odd) {
-      vertical-align: middle;
-      float: right;
-      padding: 1em;
-      overflow: auto;
-      width: 20rem;
-    }
+    width: 5rem;
+    margin: auto;
+    display: block;
+    //&:nth-of-type(even) {
+    //  vertical-align: middle;
+    //  float: left;
+    //  padding: 1em;
+    //  overflow: auto;
+    //  width: 20rem;
+    //}
+    //
+    //&:nth-of-type(odd) {
+    //  vertical-align: middle;
+    //  float: right;
+    //  padding: 1em;
+    //  overflow: auto;
+    //  width: 20rem;
+    //}
   }
 }
 
@@ -409,7 +412,7 @@ mark {
   margin-top: 1rem;
 }
 
-.not-found {
+.error-container {
   margin: auto;
   font-family: $cursive-font-family;
   display: flex;

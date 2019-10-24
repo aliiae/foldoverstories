@@ -39,7 +39,7 @@ class RegisterForm extends React.Component {
     formValues[target.name] = target.value;
     this.setState({ formValues });
     this.handleValidation(target);
-  };
+  }
 
   handleValidation(target) {
     const { name, value } = target;
@@ -68,7 +68,7 @@ class RegisterForm extends React.Component {
       formErrors,
       formValidity,
     });
-  };
+  }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -90,7 +90,7 @@ class RegisterForm extends React.Component {
       });
       this.setState({ isSubmitting: false });
     }
-  };
+  }
 
   render() {
     const { formValues, formErrors, isSubmitting } = this.state;
@@ -119,6 +119,7 @@ class RegisterForm extends React.Component {
             value={formValues.password}
             onChange={this.handleChange}
             isInvalid={!!formErrors.password}
+            isValid={formValues.password && !formErrors.password}
           />
           <Form.Control.Feedback type="invalid">
             {formErrors.password}
@@ -133,6 +134,7 @@ class RegisterForm extends React.Component {
             value={formValues.password2}
             onChange={this.handleChange}
             isInvalid={formErrors.password2}
+            isValid={formValues.password2 && !formErrors.password2}
           />
           <Form.Control.Feedback type="invalid">
             {formErrors.password2}
@@ -160,4 +162,5 @@ RegisterForm.propTypes = {
 };
 
 const mapDispatchToProps = { dispatchRegister: register };
+
 export default connect(null, mapDispatchToProps)(RegisterForm);

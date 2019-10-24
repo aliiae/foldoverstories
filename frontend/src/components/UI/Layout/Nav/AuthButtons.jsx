@@ -4,7 +4,7 @@ import RegisterLogin from './RegisterLogin';
 import Logout from './Logout';
 import { authDefaultPropType, authPropType } from '../../../commonPropTypes';
 
-function Auth({ auth }) {
+function AuthButtons({ auth }) {
   if (!auth || auth.isLoading) {
     return null;
   }
@@ -16,10 +16,10 @@ function Auth({ auth }) {
   );
 }
 
-Auth.propTypes = {
+AuthButtons.propTypes = {
   auth: authPropType,
 };
-Auth.defaultProps = {
+AuthButtons.defaultProps = {
   auth: authDefaultPropType,
 };
 
@@ -27,4 +27,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(Auth);
+export default connect(mapStateToProps)(AuthButtons);

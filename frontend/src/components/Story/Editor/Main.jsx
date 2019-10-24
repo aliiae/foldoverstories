@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 import {
-  authPropType, errorsPropType, matchPropType, usersPropType, userStatusPropType,
+  authPropType, matchPropType, usersPropType, userStatusPropType,
 } from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
@@ -25,7 +24,7 @@ function getPageTitle(roomTitle, status) {
 
 function Editor(props) {
   const {
-    errors, dispatchGetRoomStatus, match, roomIsFinished, auth, users, userStatus,
+    dispatchGetRoomStatus, match, roomIsFinished, auth, users, userStatus,
   } = props;
   const { isOnline } = useInternetStatus();
   const roomTitle = match.params.id;
@@ -44,15 +43,6 @@ function Editor(props) {
   useEffect(() => {
     document.title = getPageTitle(roomTitle, roomIsFinished ? 'ROOM_FINISHED' : userStatus);
   }, [roomTitle, userStatus, roomIsFinished]);
-
-  if (errors) {
-    if (errors.status === 404) {
-      return <Redirect to="/not-found" />;
-    }
-    if (errors.status === 401) {
-      return <Redirect to="/login" />;
-    }
-  }
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
@@ -72,7 +62,6 @@ Editor.propTypes = {
   auth: authPropType,
   roomIsFinished: PropTypes.bool,
   users: usersPropType,
-  errors: errorsPropType,
   userStatus: userStatusPropType,
 };
 
@@ -80,7 +69,6 @@ Editor.defaultProps = {
   auth: null,
   roomIsFinished: null,
   users: null,
-  errors: null,
   userStatus: null,
 };
 
@@ -88,7 +76,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
   roomIsFinished: state.story.finishedAt !== null,
   users: state.story.users,
-  errors: state.errors,
   userStatus: state.story.userStatus,
 });
 const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };

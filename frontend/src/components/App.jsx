@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import Header from './UI/Layout/Nav/Header';
 import HowToPlay from './About/HowToPlay';
 import NotificationToasts from './UI/Notifications/Toasts';
-import PageNotFound from './UI/PageNotFound';
+import PageNotFound404 from './UI/ErrorPages/PageNotFound404';
 import Footer from './UI/Layout/Footer';
 import Main from './UI/Layout/Main';
 import Login from './Auth/Login';
@@ -17,6 +17,8 @@ import { loadUser } from '../store/actions/auth';
 import LoadingSpinner from './UI/LoadingSpinner';
 import Landing from './Landing/Main';
 import store from '../store/store';
+import ErrorBoundary from './UI/ErrorPages/ErrorBoundary';
+import ServerError500 from './UI/ErrorPages/ServerError500';
 
 const pages = {
   editor: import(/* webpackChunkName: "editor" */'./Story/Editor/Main'),
@@ -33,7 +35,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <Header key="navbar" />
+        <Header />
         <NotificationToasts />
         <Main className="main-content">
           <Suspense fallback={<LoadingSpinner />}>
@@ -41,7 +43,15 @@ function App() {
               <Route exact path="/">
                 <Landing />
               </Route>
-              <Route exact path="/story/:id" component={Editor} />
+              <Route
+                exact
+                path="/story/:id"
+                render={(props) => (
+                  <ErrorBoundary>
+                    <Editor {...props} />
+                  </ErrorBoundary>
+                )}
+              />
               <Route exact path="/how-to-play">
                 <HowToPlay />
               </Route>
@@ -52,7 +62,7 @@ function App() {
                 <Login />
               </Route>
               <Route path="*">
-                <PageNotFound />
+                <PageNotFound404 />
               </Route>
             </Switch>
           </Suspense>

@@ -20,7 +20,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx)$/i,
         exclude: /node_modules/,
         use: ['babel-loader'],
       },
@@ -32,6 +32,10 @@ module.exports = {
           'postcss-loader',
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file-loader',
       },
     ],
   },
@@ -82,6 +86,7 @@ module.exports = {
     hot: true,
     host: '0.0.0.0',
     port: 1234,
+    historyApiFallback: true,
     proxy: {
       '/api': 'http://backend:8000',
       '/ws': {

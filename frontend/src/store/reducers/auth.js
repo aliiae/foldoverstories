@@ -1,10 +1,6 @@
 import {
-  USER_LOADED,
-  USER_LOADING,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT_SUCCESS,
+  USER_LOADED, USER_LOADING, AUTH_ERROR, CLEAR_ERROR,
+  LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT_SUCCESS,
   AUTH_GUEST, REGISTER_SUCCESS, REGISTER_FAIL,
 } from '../actions/types';
 
@@ -60,6 +56,14 @@ export default function (state = initialState, action) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
+      };
+    case CLEAR_ERROR:
+      if (state.error === null) {
+        return state;
+      }
+      return {
+        ...state,
+        error: null,
       };
     case AUTH_ERROR:
     case LOGOUT_SUCCESS:
