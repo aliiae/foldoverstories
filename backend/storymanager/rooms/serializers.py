@@ -49,7 +49,7 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
         if 'request' not in self.context:  # user is not logged in, can view anything
             return obj.texts.last().visible_text
         request_user = self.context['request'].user
-        obj.calculate_current_turn_user(request_user)
+        Room.calculate_current_turn_user(obj.room_title, request_user)
         request_user_membership = get_user_room_membership(request_user, obj)
         if not request_user_membership:
             return obj.texts.last().visible_text  # user is not logged in
@@ -61,7 +61,7 @@ class SingleRoomSerializer(RoomUserStatusSerializer):
         if 'request' not in self.context:
             return None
         request_user = self.context['request'].user
-        current_turn_user = obj.calculate_current_turn_user(request_user)
+        current_turn_user = Room.calculate_current_turn_user(obj.room_title, request_user)
         return current_turn_user.username if current_turn_user else None
 
     class Meta:

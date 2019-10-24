@@ -1,7 +1,7 @@
 from typing import Optional
 import uuid
 from django.contrib.auth import get_user_model
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 
 from rooms.utils import random_adj_noun_pair
@@ -15,7 +15,7 @@ User = get_user_model()
 def get_user_room_membership(user: User, room: 'Room') -> Optional['Membership']:
     if user not in room.users.all():
         return None
-    return Membership.objects.get(room=room, user=user)
+    return Membership.objects.select_related().get(room=room, user=user)
 
 
 def attempt_random_adj_noun_pair(attempts: int = 5) -> str:
@@ -53,13 +53,15 @@ class Room(models.Model):
             self.finished_at = timezone.now()
         super(Room, self).save(*args, **kwargs)
 
-    def calculate_current_turn_user(self, request_user: User) -> Optional[User]:
+    @classmethod
+    def calculate_current_turn_user(cls, room_title: str, request_user: User) -> Optional[User]:
         """Calculates the user allowed to post, the one chronologically next after the prev poster.
 
         Allows the current turn curr_user write, prohibits others.
         Closes the room if no active (those who have not stopped) users left.
         Returns None if the room is closed.
 
+        :param room_title: The room's title used as id.
         :param request_user: The currently logged in user.
         :return: A current turn User object, or None if the room is closed.
         """
@@ -75,38 +77,40 @@ class Room(models.Model):
             If `update_others=True`, forbids all other users to write now.
             If the user is a not logged in or has not joined the room yet, returns None.
             """
-            curr_membership = get_user_room_membership(curr_user, self)
+            curr_membership = get_user_room_membership(curr_user, room)
             if curr_membership is None:  # it is a guest user, they can view anything
                 return None
             if curr_membership.status == Membership.WAITING:
-                curr_membership.status = Membership.CAN_WRITE
-                curr_membership.save()
+                Membership.update_status(curr_membership, Membership.CAN_WRITE)
             if update_others:
-                self.close_all_memberships_except(curr_user)
+                room.close_all_memberships_except(curr_user)
             return curr_user
 
-        if self.is_finished:
-            return None
-        active_users = self.get_active_users()
-        if active_users.count() == 0:  # everyone stopped
-            self.close()
-            return None
-        if self.texts.count() == 0:  # the room is empty, return the currently logged in user
-            return marked_curr_user(request_user)
-        all_users = self.get_all_room_users()
-        if all_users.count() == 1:  # return the room's owner if they're alone
-            return marked_curr_user(self.users.all()[0])
-        prev_turn_user: User = self.texts.last().author
-        if active_users.count() == 1 and prev_turn_user == request_user == active_users.all()[0]:
-            # everyone else stopped, finish room to prevent double-posting
-            self.close()
-            return None
-        prev_turn_user_index = index_of(prev_turn_user, all_users)
-        if prev_turn_user_index == -1:  # current curr_user is the first one to write, allow anyone
-            return marked_curr_user(request_user)
-        # get the next available active curr_user
-        curr_turn_user = active_users[(prev_turn_user_index + 1) % active_users.count()]
-        return marked_curr_user(curr_turn_user, update_others=True)
+        with transaction.atomic():
+            room = Room.objects.select_for_update().select_related().get(room_title=room_title)
+            if room.is_finished:
+                return None
+            active_users = room.get_active_users()
+            if active_users.count() == 0:  # everyone stopped
+                room.close()
+                return None
+            if room.texts.count() == 0:  # the room is empty, return the currently logged in user
+                return marked_curr_user(request_user)
+            all_users = room.get_all_room_users()
+            if all_users.count() == 1:  # return the room's owner if they're alone
+                return marked_curr_user(room.users.all()[0])
+            prev_turn_user: User = room.texts.last().author
+            if (active_users.count() == 1
+                    and prev_turn_user == request_user == active_users.first()):
+                # everyone else stopped, finish room to prevent double-posting
+                room.close()
+                return None
+            prev_turn_user_index = index_of(prev_turn_user, all_users)
+            if prev_turn_user_index == -1:  # current user is the first one to write, allow anyone
+                return marked_curr_user(request_user)
+            # get the next available active curr_user
+            curr_turn_user = active_users[(prev_turn_user_index + 1) % active_users.count()]
+            return marked_curr_user(curr_turn_user, update_others=True)
 
     def close_all_memberships_except(self, excluded_user: User = None):
         """Marks all users who are not `curr_turn_user` as those who cannot write now."""
@@ -126,8 +130,9 @@ class Room(models.Model):
 
     def get_active_users(self) -> QueryType[User]:
         """Returns the subset of users who have not stopped yet."""
-        return self.users.exclude(membership__status=Membership.STOPPED).order_by(
-            'membership__joined_at')
+        return (self.users
+                .exclude(membership__status=Membership.STOPPED)
+                .order_by('membership__joined_at'))
 
     def has_user(self, user: User) -> bool:
         """Checks whether the user has joined the room before."""
@@ -139,7 +144,7 @@ class Room(models.Model):
             return
         new_user_membership = Membership.objects.create(room=self, user=user)
         new_user_membership.save()
-        self.calculate_current_turn_user(user)  # recalculate current turn user
+        Room.calculate_current_turn_user(self.room_title, user)  # recalculate current turn user
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_JOIN,
             'room_title': self.room_title,
@@ -151,8 +156,8 @@ class Room(models.Model):
         user_membership = get_user_room_membership(user, self)
         if not user_membership:
             return
-        user_membership.status = Membership.STOPPED
-        user_membership.save()
+        Membership.update_status(user_membership, Membership.STOPPED)
+        Room.calculate_current_turn_user(self.room_title, user)
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_LEAVE,
             'room_title': self.room_title,
@@ -179,10 +184,14 @@ class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     status = models.CharField(choices=USER_STATUS_CHOICES, default=WAITING, max_length=9)
-    joined_at = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.user}_{self.room}'
+    joined_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('joined_at',)
+
+    def __str__(self):
+        return f'{self.user}+{self.room}'
+
+    @classmethod
+    def update_status(cls, membership, new_status):
+        Membership.objects.filter(id=membership.id).update(status=new_status)

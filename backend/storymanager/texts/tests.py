@@ -8,6 +8,7 @@ def post_text_from_client_to_room(text_data, client, room):
     return client.post(reverse('texts-list', kwargs={'room_title': room.room_title}),
                        data=text_data)
 
+
 class HttpTextsTest(APITestCase):
 
     def setUp(self):
@@ -81,19 +82,25 @@ class HttpTextsTest(APITestCase):
     def test_user_with_prev_texts_cannot_write_after_another_user_joined(self):
         from rooms.models import get_user_room_membership, Membership
         from storymanager.tests_utils import login_user_into_client, create_user
+        # random users to populate User model
+        for i in range(5):
+            create_user(str(i))
+        # the first user writes something
         text_data = {'visible_text': 'visible_text', 'hidden_text': 'hidden_text'}
-        post_text_from_client_to_room(text_data, self.client, self.room)
+        _ = post_text_from_client_to_room(text_data, self.client, self.room)
         this_user = self.user
         this_membership = get_user_room_membership(this_user, self.room)
         self.assertTrue(this_membership.status == Membership.CAN_WRITE)
+        # another user joins the room
         another_user = create_user('another_user')
         login_user_into_client(another_user, self.client)
         self.room.add_user(another_user)
+        # the first user shouldn't be able to write
         login_user_into_client(this_user, self.client)
-        this_membership = get_user_room_membership(this_user, self.room)
-        self.assertFalse(this_membership.status == Membership.CAN_WRITE)
+        this_membership.refresh_from_db()
+        self.assertTrue(this_membership.status == Membership.WAITING, this_membership.status)
         response = post_text_from_client_to_room(text_data, self.client, self.room)
-        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code, response.data)
 
     def test_user_with_no_prev_texts_can_write_after_another_user_joined(self):
         from storymanager.tests_utils import create_user
@@ -113,7 +120,7 @@ class HttpTextsTest(APITestCase):
         from rooms.models import get_user_room_membership, Membership
         from storymanager.tests_utils import login_user_into_client, create_user
         authors_count = 10
-        other_usernames = [f'user-{i}' for i in range(1, authors_count)]
+        other_usernames = [f'user-{i}' for i in range(authors_count, 0, -1)]
         first_author_index = authors_count // 2
         users = []
         for i, another_username in enumerate(other_usernames):
@@ -121,9 +128,7 @@ class HttpTextsTest(APITestCase):
             login_user_into_client(another_user, self.client)
             self.room.add_user(another_user)
             if i == first_author_index:
-                response = post_text_from_client_to_room({'visible_text': 'x'}, self.client,
-                                                         self.room)
-                self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+                post_text_from_client_to_room({'visible_text': 'x'}, self.client, self.room)
             users.append(another_user)
         users = [self.user] + users
         exp_current_turn_index = (first_author_index + 1 + 1) % authors_count
@@ -131,19 +136,20 @@ class HttpTextsTest(APITestCase):
             login_user_into_client(user, self.client)
             membership = get_user_room_membership(user, self.room)
             if i < exp_current_turn_index:  # users before are not allowed to write
-                self.assertFalse(membership.status == Membership.CAN_WRITE)
+                self.assertFalse(membership.status == Membership.CAN_WRITE, membership.status)
                 response = post_text_from_client_to_room({'visible_text': 'x'}, self.client,
                                                          self.room)
                 self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
             else:  # users after are allowed to write in turn
-                self.assertTrue(membership.status == Membership.CAN_WRITE)
+                self.assertTrue(membership.status == Membership.CAN_WRITE, membership.status)
                 response = post_text_from_client_to_room({'visible_text': 'x'}, self.client,
                                                          self.room)
                 # next user should be correctly named:
                 rooms_detail_response = self.client.get(
                     reverse('rooms-detail', kwargs={'room_title': self.room.room_title}))
                 self.assertEqual(users[(i + 1) % len(users)].username,
-                                 rooms_detail_response.data.get('current_turn_username'))
+                                 rooms_detail_response.data.get('current_turn_username'),
+                                 'current_turn_username')
                 self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_user_in_a_single_user_room_can_write_many_times(self):

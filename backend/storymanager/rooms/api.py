@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions, generics, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, NotAuthenticated, ValidationError
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -67,7 +67,6 @@ class RoomsViewSet(viewsets.ModelViewSet):
             # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
         room.leave_room(request.user)
-        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
         return Response(status=status.HTTP_200_OK)
 
 
@@ -80,22 +79,24 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         room: Room = get_object_or_404(Room, room_title=room_title)
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
-        room.add_user(self.request.user)
+        room.add_user(request.user)
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, *kwargs)
 
     def get_queryset(self) -> QueryType[User]:
-        room = get_object_or_404(Room, room_title=self.kwargs['room_title'])
+        room_title = self.kwargs['room_title']
+        room = get_object_or_404(Room, room_title=room_title)
         room_users = room.users.annotate(texts_count=Count('texts', filter=Q(texts__room=room)))
-        room.calculate_current_turn_user(self.request.user)  # recalculate current turn user
+        Room.calculate_current_turn_user(room_title, self.request.user)  # recalculate
         return room_users.all().order_by('membership__joined_at')
 
 
-class RoomReadViewSet(viewsets.ModelViewSet):
+class RoomReadViewSet(viewsets.GenericViewSet, ListModelMixin):
     permission_classes = [permissions.AllowAny]
     serializer_class = RoomReadSerializer
+    pagination_class = None
 
     def get_queryset(self) -> QueryType[Text]:
         room: Room = get_object_or_404(Room, room_title=self.kwargs['room_title'])
