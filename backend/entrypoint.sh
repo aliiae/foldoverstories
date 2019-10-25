@@ -11,8 +11,8 @@ then
     echo "PostgreSQL started"
 fi
 
-#python3 ./storymanager/manage.py flush --no-input
-python3 ./storymanager/manage.py makemigrations
+python3 ./storymanager/manage.py flush --no-input
 python3 ./storymanager/manage.py migrate
+python3 ./storymanager/manage.py loaddata ./storymanager/fixtures/data.dev.json
 
 exec "$@"

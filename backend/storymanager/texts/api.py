@@ -3,7 +3,6 @@ from typing import Dict
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions
 from rest_framework.exceptions import PermissionDenied, NotFound
-from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 
 from rooms.models import Room, get_user_room_membership, Membership
@@ -57,8 +56,8 @@ class TextsViewSet(viewsets.GenericViewSet, CreateModelMixin, ListModelMixin):
             raise PermissionDenied(detail=self._wrong_turn_error_detail(current_turn_user))
 
         serializer.save(author=request_user, room=room)
-        _ = Room.calculate_current_turn_user(self.room_title, self.request.user)  # recalculate
         room.save()  # to update the modification timestamp
+        _ = Room.calculate_current_turn_user(self.room_title, self.request.user)  # recalculate
         send_channel_message(self.room_title, {
             'type': WEBSOCKET_MSG_ADD_TEXT,
             'room_title': self.room_title,

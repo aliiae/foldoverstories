@@ -126,13 +126,13 @@ class Room(models.Model):
 
     def get_all_room_users(self) -> QueryType[User]:
         """Returns all room's users."""
-        return self.users.all().order_by('membership__joined_at')
+        return self.users.all().order_by('membership__id')
 
     def get_active_users(self) -> QueryType[User]:
         """Returns the subset of users who have not stopped yet."""
         return (self.users
                 .exclude(membership__status=Membership.STOPPED)
-                .order_by('membership__joined_at'))
+                .order_by('membership__id'))
 
     def has_user(self, user: User) -> bool:
         """Checks whether the user has joined the room before."""
@@ -185,9 +185,6 @@ class Membership(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     status = models.CharField(choices=USER_STATUS_CHOICES, default=WAITING, max_length=9)
     joined_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ('joined_at',)
 
     def __str__(self):
         return f'{self.user}+{self.room}'

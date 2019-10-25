@@ -23,7 +23,7 @@ class RoomUserStatusSerializer(serializers.ModelSerializer):
         serializer = RoomUsersSerializer(
             User.objects.filter(membership__room=obj)
                 .annotate(texts_count=Count('texts', filter=Q(texts__room=obj)))
-                .order_by('membership__joined_at'),
+                .order_by('membership__id'),
             read_only=True, many=True, context={'room_title': obj.room_title})
         return serializer.data
 

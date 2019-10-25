@@ -90,7 +90,7 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         room = get_object_or_404(Room, room_title=room_title)
         room_users = room.users.annotate(texts_count=Count('texts', filter=Q(texts__room=room)))
         Room.calculate_current_turn_user(room_title, self.request.user)  # recalculate
-        return room_users.all().order_by('membership__joined_at')
+        return room_users.all().order_by('membership__id')
 
 
 class RoomReadViewSet(viewsets.GenericViewSet, ListModelMixin):

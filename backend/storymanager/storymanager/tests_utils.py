@@ -6,6 +6,7 @@ PASSWORD = 'pass_w0rd!'
 
 
 def create_user(username: str = 'test_user', password: str = PASSWORD) -> User:
+    User.objects.filter(username=username).delete()
     return User.objects.create_user(username=username, password=password)
 
 
@@ -25,6 +26,7 @@ def create_user_room_text(user: User, room: 'Room', visible_text: str = 'text', 
 
 def create_user_room(user: User, room_title: str, **kwargs) -> 'Room':
     from rooms.models import Room
+    Room.objects.filter(room_title=room_title).delete()
     room = Room.objects.create(room_title=room_title, **kwargs)
     room.add_user(user)
     return room

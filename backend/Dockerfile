@@ -18,6 +18,7 @@ RUN apt-get update \
 RUN pip install --upgrade pip
 RUN pip install pipenv
 COPY ./Pipfile /usr/src/app/Pipfile
+RUN pipenv install --skip-lock --system --dev
 RUN pipenv install --skip-lock --system
 
 # copy entrypoint.sh
