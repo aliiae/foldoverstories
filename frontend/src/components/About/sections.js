@@ -1,6 +1,8 @@
 import React from 'react';
 import Status from '../Story/Status';
 import { CAN_WRITE, WAITING, STOPPED } from '../userStatus';
+import copyLinkGif from '../../../assets/gifs/copy_link.gif';
+
 
 let key = 0;
 
@@ -30,7 +32,7 @@ const sections = [
         Registration is simple &mdash;
         all you have to provide is <mark>username and password</mark>.
       </p>,
-      <p>
+      <p key={key++}>
         Note that finished stories are available to anyone who has a link, even without
         registration.
       </p>,
@@ -45,38 +47,35 @@ const sections = [
         and your friends will be able to join the story.
       </p>,
       <p key={key++}>
-        You can invite <mark>as many friends</mark> as you&apos;d like!
+        Moreover, you can invite <mark>as many friends</mark> as you like!
         If they join your story, they will be listed as authors and have access
         to the story, just like you.
       </p>,
     ],
+    img: copyLinkGif,
   },
   {
     title: 'Whose turn is it to write?',
     key: key++,
     paragraphs: [
-      <p key={key++}>
-        The game applies a simple queuing strategy:
-        <ol>
-          <li>Anyone can start if the story is yet empty.</li>
-          <li>The next author is the one who joined chronologically after the previous author.</li>
-        </ol>
-      </p>,
-      <p key={key++}>
-        You can determine whose turn it is to write by these indicators:
-        <ul>
-          <li><Status item={{ userStatus: CAN_WRITE }} /> means that it is player&apos;s time to
-            write.
-          </li>
-          <li><Status item={{ userStatus: WAITING }} /> means that the player is waiting for their
-            turn.
-          </li>
-          <li><Status item={{ userStatus: STOPPED }} /> means that the player stopped contributing
-            to the story.
-          </li>
-          <li><Status item={{ finishedAt: 'date' }} /> means that the story is completed.</li>
-        </ul>
-      </p>,
+      <p key={key++}>The game applies a simple queuing strategy:</p>,
+      <ol key={key++}>
+        <li>Anyone can start if the story is yet empty.</li>
+        <li>The next author is the one who joined chronologically after the previous author.</li>
+      </ol>,
+      <p key={key++}>You can determine whose turn it is to write by these indicators:</p>,
+      <ul key={key++}>
+        <li><Status item={{ userStatus: CAN_WRITE }} /> means that it is player&apos;s time to
+          write.
+        </li>
+        <li><Status item={{ userStatus: WAITING }} /> means that the player is waiting for their
+          turn.
+        </li>
+        <li><Status item={{ userStatus: STOPPED }} /> means that the player stopped contributing
+          to the story.
+        </li>
+        <li><Status item={{ finishedAt: 'date' }} /> means that the story is completed.</li>
+      </ul>,
     ],
   },
   {
@@ -91,8 +90,8 @@ const sections = [
         When every author leaves the story, or the last remaining author submits their text,
         the story becomes finished and can be shared and read!
       </p>,
-      <p>
-        To share a finished story with anyone, you can simply copy and send its link.
+      <p key={key++}>
+        To share a finished story with anyone, you can simply copy and send its corresponding link.
       </p>,
     ],
   },

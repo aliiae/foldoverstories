@@ -6,7 +6,7 @@ import Content from './Content';
 
 export default function HowToPlay() {
   return (
-    <div className="dark-bg">
+    <div>
       <Container className="pt-3 pb-3">
         <Col md={8} className="m-auto">
           <ContentWrapper>
