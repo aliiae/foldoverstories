@@ -36,7 +36,7 @@ export default function (state = initialState, action) {
     case ADD_TEXT:
       return {
         ...state,
-        ...action.payload.visibleText,
+        visibleText: action.payload.visibleText,
       };
     case ADD_ROOM_SUCCESS:
       return { ...state, ...action.payload };

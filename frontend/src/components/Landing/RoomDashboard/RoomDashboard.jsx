@@ -63,7 +63,7 @@ function RoomDashboard(props) {
   );
 }
 
-const propTypes = {
+RoomDashboard.propTypes = {
   dispatchGetRooms: PropTypes.func.isRequired,
   rooms: PropTypes.shape({
     count: PropTypes.number,
@@ -72,13 +72,9 @@ const propTypes = {
     results: PropTypes.arrayOf(PropTypes.object),
   }),
 };
-
-const defaultProps = {
+RoomDashboard.defaultProps = {
   rooms: null,
 };
-
-RoomDashboard.propTypes = propTypes;
-RoomDashboard.defaultProps = defaultProps;
 
 const mapStateToProps = (state) => ({
   rooms: state.room.rooms,
