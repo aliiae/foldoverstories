@@ -129,10 +129,6 @@ mark {
   box-shadow: 4px 4px 0 #c3c3c3;
 }
 
-.dashboard {
-  transition: all .2s ease-in-out;
-}
-
 .responsive {
   width: 100%;
   overflow-x: auto;
@@ -156,7 +152,8 @@ mark {
 
   p {
     font-size: 1.2rem;
-    margin: .35rem 0;
+    margin: 0;
+    line-height: 1.7em;
   }
 }
 
@@ -291,6 +288,18 @@ mark {
   z-index: 1;
 }
 
+.card {
+  .paper {
+    padding: 1.6rem 1rem;
+
+    p {
+      font-size: 1.2rem;
+      margin: 0 0;
+    }
+  }
+}
+
+
 .finished-text-container {
   position: relative;
   border-radius: .2rem;
@@ -355,24 +364,9 @@ mark {
 .illustrated-text-card {
 
   img {
-    width: 5rem;
+    width: 4rem;
     margin: auto;
     display: block;
-    //&:nth-of-type(even) {
-    //  vertical-align: middle;
-    //  float: left;
-    //  padding: 1em;
-    //  overflow: auto;
-    //  width: 20rem;
-    //}
-    //
-    //&:nth-of-type(odd) {
-    //  vertical-align: middle;
-    //  float: right;
-    //  padding: 1em;
-    //  overflow: auto;
-    //  width: 20rem;
-    //}
   }
 }
 
@@ -446,4 +440,13 @@ mark {
   display: flex;
   flex-flow: column;
   line-height: .9;
+}
+
+.fade-in {
+  opacity: 0;
+}
+
+.fade-in.visible {
+  transition: opacity .3s ease-out;
+  opacity: 1;
 }

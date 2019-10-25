@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ErrorModal from './ErrorModal';
 import RegisterForm from './RegisterForm';
+import AnimateLoad from '../../UI/AnimateLoad';
 
 
 function Register(props) {
@@ -44,4 +45,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps)(Register);
+export default connect(mapStateToProps)(AnimateLoad(Register));

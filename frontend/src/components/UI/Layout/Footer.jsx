@@ -10,9 +10,9 @@ export default function Footer() {
         {' '}
         &copy;
         {' '}
-        alii&#230;
-        {'. '}
-        <a href="mailto:#">Email</a>
+        Fold-over Stories.
+        {' '}
+        <a href="mailto:#">Contact</a>
         .
       </Container>
     </footer>

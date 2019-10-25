@@ -1,7 +1,8 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
+import AnimateLoad from '../AnimateLoad';
 
-export default function PageNotFound404() {
+function PageNotFound404() {
   return (
     <Container className="error-container">
       <p className="display-1 text-center">404</p>
@@ -9,3 +10,5 @@ export default function PageNotFound404() {
     </Container>
   );
 }
+
+export default AnimateLoad(PageNotFound404);

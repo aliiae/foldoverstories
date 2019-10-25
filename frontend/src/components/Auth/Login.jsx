@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/Form';
 
 import Button from 'react-bootstrap/Button';
 import { login } from '../../store/actions/auth';
+import AnimateLoad from '../UI/AnimateLoad';
 
 function Login(props) {
   const [form, setValues] = useState({ username: '', password: '' });
@@ -122,4 +123,4 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = { dispatchLogin: login };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(AnimateLoad(Login));

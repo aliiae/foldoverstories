@@ -30,8 +30,10 @@ export default function TextTabs({ texts, usernames, finishedAt }) {
         <Nav.Item>
           <Nav.Link eventKey="full" className="tab-pill" disabled={isEmpty}>Full Text</Nav.Link>
         </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="lines" className="tab-pill" disabled={isEmpty}>By Lines</Nav.Link>
+        <Nav.Item className="mb-2 mb-lg-0">
+          <Nav.Link eventKey="lines" className="tab-pill" disabled={isEmpty}>
+            By Lines
+          </Nav.Link>
         </Nav.Item>
       </Nav>
       <div>

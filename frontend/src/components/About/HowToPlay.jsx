@@ -3,8 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import ContentWrapper from './ContentWrapper';
 import Content from './Content';
+import AnimateLoad from '../UI/AnimateLoad';
 
-export default function HowToPlay() {
+function HowToPlay() {
   return (
     <div>
       <Container className="pt-3 pb-3">
@@ -17,3 +18,5 @@ export default function HowToPlay() {
     </div>
   );
 }
+
+export default AnimateLoad(HowToPlay);

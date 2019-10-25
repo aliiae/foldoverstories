@@ -5,7 +5,10 @@ import { WEBSITE_TITLE } from '../../settings';
 import RoomDashboard from './RoomDashboard/RoomDashboard';
 import WelcomeJumbotron from './WelcomeJumbotron';
 import { authPropType } from '../commonPropTypes';
+import AnimateLoad from '../UI/AnimateLoad';
 
+const AnimatedRoomDashboard = AnimateLoad(RoomDashboard);
+const AnimatedWelcome = AnimateLoad(WelcomeJumbotron);
 
 function Landing({ auth }) {
   useEffect(() => {
@@ -14,9 +17,9 @@ function Landing({ auth }) {
   return (
     <>
       <Container className="align-center">
-        <WelcomeJumbotron />
+        <AnimatedWelcome />
       </Container>
-      {auth && auth.isAuthenticated && <RoomDashboard />}
+      {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
     </>
   );
 }

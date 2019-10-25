@@ -13,6 +13,7 @@ import TwoColsContainer from './TwoColsContainer';
 import RoomUsers from '../RoomUsers';
 import Content from './Content';
 import { mapStatusToEmoji } from '../Status';
+import AnimateLoad from '../../UI/AnimateLoad';
 
 function getPageTitle(roomTitle, status) {
   if (!status) {
@@ -80,4 +81,4 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = { dispatchGetRoomStatus: getRoomStatus };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(AnimateLoad(Editor));

@@ -1,8 +1,9 @@
 import React from 'react';
 import Status from '../Story/Status';
 import { CAN_WRITE, WAITING, STOPPED } from '../userStatus';
-import copyLinkGif from '../../../assets/gifs/copy_link.gif';
-
+import TypistWithoutCursor from '../UI/TypistWithoutCursor';
+import { LeaveButton } from '../Story/Editor/Buttons/LeaveRoomButton';
+import SvgLinkIcon from '../UI/ShareLink/SvgLinkIcon';
 
 let key = 0;
 
@@ -17,6 +18,21 @@ const sections = [
         the next author. Each turn, a player composes a continuation of the text based on the last
         visible line, resulting in a collaborative story.
       </p>,
+      <p key={key++}>
+        You can delimit what&apos;s visible and what&apos;s hidden by pressing
+        the <mark>Enter</mark> key, or making a new line on mobile, while writing your
+        text, <i>e.g.</i>:
+      </p>,
+      <div className="paper" key={key++}>
+        <p className="full-text">
+          <TypistWithoutCursor>
+            <span>and from this the bed had been removed and thrown ⏎</span>
+            <br />
+            <u>into the middle of...</u>
+            <span className="text-muted"> (this line will be visible)</span>
+          </TypistWithoutCursor>
+        </p>
+      </div>,
     ],
   },
   {
@@ -24,7 +40,7 @@ const sections = [
     key: key++,
     paragraphs: [
       <p key={key++}>
-        Created stories are <mark>not public</mark>, i.e. private and each one is available only to
+        Created stories are <mark>not public</mark>, and each one is available only to
         its authors. The game needs you to register and sign in order to access all stories
         you&apos;ve participated in.
       </p>,
@@ -43,7 +59,8 @@ const sections = [
     key: key++,
     paragraphs: [
       <p key={key++}>
-        To invite other authors into a story, send them the story&apos;s <mark>link</mark>,
+        To invite other authors into a story, send them the
+        story&apos;s <mark>link</mark> <SvgLinkIcon size={32} />,
         and your friends will be able to join the story.
       </p>,
       <p key={key++}>
@@ -52,7 +69,6 @@ const sections = [
         to the story, just like you.
       </p>,
     ],
-    img: copyLinkGif,
   },
   {
     title: 'Whose turn is it to write?',
@@ -60,7 +76,7 @@ const sections = [
     paragraphs: [
       <p key={key++}>The game applies a simple queuing strategy:</p>,
       <ol key={key++}>
-        <li>Anyone can start if the story is yet empty.</li>
+        <li>Anyone can start if the story is empty.</li>
         <li>The next author is the one who joined chronologically after the previous author.</li>
       </ol>,
       <p key={key++}>You can determine whose turn it is to write by these indicators:</p>,
@@ -84,7 +100,7 @@ const sections = [
     paragraphs: [
       <p key={key++}>
         If you think that story is ready to be finished or you just got tired of it,
-        simply click the <mark>&ldquo;Leave story&rdquo;</mark> button.
+        simply click the <LeaveButton aria-label="leave this story" role="img" /> button.
       </p>,
       <p key={key++}>
         When every author leaves the story, or the last remaining author submits their text,
