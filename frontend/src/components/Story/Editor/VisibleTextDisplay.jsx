@@ -47,7 +47,6 @@ VisibleTextDisplay.defaultProps = {
 const mapStateToProps = (state) => ({
   visibleText: state.story.visibleText,
   userStatus: state.story.userStatus,
-  wsStatus: state.websockets.ws.status,
 });
 
 export default connect(mapStateToProps)(VisibleTextDisplay);

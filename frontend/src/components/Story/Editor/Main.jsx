@@ -7,13 +7,12 @@ import {
 } from '../../commonPropTypes';
 import { getRoomStatus } from '../../../store/actions/story';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-import useInternetStatus from '../../../hooks/useInternetStatus';
 import useWebsocket from '../../../hooks/useWebsocket';
 import TwoColsContainer from './TwoColsContainer';
 import RoomUsers from '../RoomUsers';
 import Content from './Content';
 import { mapStatusToEmoji } from '../Status';
-import AnimateLoad from '../../UI/AnimateLoad';
+import AnimateLoad from '../../wrappers/animateLoad';
 
 function getPageTitle(roomTitle, status) {
   if (!status) {
@@ -27,11 +26,9 @@ function Editor(props) {
   const {
     dispatchGetRoomStatus, match, roomIsFinished, auth, users, userStatus,
   } = props;
-  const { isOnline } = useInternetStatus();
   const roomTitle = match.params.id;
   const usernames = users ? users.map((user) => user.username) : null;
   useWebsocket({
-    isOnline,
     user: auth.user,
     token: auth.token,
     roomTitle,

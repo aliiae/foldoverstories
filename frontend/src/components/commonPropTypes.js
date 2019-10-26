@@ -57,3 +57,5 @@ export const errorsPropType = PropTypes.shape({
   })]),
   status: PropTypes.number,
 });
+
+export const websocketStatusPropType = PropTypes.oneOf([1, 3]);

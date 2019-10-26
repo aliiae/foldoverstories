@@ -1,18 +1,17 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { MAX_WS_RECONNECTING_ATTEMPTS, SOCKET_URL } from '../settings';
-import { wsClosed, wsOpened } from '../store/actions/websockets';
+import { setWsStatus } from '../store/actions/websockets';
 import { getRoomStatus } from '../store/actions/story';
 import { addNotification } from '../store/actions/notifications';
 
 const useWebsocket = (props) => {
-  const opened = useSelector((state) => state.websockets.ws.opened);
   const wsRef = useRef(null);
   const dispatchAction = useDispatch();
 
   const {
-    isOnline, token, roomTitle, user, roomIsFinished, usernames,
+    token, roomTitle, user, roomIsFinished, usernames,
   } = props;
 
   const initWebsocket = useCallback((accessToken) => {
@@ -40,23 +39,23 @@ const useWebsocket = (props) => {
     const onMessage = (msg) => {
       receiveMessage(msg);
     };
+    const onOpen = () => {
+      dispatchAction(setWsStatus(wsRef.current.readyState));
+    };
+    const onClose = () => {
+      dispatchAction(setWsStatus(wsRef.current.readyState));
+    };
 
-    if (wsRef.current && wsRef.current.readyState < 3) {
+    if (wsRef.current) {
       wsRef.current.close();
     }
     wsRef.current = new ReconnectingWebSocket(`${SOCKET_URL}/ws/room/${roomTitle}`,
       ['access_token', accessToken],
       { maxRetries: MAX_WS_RECONNECTING_ATTEMPTS });
     wsRef.current.addEventListener('message', onMessage);
+    wsRef.current.addEventListener('open', onOpen);
+    wsRef.current.addEventListener('close', onClose);
   }, [roomTitle, user, dispatchAction]);
-
-  useEffect(() => {
-    if (isOnline) {
-      dispatchAction(wsOpened());
-    } else {
-      dispatchAction(wsClosed());
-    }
-  }, [dispatchAction, isOnline]);
 
   useEffect(() => {
     if (wsRef.current || roomIsFinished) {
@@ -71,7 +70,6 @@ const useWebsocket = (props) => {
 
   return {
     ws: wsRef.current,
-    opened,
     initWebsocket,
   };
 };

@@ -24,6 +24,9 @@ export default function (state = initialState, action) {
     case WS_CLOSED:
       return { ...state, ws: { ...state.ws, connecting: false, opened: false } };
     case SET_WS_STATUS:
+      if (state.ws.status === action.payload) {
+        return state;
+      }
       return { ...state, ws: { ...state.ws, status: action.payload } };
     default:
       return state;

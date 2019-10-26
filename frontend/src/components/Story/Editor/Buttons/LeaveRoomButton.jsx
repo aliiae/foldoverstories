@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { leaveRoom } from '../../../../store/actions/story';
+import { getRoomStatus, leaveRoom } from '../../../../store/actions/story';
+import { websocketStatusPropType } from '../../../commonPropTypes';
 
 export function LeaveButton(props) {
   return (
@@ -21,9 +22,15 @@ export function LeaveButton(props) {
   );
 }
 
-function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
+function LeaveRoomButton(props) {
+  const {
+    dispatchLeaveRoom, roomTitle, websocketStatus, dispatchGetRoomStatus,
+  } = props;
   const onClick = () => {
     dispatchLeaveRoom(roomTitle);
+    if (websocketStatus !== 1) {
+      dispatchGetRoomStatus(roomTitle);
+    }
   };
   return (
     <OverlayTrigger
@@ -42,11 +49,20 @@ function LeaveRoomButton({ dispatchLeaveRoom, roomTitle }) {
 
 LeaveRoomButton.propTypes = {
   dispatchLeaveRoom: PropTypes.func.isRequired,
+  dispatchGetRoomStatus: PropTypes.func.isRequired,
   roomTitle: PropTypes.string.isRequired,
+  websocketStatus: websocketStatusPropType,
+};
+LeaveRoomButton.defaultProps = {
+  websocketStatus: null,
 };
 
+const mapStateToProps = (state) => ({
+  websocketStatus: state.websockets.ws.status,
+});
 const mapDispatchToProps = {
   dispatchLeaveRoom: leaveRoom,
+  dispatchGetRoomStatus: getRoomStatus,
 };
 
-export default connect(null, mapDispatchToProps)(LeaveRoomButton);
+export default connect(mapStateToProps, mapDispatchToProps)(LeaveRoomButton);
