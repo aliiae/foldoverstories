@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Typist from 'react-typist';
 import Status from '../Story/Status';
 import { CAN_WRITE, WAITING, STOPPED } from '../userStatus';
-import TypistWithoutCursor from '../UI/TypistWithoutCursor';
 import { LeaveButton } from '../Story/Editor/Buttons/LeaveRoomButton';
 import SvgLinkIcon from '../UI/ShareLink/SvgLinkIcon';
 
 let key = 0;
+
+function Example() {
+  const [visible, setVisible] = useState(false);
+  const onDone = () => {
+    setVisible(true);
+  };
+  const cursorOptions = { show: false };
+  return (
+    <>
+      <Typist cursor={cursorOptions} onTypingDone={onDone}>
+        <span>and from this the bed had been removed and thrown ⏎</span>
+        <br />
+        <u>into the middle of...</u>
+      </Typist>
+      <span className={`text-muted ${!visible && 'd-none'}`}> (this line will be visible)</span>
+    </>
+  );
+}
 
 const sections = [
   {
@@ -24,14 +42,7 @@ const sections = [
         text, <i>e.g.</i>:
       </p>,
       <div className="paper" key={key++}>
-        <TypistWithoutCursor>
-          <p className="full-text">
-            <span>and from this the bed had been removed and thrown ⏎</span>
-            <br />
-            <u>into the middle of...</u>
-            <span className="text-muted"> (this line will be visible)</span>
-          </p>
-        </TypistWithoutCursor>
+        <Example />
       </div>,
     ],
   },

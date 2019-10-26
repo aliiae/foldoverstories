@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const { LicenseWebpackPlugin } = require('license-webpack-plugin');
 const CleanCss = require('clean-css');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -34,8 +33,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        loader: 'file-loader',
+        test: /\.jpe?g$|\.webmanifest$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        loader: 'file-loader?name=[name].[ext]',
       },
     ],
   },
@@ -43,7 +42,6 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
   },
   plugins: [
-    new LicenseWebpackPlugin(),
     new HtmlWebpackPlugin({
       inject: true,
       hash: true,

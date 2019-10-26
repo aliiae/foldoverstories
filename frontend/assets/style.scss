@@ -118,7 +118,7 @@ mark {
 }
 
 .jumbotron {
-  background-color: white;
+  background-color: transparent;
   color: $black;
 }
 
@@ -450,4 +450,8 @@ mark {
 .fade-in.visible {
   transition: opacity .3s ease-out;
   opacity: 1;
+}
+
+.Typist {
+  display: inline;
 }
