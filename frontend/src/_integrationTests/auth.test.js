@@ -6,14 +6,14 @@ import {
   loadUser, login, logout, register,
 } from '../store/actions/auth';
 
-const compareStoreAfterDispatch = (action, store, expectedState, ...args) => {
-  return store.dispatch(action(args))
+const compareStoreAfterDispatch = (action, store, expectedState, ...args) => (
+  store.dispatch(action(args))
     .then(() => {
       const newState = store.getState();
       expect(newState.auth)
         .toStrictEqual(expectedState);
-    });
-};
+    })
+);
 const mockData = getUserMockData();
 const defaultExpectedState = {
   user: { username: mockData.username },

@@ -24,14 +24,14 @@ const sections = [
         text, <i>e.g.</i>:
       </p>,
       <div className="paper" key={key++}>
-        <p className="full-text">
-          <TypistWithoutCursor>
+        <TypistWithoutCursor>
+          <p className="full-text">
             <span>and from this the bed had been removed and thrown ⏎</span>
             <br />
             <u>into the middle of...</u>
             <span className="text-muted"> (this line will be visible)</span>
-          </TypistWithoutCursor>
-        </p>
+          </p>
+        </TypistWithoutCursor>
       </div>,
     ],
   },
@@ -45,8 +45,9 @@ const sections = [
         you&apos;ve participated in.
       </p>,
       <p key={key++}>
-        Registration is simple &mdash;
-        all you have to provide is <mark>username and password</mark>.
+        <mark>Registration is simple</mark>
+        {' '}
+        &mdash; all you have to provide is username and password.
       </p>,
       <p key={key++}>
         Note that finished stories are available to anyone who has a link, even without

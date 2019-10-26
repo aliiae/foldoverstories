@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,9 +8,14 @@ import Container from 'react-bootstrap/Container';
 import ErrorModal from './ErrorModal';
 import RegisterForm from './RegisterForm';
 import AnimateLoad from '../../UI/AnimateLoad';
+import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
 
 function Register(props) {
+  useEffect(() => {
+    document.title = `Register ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
+  }, []);
+
   const { isAuthenticated } = props;
   if (isAuthenticated) {
     return <Redirect to="/" />;

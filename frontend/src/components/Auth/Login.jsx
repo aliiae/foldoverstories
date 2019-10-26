@@ -11,9 +11,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { login } from '../../store/actions/auth';
 import AnimateLoad from '../UI/AnimateLoad';
+import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 
 function Login(props) {
-  const [form, setValues] = useState({ username: '', password: '' });
+  const [form, setValues] = useState({
+    username: '',
+    password: '',
+  });
   const [showError, setShowError] = useState(false);
   const [message, setMessage] = useState('');
   const { dispatchLogin, isAuthenticated, error } = props;
@@ -21,6 +25,9 @@ function Login(props) {
   if (isAuthenticated) {
     history.goBack(); // redirects to the previous page
   }
+  useEffect(() => {
+    document.title = `Login ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
+  }, []);
   useEffect(() => {
     if (error && error.nonFieldErrors && error.nonFieldErrors[0] === 'Incorrect Credentials') {
       setShowError(true);
@@ -53,7 +60,10 @@ function Login(props) {
   };
 
   const onChange = (e) => {
-    setValues({ ...form, [e.target.name]: e.target.value });
+    setValues({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (

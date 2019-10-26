@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import { WEBSITE_TITLE } from '../../settings';
 import StartButton from '../Story/Editor/Buttons/StartButton';
 import TypistWithoutCursor from '../UI/TypistWithoutCursor';
 
 function WelcomeJumbotron() {
   return (
     <Jumbotron className="text-center">
-      <h1 className="display-3">{`Welcome to ${WEBSITE_TITLE}`}</h1>
+      <h1 className="display-3">Welcome to Fold&#8209;over Stories</h1>
       <TypistWithoutCursor>
         <p className="lead text-muted text-monospace text-center">
           a creative, collaborative, storytelling game

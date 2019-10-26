@@ -4,9 +4,7 @@ import rootReducer from '../store/reducers';
 import { middleware } from '../store/store';
 
 
-export const findByTestAttr = (Component, attr) => {
-  return Component.find(`[data-test='${attr}']`);
-};
+export const findByTestAttr = (Component, attr) => (Component.find(`[data-test='${attr}']`));
 
 export const getUserMockData = () => ({
   username: 'test-username',

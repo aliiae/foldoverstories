@@ -18,7 +18,6 @@ import LoadingSpinner from './UI/LoadingSpinner';
 import Landing from './Landing/Main';
 import store from '../store/store';
 import ErrorBoundary from './UI/ErrorPages/ErrorBoundary';
-import AnimateLoad from './UI/AnimateLoad';
 
 const pages = {
   editor: import(/* webpackChunkName: "editor" */'./Story/Editor/Main'),
