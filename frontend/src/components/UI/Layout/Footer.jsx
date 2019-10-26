@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className="footer">
       <Container className="text-center">
@@ -20,3 +20,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default React.memo(Footer);

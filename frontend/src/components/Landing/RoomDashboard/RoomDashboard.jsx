@@ -27,9 +27,9 @@ function RoomDashboard(props) {
           <Table hover className="dashboard" data-test="dashboard">
             <thead>
               <tr>
-                <th scope="col" width="45%">Story</th>
-                <th scope="col" width="20%">Authors</th>
-                <th scope="col" className="text-center" width="5%">Status</th>
+                <th scope="col" width="30%">Story</th>
+                <th scope="col" className="text-center" width="10%">Status</th>
+                <th scope="col" width="25%">Authors</th>
                 <th scope="col" width="30%">Updated</th>
               </tr>
             </thead>
@@ -44,11 +44,11 @@ function RoomDashboard(props) {
                   <td className="room-link-td">
                     <Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>
                   </td>
+                  <td className="text-center"><Status item={room} /></td>
                   <td>
                     {room.users.map((user) => user.username)
                       .reduce((prev, curr) => [prev, ', ', curr])}
                   </td>
-                  <td className="text-center"><Status item={room} /></td>
                   <td>{formatTimeStamp(room.modifiedAt)}</td>
                 </tr>
               ))}

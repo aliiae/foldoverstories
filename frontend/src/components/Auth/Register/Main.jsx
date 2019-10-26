@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import ErrorModal from './ErrorModal';
 import RegisterForm from './RegisterForm';
-import AnimateLoad from '../../UI/AnimateLoad';
+import AnimateLoad from '../../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
 

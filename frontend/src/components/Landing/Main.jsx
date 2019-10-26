@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Container from 'react-bootstrap/Container';
 import { WEBSITE_TITLE } from '../../settings';
 import RoomDashboard from './RoomDashboard/RoomDashboard';
 import WelcomeJumbotron from './WelcomeJumbotron';
 import { authPropType } from '../commonPropTypes';
-import AnimateLoad from '../UI/AnimateLoad';
+import AnimateLoad from '../wrappers/animateLoad';
 
 const AnimatedRoomDashboard = AnimateLoad(RoomDashboard);
 const AnimatedWelcome = AnimateLoad(WelcomeJumbotron);
@@ -16,10 +15,12 @@ function Landing({ auth }) {
   }, []);
   return (
     <>
-      <Container className="align-center">
-        <AnimatedWelcome />
-      </Container>
-      {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
+      <div className="full-page">
+        <div className="align-center">
+          <AnimatedWelcome />
+        </div>
+        {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
+      </div>
     </>
   );
 }

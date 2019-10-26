@@ -24,7 +24,7 @@ function RoomUsers(props) {
     return null;
   }
   return (
-    <Card className="mt-3">
+    <Card className="mt-5">
       <Card.Header>Authors</Card.Header>
       <Card.Body>
         <ul className="list-unstyled card-text">

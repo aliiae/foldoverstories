@@ -12,26 +12,16 @@ import WaitingForTurnMessage from './Messages/WaitingForTurnMessage';
 import LeaveRoomButton from './Buttons/LeaveRoomButton';
 import { authPropType, usersPropType, userStatusPropType } from '../../commonPropTypes';
 import { CAN_WRITE, STOPPED } from '../../userStatus';
+import StoryHeadline from './Finished/StoryHeadline';
 
 function Content({ roomTitle, ...props }) {
   const {
     auth, users, currentTurnUsername, userStatus, isLastTurn, roomIsFinished,
   } = props;
   const { isLoading: userIsLoading, isAuthenticated, user } = auth;
-  if (users && (roomIsFinished || isLastTurn)) {
+  if (users && ((roomIsFinished || isLastTurn) || (users.length === 1 && userStatus === STOPPED))) {
     return <FinishedTextViewer roomTitle={roomTitle} />;
   }
-  // if (isLastTurn) {
-  //   return (
-  //     <>
-  //       <p className="lead paper-top-message">This was the last turn!</p>
-  //       <p className="paper-bottom-message">
-  //         The other authors have finished their parts, so simply
-  //         refresh this page to read the completed story.
-  //       </p>
-  //     </>
-  //   );
-  // }
 
   let content;
   const isNewUser = (userIsLoading === false
@@ -60,9 +50,16 @@ function Content({ roomTitle, ...props }) {
   }
   if (content) {
     return (
-      <PaperContainer>
-        {content}
-      </PaperContainer>
+      <>
+        {users && (
+          <div className="mt-5">
+            <StoryHeadline usernames={users.map((u) => u.username)} />
+          </div>
+        )}
+        <PaperContainer>
+          {content}
+        </PaperContainer>
+      </>
     );
   }
   return null;

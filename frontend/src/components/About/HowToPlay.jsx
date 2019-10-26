@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import ContentWrapper from './ContentWrapper';
 import Content from './Content';
-import AnimateLoad from '../UI/AnimateLoad';
+import AnimateLoad from '../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 
 function HowToPlay() {

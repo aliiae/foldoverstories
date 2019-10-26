@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
 const CopyLinkButton = ({ url, children, ...props }) => {
   let hiddenInputRef = useRef(null);
@@ -9,8 +10,9 @@ const CopyLinkButton = ({ url, children, ...props }) => {
 
   const onClickCopy = () => {
     if (navigator.share) {
+      const title = `${document.querySelector('h1').textContent} ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
       navigator.share({
-        title: document.querySelector('h1').textContent,
+        title,
         url,
       });
     } else {

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Neucha|Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Serif+Pro&display=swap');
 
-$main-font-family: 'Roboto', sans-serif;
+$main-font-family: 'Source Sans Pro', sans-serif;
 $cursive-font-family: 'Neucha', sans-serif;
 
 $white: #fff !default;
@@ -16,6 +17,8 @@ $warning: #F5E625;
 $danger: #F57A00;
 
 $yellow: #ffed02 !default;
+$accent-bg-color: $warning;
+$accent-font-color: $black;
 
 $nav-height: 4rem;
 
@@ -24,9 +27,9 @@ $nav-height: 4rem;
   padding: 0;
   background-image: linear-gradient(
                   transparent 0%,
-                  transparent calc(50% - 8px),
-                  rgba(255, 237, 2, .5) calc(50% - 8px),
-                  rgba(255, 237, 2, .5) 100%
+                  transparent calc(50% - 4px),
+                  rgba(255, 237, 2, 1) calc(50% - 4px),
+                  rgba(255, 237, 2, 1) 100%
   );
   transition: background-position 120ms ease-in-out, padding 120ms ease-in-out;
   background-size: 100% 200%;
@@ -35,6 +38,7 @@ $nav-height: 4rem;
 }
 
 @mixin color-underline-hover() {
+  color: $black;
   padding: 2px 0 4px 0;
   background-image: linear-gradient(
                   transparent 0%,
@@ -71,6 +75,19 @@ $nav-height: 4rem;
   font-family: $main-font-family;
 }
 
+.accent-bg {
+  background-color: $accent-bg-color !important;
+  color: $accent-font-color;
+}
+
+.full-page {
+  min-height: -webkit-calc(100vh - 8rem);
+  min-height: -moz-calc(100vh - 8rem);
+  min-height: calc(100vh - 8rem);
+  display: flex;
+  flex-flow: column;
+}
+
 .align-center {
   margin: auto;
 }
@@ -88,28 +105,30 @@ nav {
   }
 }
 
-mark {
+mark, .story-title {
   background-color: $yellow;
   color: $black;
 }
 
-.footer,
+.navbar {
+  border: none;
+}
+
+footer,
 .navbar-nav,
 .card,
-.jumbotron,
 .illustrated-text-card {
 
   a {
+    color: black;
     @extend %color-underline;
   }
 }
 
-.footer {
-  min-height: $nav-height;
+footer {
+  height: $nav-height;
   line-height: $nav-height;
   background-color: $white;
-
-  @extend %gray-border;
 }
 
 .editor {
@@ -120,6 +139,12 @@ mark {
 .jumbotron {
   background-color: transparent;
   color: $black;
+  font-family: $main-font-family;
+
+  a {
+    @extend %color-underline;
+    color: $black;
+  }
 }
 
 .card,
@@ -244,7 +269,7 @@ mark {
 
 .visible-text {
   width: 100%;
-  padding: .5rem;
+  padding: .6rem .5rem;
   line-height: 2rem;
   font-size: 1.2rem;
 }
@@ -315,25 +340,11 @@ mark {
 .section-break {
   background-color: transparent;
   border: 0;
-  border-top: 1px solid $gray-200;
+  border-top: 1px solid #777;
   height: 1px;
   margin: 2rem auto;
   text-align: center;
   width: 80%;
-
-  &::before {
-    color: darken($gray-200, 20%);
-    content: '\25C8';
-    display: inline-block;
-    font-size: 20px;
-    left: 50%;
-    letter-spacing: 0;
-    line-height: 1;
-    text-indent: -1px;
-    text-rendering: geometricPrecision;
-    transform: translateY(-53%);
-    width: 15px;
-  }
 }
 
 ::-moz-selection {

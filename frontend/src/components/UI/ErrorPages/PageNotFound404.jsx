@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
-import AnimateLoad from '../AnimateLoad';
+import AnimateLoad from '../../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
 function PageNotFound404() {

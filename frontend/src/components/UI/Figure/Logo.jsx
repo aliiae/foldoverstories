@@ -32,4 +32,4 @@ Logo.propTypes = {
 };
 const mapDispatchToProps = { dispatchClearRoomTitle: clearRoomTitle };
 
-export default connect(null, mapDispatchToProps)(Logo);
+export default connect(null, mapDispatchToProps)(React.memo(Logo));

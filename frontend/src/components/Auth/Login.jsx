@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/Form';
 
 import Button from 'react-bootstrap/Button';
 import { login } from '../../store/actions/auth';
-import AnimateLoad from '../UI/AnimateLoad';
+import AnimateLoad from '../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
 
 function Login(props) {
