@@ -8,11 +8,18 @@ const CopyLinkButton = ({ url, children, ...props }) => {
   const [show, setShow] = useState(false);
 
   const onClickCopy = () => {
-    hiddenInputRef.style.display = 'block';
-    hiddenInputRef.select();
-    document.execCommand('copy');
-    hiddenInputRef.style.display = 'none';
-    setShow(!show);
+    if (navigator.share) {
+      navigator.share({
+        title: document.querySelector('h1').textContent,
+        url,
+      });
+    } else {
+      hiddenInputRef.style.display = 'block';
+      hiddenInputRef.select();
+      document.execCommand('copy');
+      hiddenInputRef.style.display = 'none';
+      setShow(!show);
+    }
   };
   return (
     <>
@@ -45,6 +52,9 @@ const CopyLinkButton = ({ url, children, ...props }) => {
     </>
   );
 };
-CopyLinkButton.propTypes = { url: PropTypes.string.isRequired, children: PropTypes.node };
+CopyLinkButton.propTypes = {
+  url: PropTypes.string.isRequired,
+  children: PropTypes.node,
+};
 CopyLinkButton.defaultProps = { children: null };
 export default CopyLinkButton;
