@@ -16,7 +16,7 @@ function JoinButton(props) {
 
   return (
     <Link
-      className="btn btn-warning btn-sm mt-3 shadow-button"
+      className="button is-warning"
       onClick={onClick}
       to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
     >

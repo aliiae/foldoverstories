@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import {
+  Field, Control, Label, Input, Help,
+} from 'react-bulma-components/lib/components/form';
+import Button from 'react-bulma-components/lib/components/button';
 import { Link } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner';
 import { register } from '../../../store/actions/auth';
 
 // mostly taken from https://blog.logrocket.com/building-better-react-forms-with-formik/
@@ -95,64 +96,72 @@ class RegisterForm extends React.Component {
   render() {
     const { formValues, formErrors, isSubmitting } = this.state;
     return (
-      <Form noValidate onSubmit={this.handleSubmit}>
-        <Form.Group>
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Username"
-            name="username"
-            value={formValues.username}
-            onChange={this.handleChange}
-            isInvalid={!!formErrors.username}
-          />
-          <Form.Control.Feedback type="invalid">
+      <div>
+        <Field>
+          <Label>Username</Label>
+          <Control>
+            <Input
+              type="text"
+              placeholder="Username"
+              name="username"
+              value={formValues.username}
+              onChange={this.handleChange}
+              color={!!formErrors.username && 'danger'}
+            />
+          </Control>
+          <Help color="danger">
             {formErrors.username}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={formValues.password}
-            onChange={this.handleChange}
-            isInvalid={!!formErrors.password}
-            isValid={formValues.password && !formErrors.password}
-          />
-          <Form.Control.Feedback type="invalid">
-            {formErrors.password}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Confirm Password"
-            name="password2"
-            value={formValues.password2}
-            onChange={this.handleChange}
-            isInvalid={formErrors.password2}
-            isValid={formValues.password2 && !formErrors.password2}
-          />
-          <Form.Control.Feedback type="invalid">
-            {formErrors.password2}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Button variant="primary" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? (
-            <Spinner animation="border" size="sm">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          ) : 'Register'}
+          </Help>
+        </Field>
+        <Field>
+          <Label>Password</Label>
+          <Control>
+            <Input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={formValues.password}
+              onChange={this.handleChange}
+              color={(!!formErrors.password && 'danger')
+              || (formValues.password && !formErrors.password ? 'success' : null)}
+            />
+            <Help color="danger">
+              {formErrors.password}
+            </Help>
+          </Control>
+        </Field>
+        <Field>
+          <Label>Confirm Password</Label>
+          <Control>
+            <Input
+              type="password"
+              placeholder="Confirm Password"
+              name="password2"
+              value={formValues.password2}
+              onChange={this.handleChange}
+              color={(!!formErrors.password2 && 'danger')
+              || (formValues.password2 && !formErrors.password2 ? 'success' : null)}
+            />
+            <Help color="danger">
+              {formErrors.password2}
+            </Help>
+          </Control>
+        </Field>
+        <Button
+          color="primary"
+          type="submit"
+          state={isSubmitting ? 'loading' : null}
+          disabled={isSubmitting}
+          onClick={this.handleSubmit}
+        >
+          Register
         </Button>
-        <Form.Text>
+        <p className="is-size-7">
           Already have an account?
           {' '}
           <Link to="/login">Login</Link>
-        </Form.Text>
-      </Form>
+        </p>
+      </div>
     );
   }
 }

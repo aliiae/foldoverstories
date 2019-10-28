@@ -14,7 +14,7 @@ export default function TextTabs({ texts, usernames, finishedAt }) {
   }
   const isEmpty = texts.length === 0;
   const emptyStoryMessage = (
-    <span className="text-muted">
+    <span className="has-text-grey">
       <Emoji emoji="🐚" label="empty seashell emoji" />
       {' '}
       This story is empty.

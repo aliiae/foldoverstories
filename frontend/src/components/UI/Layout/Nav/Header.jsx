@@ -1,35 +1,42 @@
-import React from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-
-import StartNewStoryWrapper from '../../../Story/Editor/StartNewStoryWrapper';
+import React, { useEffect, useRef, useState } from 'react';
+import Navbar from 'react-bulma-components/lib/components/navbar';
 import Logo from '../../Figure/Logo';
-import AuthButtons from './AuthButtons';
+import Menu from './Menu';
+
 
 function Header() {
+  const menuRef = useRef();
+  const [show, setShow] = useState(false);
+  const toggleMenu = () => {
+    setShow(!show);
+  };
+  const onClickOutside = (e) => {
+    if (menuRef.current.contains(e.target)) {
+      return;
+    }
+    setShow(false);
+  };
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('mousedown', onClickOutside);
+    } else {
+      document.removeEventListener('mousedown', onClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside);
+    };
+  }, [show]);
+
   return (
     <header>
-      <Navbar collapseOnSelect expand="sm" bg="light" variant="light">
-        <Logo data-test="logo" />
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav>
-            <Nav.Item>
-              <LinkContainer exact to="/how-to-play">
-                <Nav.Link data-test="how-to-play-link">
-                  How to Play
-                </Nav.Link>
-              </LinkContainer>
-            </Nav.Item>
-            <Nav.Item className="ml-sm-1">
-              <StartNewStoryWrapper>
-                <Nav.Link>Start a New Story</Nav.Link>
-              </StartNewStoryWrapper>
-            </Nav.Item>
-          </Nav>
-          <AuthButtons />
-        </Navbar.Collapse>
+      <Navbar aria-label="main navigation" active={show} domRef={menuRef}>
+        <Navbar.Brand>
+          <Navbar.Item renderAs="div" className="brand">
+            <Logo data-test="logo" />
+          </Navbar.Item>
+          <Navbar.Burger onClick={toggleMenu} />
+        </Navbar.Brand>
+        <Menu />
       </Navbar>
     </header>
   );

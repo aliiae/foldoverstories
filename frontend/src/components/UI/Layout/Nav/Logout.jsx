@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useHistory, withRouter } from 'react-router-dom';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
+import Button from 'react-bulma-components/lib/components/button';
+import Navbar from 'react-bulma-components/lib/components/navbar';
 import { logout } from '../../../../store/actions/auth';
 
 function Logout({ username, dispatchLogout }) {
@@ -17,18 +16,16 @@ function Logout({ username, dispatchLogout }) {
   };
 
   return (
-    <Nav className="ml-auto mt-2 mt-lg-0 align-items-center">
-      <Nav.Item className="mr-2">
-        <Navbar.Text>
-          <span className="nav-welcome-text">
-            <strong>{`Welcome, ${username}!`}</strong>
-          </span>
-        </Navbar.Text>
-      </Nav.Item>
-      <Nav.Item>
-        <Button type="button" variant="info" size="sm" onClick={onClick}>Logout</Button>
-      </Nav.Item>
-    </Nav>
+    <>
+      <Navbar.Item renderAs="div">
+        <strong className="nav-welcome-text has-text-center-touch">
+          {`Welcome, ${username}!`}
+        </strong>
+      </Navbar.Item>
+      <Navbar.Item renderAs="div" className="has-text-center-touch">
+        <Button type="button" color="light" onClick={onClick}>Logout</Button>
+      </Navbar.Item>
+    </>
   );
 }
 

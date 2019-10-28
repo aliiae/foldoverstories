@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Pagination from 'react-bootstrap/Pagination';
+// eslint-disable-next-line no-unused-vars
+import Pagination from 'react-bulma-components/lib/components/pagination'; // import needed styles
+
 
 export default function Paginator({ dispatchGetRooms, numPages }) {
   const [activePage, setActivePageNumber] = React.useState(1);
@@ -15,7 +17,7 @@ export default function Paginator({ dispatchGetRooms, numPages }) {
     } else if (e.currentTarget.getAttribute('tag') === 'prev') {
       newPageNumber = activePage - 1;
     } else if (e.currentTarget.text) {
-      newPageNumber = Number(e.target.text);
+      newPageNumber = Number(e.currentTarget.text);
     } else {
       return;
     }
@@ -27,33 +29,60 @@ export default function Paginator({ dispatchGetRooms, numPages }) {
   const left = Math.max(1, Math.min(activePage - delta, right - maxSize + 1));
 
   const paginationItems = [];
-  if (activePage > 1) {
-    paginationItems.push(<Pagination.Prev key="prev" tag="prev" onClick={onClickPage} />);
-  } else {
-    paginationItems.push(<Pagination.Prev key="prev" onClick={onClickPage} disabled />);
-  }
-  for (let number = left; number <= right; number++) {
-    paginationItems.push(
-      <Pagination.Item
-        key={number}
-        active={number === activePage}
+  paginationItems.push((
+    <li key="prev">
+      <a
+        role="navigation"
+        type="button"
+        className="pagination-previous"
+        tag="prev"
+        aria-label="Go to previous page"
+        disabled={activePage <= 1}
         onClick={onClickPage}
       >
-        {number}
-      </Pagination.Item>,
-    );
+        «
+        <span className="is-sr-only">Previous</span>
+      </a>
+    </li>
+  ));
+
+  for (let number = left; number <= right; number++) {
+    paginationItems.push((
+      <li key={number}>
+        <a
+          role="navigation"
+          type="button"
+          className={`pagination-link ${number === activePage && 'is-current'}`}
+          aria-label={`Page ${number}`}
+          onClick={onClickPage}
+        >
+          {number}
+        </a>
+      </li>
+    ));
   }
-  if (activePage < numPages) {
-    paginationItems.push(<Pagination.Next key="next" tag="next" onClick={onClickPage} />);
-  } else {
-    paginationItems.push(<Pagination.Next key="next" onClick={onClickPage} disabled />);
-  }
+  paginationItems.push((
+    <li key="next">
+      <a
+        role="navigation"
+        type="button"
+        className="pagination-next"
+        tag="next"
+        disabled={activePage >= numPages}
+        aria-label="Go to next page"
+        onClick={onClickPage}
+      >
+        »
+        <span className="is-sr-only">Next</span>
+      </a>
+    </li>
+  ));
   return (
-    <div className="pagination-center">
-      <Pagination className="flex-wrap">
+    <nav className="pagination is-centered" role="navigation" aria-label="pagination">
+      <ul className="pagination-list">
         {paginationItems}
-      </Pagination>
-    </div>
+      </ul>
+    </nav>
   );
 }
 

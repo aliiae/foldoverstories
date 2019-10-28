@@ -10,7 +10,7 @@ export default function TextLines({ texts }) {
           {texts.map((text) => (
             <tr key={text.username + text.id}>
               <td
-                className="text-muted"
+                className="has-text-grey"
                 style={{
                   width: '4em',
                   border: 'none',

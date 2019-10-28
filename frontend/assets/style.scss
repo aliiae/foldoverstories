@@ -1,7 +1,9 @@
+@import "~react-bulma-components/src/index.sass";
 @import url('https://fonts.googleapis.com/css?family=Neucha|Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Serif+Pro&display=swap');
 
-$main-font-family: 'Source Sans Pro', sans-serif;
+$family-sans-serif: 'Source Sans Pro', sans-serif;
+$main-font-family: $family-sans-serif;
 $cursive-font-family: 'Neucha', sans-serif;
 
 $white: #fff !default;
@@ -62,8 +64,9 @@ $nav-height: 4rem;
   background-color: $gray-100;
 }
 
-.app {
+#app {
   min-height: 100vh;
+  width: 100vw;
 }
 
 .main-content {
@@ -94,6 +97,12 @@ $nav-height: 4rem;
 
 nav {
   min-height: $nav-height;
+  font-family: $main-font-family;
+  color: $black;
+}
+
+.navbar-item .buttons a:not(:last-of-type) {
+  margin-right: .5rem;
 }
 
 .color-underline,
@@ -110,12 +119,8 @@ mark, .story-title {
   color: $black;
 }
 
-.navbar {
-  border: none;
-}
-
 footer,
-.navbar-nav,
+.navbar-link,
 .card,
 .illustrated-text-card {
 
@@ -128,7 +133,7 @@ footer,
 footer {
   height: $nav-height;
   line-height: $nav-height;
-  background-color: $white;
+  padding: 0 !important;
 }
 
 .editor {
@@ -147,11 +152,15 @@ footer {
   }
 }
 
-.card,
-.pagination,
-.dashboard,
-.paper {
-  box-shadow: 4px 4px 0 #c3c3c3;
+//.card,
+//.pagination,
+//.dashboard,
+//.paper {
+//  box-shadow: 4px 4px 0 #c3c3c3;
+//}
+
+.content-card {
+  margin: 2rem 0;
 }
 
 .responsive {
@@ -232,25 +241,25 @@ footer {
   margin-top: .8rem;
 }
 
-.shadow-button,
-.nav-item button,
-.inline-button,
-.tab-pill.active {
-  box-shadow: 2px 2px 0 #222 !important;
+//.shadow-button,
+//.nav-item button,
+//.inline-button,
+//.tab-pill.active {
+//  box-shadow: 2px 2px 0 #222 !important;
+//
+//  &:hover {
+//    box-shadow: 1px 1px 0 #222 !important;
+//  }
+//}
 
-  &:hover {
-    box-shadow: 1px 1px 0 #222 !important;
-  }
-}
-
-.start-button,
-.card button {
-  box-shadow: 4px 4px 0 #222;
-
-  &:hover {
-    box-shadow: 2px 2px 0 #222;
-  }
-}
+//.start-button,
+//.card button {
+//  box-shadow: 4px 4px 0 #222;
+//
+//  &:hover {
+//    box-shadow: 2px 2px 0 #222;
+//  }
+//}
 
 .start-button {
 
@@ -269,7 +278,6 @@ footer {
 
 .visible-text {
   width: 100%;
-  padding: .6rem .5rem;
   line-height: 2rem;
   font-size: 1.2rem;
 }
@@ -284,7 +292,7 @@ footer {
 
 .paper {
   font-family: $cursive-font-family;
-  padding: 37px 55px 27px;
+  padding: 1.7rem;
   position: relative;
   line-height: 2em;
   background: white;
@@ -299,12 +307,13 @@ footer {
 }
 
 .paper textarea {
+  font-family: $cursive-font-family;
   width: 100%;
+  margin: 1.3rem 0;
   max-width: 100%;
   max-height: 100%;
   line-height: 1.5em;
   overflow-x: hidden;
-  padding: 0 10px;
   border: 0;
   outline: 0;
   background: transparent;
@@ -452,6 +461,7 @@ footer {
   display: flex;
   flex-flow: column;
   line-height: .9;
+  color: $black;
 }
 
 .fade-in {
@@ -465,4 +475,13 @@ footer {
 
 .Typist {
   display: inline;
+}
+
+.circle-bg {
+  border-radius: 50%;
+  text-align: center;
+}
+
+.table-container {
+  max-width: 100vw;
 }

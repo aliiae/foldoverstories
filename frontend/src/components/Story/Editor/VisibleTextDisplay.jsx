@@ -18,7 +18,7 @@ function VisibleTextDisplay({ isNewUser, roomTitle, ...props }) {
   if (correctTurn && visibleText === '') {
     return (
       <div className="visible-text pl-2">
-        <p className="lead text-muted" data-test="start-this-story">
+        <p className="lead has-text-grey" data-test="start-this-story">
           There is nothing yet. Start this story! ↓
         </p>
       </div>

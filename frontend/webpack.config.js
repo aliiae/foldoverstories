@@ -40,12 +40,17 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
+    modules: ['node_modules', 'src'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      inject: true,
+      inject: 'body',
       hash: true,
       template: './src/index.html',
+      minify: {
+        collapseWhitespace: true,
+      },
+      chunksSortMode: 'auto',
     }),
     new MiniCssExtractPlugin({
       filename: 'style.[contenthash].css',

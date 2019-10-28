@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Alert from 'react-bootstrap/Alert';
+import Notification from 'react-bulma-components/lib/components/notification';
+import Button from 'react-bulma-components/lib/components/button';
 
 function AlertMessage(props) {
-  const { title, message } = props;
+  const { message } = props;
   const [show, setShow] = useState(true);
-  const onHide = () => {
-    setShow(false);
-  };
+  const close = () => setShow(false);
   return (
-    <Alert show={show} onClose={onHide} variant="warning" dismissible>
-      <Alert.Heading>{title}</Alert.Heading>
-      <p>{message}</p>
-    </Alert>
+    <Notification className={!show ? 'is-hidden' : ''} color="warning">
+      {message}
+      <Button remove onClick={close} />
+    </Notification>
   );
 }
 
 AlertMessage.propTypes = {
   message: PropTypes.string.isRequired,
-  title: PropTypes.string,
-};
-AlertMessage.defaultProps = {
-  title: 'Heads up!',
 };
 
 export default AlertMessage;

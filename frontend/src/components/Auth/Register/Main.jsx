@@ -2,13 +2,12 @@ import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import ErrorModal from './ErrorModal';
+import Card from 'react-bulma-components/lib/components/card';
+import Heading from 'react-bulma-components/lib/components/heading';
 import RegisterForm from './RegisterForm';
 import AnimateLoad from '../../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
+import CardContainer from '../CardContainer';
 
 
 function Register(props) {
@@ -22,19 +21,14 @@ function Register(props) {
   }
 
   return (
-    <Container className="pt-3 pb-3">
-      <Col md={6} className="m-auto">
-        <Card>
-          <Card.Body>
-            <Card.Title>
-              <h1 className="text-center">Register</h1>
-            </Card.Title>
-            <RegisterForm />
-          </Card.Body>
-        </Card>
-      </Col>
-      <ErrorModal />
-    </Container>
+    <CardContainer>
+      <Card.Content>
+        <Heading>Register</Heading>
+        <div>
+          <RegisterForm />
+        </div>
+      </Card.Content>
+    </CardContainer>
   );
 }
 

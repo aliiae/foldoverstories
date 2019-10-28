@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Heading from 'react-bulma-components/lib/components/heading';
 import { formatTimeStampDateOnly } from '../../../dateFormatters';
 
 const subtitleStyle = { display: 'block' };
+
 export default function StoryHeadline({ usernames, dateISOString }) {
-  function getJoinedUsernames() { // format as "user1, user2 & user3"
-    return ` ${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`;
-  }
+  const joinedUsernames = `${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`;
 
   return (
-    <h1 className="h5 story-headline">
-      <span className="story-title">
-      Story by
-        {getJoinedUsernames()}
+    <>
+      <span className="story-headline">
+        <Heading renderAs="h2" size={4}>
+          Story by {joinedUsernames}
+        </Heading>
+        <Heading subtitle size={6}>
+          {dateISOString && (
+            <span style={subtitleStyle}>
+            Finished on
+              {' '}
+              {formatTimeStampDateOnly(dateISOString)}
+            </span>
+          )}
+        </Heading>
       </span>
-      {dateISOString && (
-        <span className="small text-muted" style={subtitleStyle}>
-          Finished on
-          {' '}
-          {formatTimeStampDateOnly(dateISOString)}
-        </span>
-      )}
-    </h1>
+    </>
   );
 }
 

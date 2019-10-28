@@ -51,11 +51,7 @@ function Content({ roomTitle, ...props }) {
   if (content) {
     return (
       <>
-        {users && (
-          <div className="mt-5">
-            <StoryHeadline usernames={users.map((u) => u.username)} />
-          </div>
-        )}
+        {users && <StoryHeadline usernames={users.map((u) => u.username)} />}
         <PaperContainer>
           {content}
         </PaperContainer>

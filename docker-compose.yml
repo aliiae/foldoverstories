@@ -28,14 +28,13 @@ services:
 
   daphne:
     image: "backend:latest"
-#    build:
-#      context: ./backend
-#      dockerfile: Dockerfile
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     working_dir: /usr/src/app
     env_file:
       - ./.env.dev
-    command: [sh, -c, "cd storymanager
-      && daphne storymanager.asgi:application -b 0.0.0.0 -p 9000"]
+    command: [sh, -c, "cd storymanager && daphne storymanager.asgi:application -b 0.0.0.0 -p 9000"]
     ports:
       - "9000:9000"
     depends_on:

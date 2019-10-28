@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import Card from 'react-bulma-components/lib/components/card';
+import Heading from 'react-bulma-components/lib/components/heading';
+import {
+  Field, Control, Label, Input,
+} from 'react-bulma-components/lib/components/form';
 
-import Button from 'react-bootstrap/Button';
+import Button from 'react-bulma-components/lib/components/button';
 import { login } from '../../store/actions/auth';
 import AnimateLoad from '../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../settings';
+import CardContainer from './CardContainer';
 
 function Login(props) {
   const [form, setValues] = useState({
     username: '',
     password: '',
   });
-  const [showError, setShowError] = useState(false);
-  const [message, setMessage] = useState('');
-  const { dispatchLogin, isAuthenticated, error } = props;
+  const { dispatchLogin, isAuthenticated } = props;
   const history = useHistory();
   if (isAuthenticated) {
     history.goBack(); // redirects to the previous page
@@ -28,30 +27,6 @@ function Login(props) {
   useEffect(() => {
     document.title = `Login ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
-  useEffect(() => {
-    if (error && error.nonFieldErrors && error.nonFieldErrors[0] === 'Incorrect Credentials') {
-      setShowError(true);
-      setMessage('Incorrect username or password.');
-    }
-  }, [error]);
-  const handleClose = () => {
-    setShowError(false);
-  };
-  const errorModal = (
-    <>
-      <Modal show={showError} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Oops!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{message}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -67,69 +42,58 @@ function Login(props) {
   };
 
   return (
-    <Container className="pt-3 pb-3">
-      <Col md={6} className="m-auto">
-        <Card>
-          <Card.Body>
-            <Card.Title>
-              <h1 className="text-center">Login</h1>
-            </Card.Title>
-            <Form onSubmit={onSubmit}>
-              <Form.Group controlId="fromLoginUsername">
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Username"
-                  name="username"
-                  onChange={onChange}
-                  value={form.username}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="fromLoginPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  onChange={onChange}
-                  value={form.password}
-                  required
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit">Login</Button>
-              <Form.Text>
-                Don&apos;t have an account?
-                {' '}
-                <Link to="/register">Register</Link>
-              </Form.Text>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-      {errorModal}
-    </Container>
+    <CardContainer>
+      <Card.Content>
+        <Heading>Login</Heading>
+        <div>
+          <Field>
+            <Label>Username</Label>
+            <Control>
+              <Input
+                type="text"
+                placeholder="Username"
+                name="username"
+                onChange={onChange}
+                value={form.username}
+                required
+              />
+            </Control>
+          </Field>
+          <Field>
+            <Label>Password</Label>
+            <Control>
+              <Input
+                type="password"
+                placeholder="Password"
+                name="password"
+                onChange={onChange}
+                value={form.password}
+                required
+              />
+            </Control>
+          </Field>
+          <Button color="primary" type="submit" onClick={onSubmit}>Login</Button>
+          <p className="is-size-7">
+            Don&apos;t have an account?
+            {' '}
+            <Link to="/register">Register</Link>
+          </p>
+        </div>
+      </Card.Content>
+    </CardContainer>
   );
 }
 
 Login.propTypes = {
   dispatchLogin: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  // eslint-disable-next-line react/forbid-prop-types
-  error: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.shape({
-      nonFieldErrors: PropTypes.arrayOf(PropTypes.string),
-    })]),
 };
 Login.defaultProps = {
   isAuthenticated: false,
-  error: null,
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.auth.error,
 });
 const mapDispatchToProps = { dispatchLogin: login };
 

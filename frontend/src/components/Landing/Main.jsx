@@ -1,27 +1,26 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import Columns from 'react-bulma-components/lib/components/columns';
 import { WEBSITE_TITLE } from '../../settings';
 import RoomDashboard from './RoomDashboard/RoomDashboard';
-import WelcomeJumbotron from './WelcomeJumbotron';
+import WelcomeHero from './WelcomeHero';
 import { authPropType } from '../commonPropTypes';
 import AnimateLoad from '../wrappers/animateLoad';
 
 const AnimatedRoomDashboard = AnimateLoad(RoomDashboard);
-const AnimatedWelcome = AnimateLoad(WelcomeJumbotron);
+const AnimatedWelcome = AnimateLoad(WelcomeHero);
 
 function Landing({ auth }) {
   useEffect(() => {
     document.title = `${WEBSITE_TITLE}`;
   }, []);
   return (
-    <>
-      <div className="full-page">
-        <div className="align-center">
-          <AnimatedWelcome />
-        </div>
+    <Columns centered className="is-vcentered full-page">
+      <Columns.Column size={8}>
+        <AnimatedWelcome />
         {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
-      </div>
-    </>
+      </Columns.Column>
+    </Columns>
   );
 }
 

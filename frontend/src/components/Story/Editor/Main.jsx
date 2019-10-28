@@ -45,11 +45,10 @@ function Editor(props) {
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }
-  // TwoColsContainer needs two ordered children: a side panel and main content
   return (
     <TwoColsContainer>
-      <RoomUsers roomTitle={roomTitle} />
       <Content roomTitle={roomTitle} />
+      <RoomUsers roomTitle={roomTitle} />
     </TwoColsContainer>
   );
 }
