@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Button from 'react-bulma-components/lib/components/button';
 
 import { addText, getRoomStatus } from '../../../store/actions/story';
 import LeaveRoomButton from './Buttons/LeaveRoomButton';
@@ -66,30 +64,15 @@ function TextForm(props) {
     + 'please check that you divided your text with Enter ⏎.';
   const submitForm = (
     <>
-      <Form onSubmit={onSubmit} className="editor-form">
-        <TextArea ref={(el) => {
-          userTextRef = el;
-        }}
-        />
-        <Row style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-        >
-          <Col>
-            <SubmitButton />
-          </Col>
-          <Col className="float-right text-right">
-            <LeaveRoomButton roomTitle={roomTitle} />
-          </Col>
-        </Row>
-      </Form>
-      {showAlert && (
-        <AlertMessage
-          message={alertMessageHiddenIsEmpty}
-          title="Only one line?"
-        />
-      )}
+      <TextArea ref={(el) => {
+        userTextRef = el;
+      }}
+      />
+      <Button.Group hasAddons={false}>
+        <SubmitButton onSubmit={onSubmit} />
+        <LeaveRoomButton roomTitle={roomTitle} />
+      </Button.Group>
+      {showAlert && <AlertMessage message={alertMessageHiddenIsEmpty} />}
     </>
   );
 

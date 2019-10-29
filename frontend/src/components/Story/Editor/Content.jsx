@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import TextForm from './TextForm';
 import FinishedTextViewer from './Finished/FinishedTextViewer';
 import PaperContainer from './PaperContainer';
@@ -11,7 +9,7 @@ import VisibleTextDisplay from './VisibleTextDisplay';
 import WaitingForTurnMessage from './Messages/WaitingForTurnMessage';
 import LeaveRoomButton from './Buttons/LeaveRoomButton';
 import { authPropType, usersPropType, userStatusPropType } from '../../commonPropTypes';
-import { CAN_WRITE, STOPPED } from '../../userStatus';
+import { CAN_WRITE, STOPPED, WAITING } from '../../userStatus';
 import StoryHeadline from './Finished/StoryHeadline';
 
 function Content({ roomTitle, ...props }) {
@@ -36,26 +34,18 @@ function Content({ roomTitle, ...props }) {
         <TextForm roomTitle={roomTitle} isNewUser={isNewUser} />
       </>
     );
-  } else if (userStatus !== CAN_WRITE && currentTurnUsername) {
+  } else if (userStatus === WAITING && currentTurnUsername) {
     content = (
       <>
         <WaitingForTurnMessage currentTurnUsername={currentTurnUsername} />
-        <Row>
-          <Col className="float-right text-right">
-            <LeaveRoomButton roomTitle={roomTitle} />
-          </Col>
-        </Row>
+        <LeaveRoomButton roomTitle={roomTitle} />
       </>
     );
   }
   if (content) {
     return (
       <>
-        {users && (
-          <div className="mt-5">
-            <StoryHeadline usernames={users.map((u) => u.username)} />
-          </div>
-        )}
+        {users && <StoryHeadline usernames={users.map((u) => u.username)} />}
         <PaperContainer>
           {content}
         </PaperContainer>

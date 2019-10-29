@@ -6,10 +6,13 @@ export const mapStatusToEmoji = {
   [STOPPED]: '🏁',
   [CAN_WRITE]: '️️✍️',
   [WAITING]: '⏳',
-  ROOM_FINISHED: '📗',
+  ROOM_FINISHED: '📘',
 };
 
-export function Emoji({ emoji, label, title }) {
+export function Emoji(props) {
+  const {
+    emoji, label, title, color,
+  } = props;
   if (!label) { // emoji is purely decorative
     return (
       <span title={title}>
@@ -23,6 +26,7 @@ export function Emoji({ emoji, label, title }) {
         role="img"
         aria-label={label}
         title={title}
+        className={`circle-bg ${color}`}
       >
         {emoji}
       </span>
@@ -34,10 +38,12 @@ Emoji.propTypes = {
   emoji: PropTypes.string.isRequired,
   label: PropTypes.string,
   title: PropTypes.string,
+  color: PropTypes.string,
 };
 Emoji.defaultProps = {
   label: null,
   title: '',
+  color: '',
 };
 
 const flagEmoji = (
@@ -45,6 +51,7 @@ const flagEmoji = (
     emoji={mapStatusToEmoji[STOPPED]}
     label="finished"
     title="Finished turns"
+    color="has-background-primary"
   />
 );
 const writingEmoji = (
@@ -52,6 +59,7 @@ const writingEmoji = (
     emoji={mapStatusToEmoji[CAN_WRITE]}
     label="writing hand"
     title="Time to write!"
+    color="has-background-success"
   />
 );
 const hourglassEmoji = (
@@ -59,6 +67,7 @@ const hourglassEmoji = (
     emoji={mapStatusToEmoji[WAITING]}
     label="hourglass"
     title="Waiting for turn..."
+    color="has-background-warning"
   />
 );
 const bookEmoji = (
@@ -66,6 +75,7 @@ const bookEmoji = (
     emoji={mapStatusToEmoji.ROOM_FINISHED}
     label="closed book"
     title="Story is finished!"
+    color="has-background-light"
   />
 );
 

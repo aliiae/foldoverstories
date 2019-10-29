@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
+import Table from 'react-bulma-components/lib/components/table';
 
 import { getRooms } from '../../../store/actions/room';
 import Status from '../../Story/Status';
@@ -21,45 +20,40 @@ function RoomDashboard(props) {
   const numPages = Math.ceil(count / ROOMS_PER_PAGE);
 
   return (
-    <div className="dark-bg">
-      <Container className="pt-3 pb-2">
-        <div className="responsive d-block d-md-table">
-          <Table hover className="dashboard" data-test="dashboard">
-            <thead>
-              <tr>
-                <th scope="col" width="30%">Story</th>
-                <th scope="col" className="text-center" width="10%">Status</th>
-                <th scope="col" width="25%">Authors</th>
-                <th scope="col" width="30%">Updated</th>
+    <>
+      <div className="table-container">
+        <Table className="dashboard" data-test="dashboard" striped={false}>
+          <thead>
+            <tr>
+              <th scope="col" width="30%">Story</th>
+              <th scope="col" className="has-text-centered" width="10%">Status</th>
+              <th scope="col" width="25%">Authors</th>
+              <th scope="col" width="30%">Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {results.map((room) => (
+              <tr key={room.roomTitle}>
+                <td className="room-link-td">
+                  <Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>
+                </td>
+                <td className="has-text-centered">
+                  <Status item={room} />
+                </td>
+                <td>
+                  {room.users.map((user) => user.username)
+                    .reduce((prev, curr) => [prev, ', ', curr])}
+                </td>
+                <td>{formatTimeStamp(room.modifiedAt)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {results.map((room) => (
-                <tr
-                  key={room.roomTitle}
-                  className={room.userStatus !== 'STOPPED'
-                  && room.userStatus === 'CAN_WRITE' ? 'table-success'
-                    : !room.finishedAt ? 'table-warning' : ''}
-                >
-                  <td className="room-link-td">
-                    <Link to={`/story/${room.roomTitle}`}>{room.roomTitle}</Link>
-                  </td>
-                  <td className="text-center"><Status item={room} /></td>
-                  <td>
-                    {room.users.map((user) => user.username)
-                      .reduce((prev, curr) => [prev, ', ', curr])}
-                  </td>
-                  <td>{formatTimeStamp(room.modifiedAt)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-        {numPages > 1 && (
-          <Paginator dispatchGetRooms={dispatchGetRooms} numPages={numPages} />
-        )}
-      </Container>
-    </div>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+      {numPages > 1 && (
+        <Paginator dispatchGetRooms={dispatchGetRooms} numPages={numPages} />
+      )}
+    </>
   );
 }
 

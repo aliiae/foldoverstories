@@ -1,17 +1,20 @@
 import React from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
+import Navbar from 'react-bulma-components/lib/components/navbar';
+import Button from 'react-bulma-components/lib/components/button';
 
 function RegisterLogin() {
   return (
-    <Nav className="ml-auto">
-      <LinkContainer exact to="/register">
-        <Nav.Link className="mr-sm-3" data-test="register-link">Register</Nav.Link>
-      </LinkContainer>
-      <LinkContainer exact to="/login">
-        <Nav.Link data-test="register-link">Login</Nav.Link>
-      </LinkContainer>
-    </Nav>
+    <Navbar.Item renderAs="div">
+      <Button.Group hasAddons={false}>
+        <Link to="/register">
+          <Button color="info" data-test="register-link">Register</Button>
+        </Link>
+        <Link to="/login">
+          <Button color="light" data-test="login-link">Login</Button>
+        </Link>
+      </Button.Group>
+    </Navbar.Item>
   );
 }
 

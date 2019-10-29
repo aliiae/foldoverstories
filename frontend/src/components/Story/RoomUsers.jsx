@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pluralize from 'react-pluralize';
-import Card from 'react-bootstrap/Card';
+import Card from 'react-bulma-components/lib/components/card';
 import Status from './Status';
 
 const propTypes = {
@@ -24,15 +24,18 @@ function RoomUsers(props) {
     return null;
   }
   return (
-    <Card className="mt-5">
-      <Card.Header>Authors</Card.Header>
-      <Card.Body>
+    <Card>
+      <Card.Header>
+        <Card.Header.Title renderAs="h2">Authors</Card.Header.Title>
+      </Card.Header>
+      <Card.Content>
         <ul className="list-unstyled card-text">
           {users.map((u) => (
             <li key={u.username}>
               {!roomIsFinished && <Status item={u} />}
+              {!roomIsFinished && ' '}
               {`${u.username} `}
-              <span className="text-muted small">
+              <span className="has-text-grey small">
                 (
                 <Pluralize
                   singular="contribution"
@@ -45,7 +48,7 @@ function RoomUsers(props) {
             </li>
           ))}
         </ul>
-      </Card.Body>
+      </Card.Content>
     </Card>
   );
 }

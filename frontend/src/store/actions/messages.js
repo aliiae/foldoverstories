@@ -1,4 +1,4 @@
-import { GET_ERRORS } from './types';
+import { CLEAR_ERROR, GET_ERRORS } from './types';
 
 // RETURN ERRORS
 export default function returnErrors(msg, status) {
@@ -9,4 +9,8 @@ export default function returnErrors(msg, status) {
       status,
     },
   };
+}
+
+export function clearErrors() {
+  return { type: CLEAR_ERROR };
 }

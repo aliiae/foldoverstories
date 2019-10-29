@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
+import Container from 'react-bulma-components/lib/components/container';
+import Heading from 'react-bulma-components/lib/components/heading';
 import AnimateLoad from '../../wrappers/animateLoad';
 import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
@@ -8,9 +9,11 @@ function PageNotFound404() {
     document.title = `Not Found ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
   return (
-    <Container className="error-container">
-      <p className="display-1 text-center">404</p>
-      <p className="display-2 text-center">not found</p>
+    <Container className="error-container content is-vcentered full-page">
+      <div className="m-auto has-text-centered">
+        <Heading renderAs="h1" size={1}>404</Heading>
+        <Heading subtitle renderAs="p" size={1}>not found</Heading>
+      </div>
     </Container>
   );
 }

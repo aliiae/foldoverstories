@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/Button';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import Button from 'react-bulma-components/lib/components/button';
 import { getRoomStatus, leaveRoom } from '../../../../store/actions/story';
 import { websocketStatusPropType } from '../../../commonPropTypes';
 
@@ -11,10 +9,11 @@ export function LeaveButton(props) {
   return (
     <Button
       type="button"
-      variant="danger"
-      size="sm"
-      className="shadow-button"
+      color="danger"
       data-test="story-leave-button"
+      className="has-tooltip-bottom has-tooltip-multiline"
+      data-tooltip="When you leave the story, you won&apos;t be able to contribute anymore,
+          but still can read the result when all the other authors finish as well"
       {...props}
     >
       Leave this story
@@ -33,17 +32,7 @@ function LeaveRoomButton(props) {
     }
   };
   return (
-    <OverlayTrigger
-      placement="bottom"
-      overlay={(
-        <Tooltip id="leaveRoomButton">
-          When you leave the story, you won&apos;t be able to contribute anymore,
-          but still can read the result when all the other authors finish too
-        </Tooltip>
-      )}
-    >
-      <LeaveButton onClick={onClick} />
-    </OverlayTrigger>
+    <LeaveButton onClick={onClick} />
   );
 }
 

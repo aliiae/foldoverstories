@@ -1,17 +1,17 @@
 import React from 'react';
-import Spinner from 'react-bootstrap/Spinner';
+import Loader from 'react-bulma-components/lib/components/loader';
+
+const minOptions = {
+  role: 'status',
+};
 
 function LoadingSpinner(props) {
-  const minOptions = {
-    role: 'status',
-    animation: 'border',
-  };
   const options = { ...minOptions, ...props };
   return (
     <div className="spinner-container">
-      <Spinner {...options}>
-        <span className="sr-only">Loading...</span>
-      </Spinner>
+      <Loader {...options}>
+        <span className="is-sr-only">Loading...</span>
+      </Loader>
     </div>
   );
 }

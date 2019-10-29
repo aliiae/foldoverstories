@@ -40,17 +40,23 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
+    modules: ['node_modules', './src'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      inject: true,
+      inject: 'body',
       hash: true,
       template: './src/index.html',
+      minify: {
+        collapseWhitespace: true,
+      },
+      chunksSortMode: 'auto',
     }),
     new MiniCssExtractPlugin({
       filename: 'style.[contenthash].css',
     }),
     new WebpackMd5Hash(),
+    new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(),
@@ -75,6 +81,12 @@ module.exports = {
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
             return `npm.${packageName.replace('@', '')}`;
           },
+        },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
         },
       },
     },

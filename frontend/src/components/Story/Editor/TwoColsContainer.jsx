@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Section from 'react-bulma-components/lib/components/section';
+import Columns from 'react-bulma-components/lib/components/columns';
 
 export default function TwoColsContainer({ children }) {
   return (
-    <Container className="editor">
-      <Row className="justify-content-center">
-        <Col md={3} className="order-2">
+    <Section>
+      <Columns className="editor" centered>
+        <Columns.Column size={7}>
           {children[0]}
-        </Col>
-        <Col md={7}>
+        </Columns.Column>
+        <Columns.Column size={3}>
           {children[1]}
-        </Col>
-      </Row>
-    </Container>
+        </Columns.Column>
+      </Columns>
+    </Section>
   );
 }
 

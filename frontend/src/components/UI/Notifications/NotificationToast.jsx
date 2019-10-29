@@ -1,70 +1,72 @@
-import React, { useState } from 'react';
-import Toast from 'react-bootstrap/Toast';
+import React, { useCallback, useEffect } from 'react';
+import Message from 'react-bulma-components/lib/components/message';
+import Button from 'react-bulma-components/lib/components/button';
 import PropTypes from 'prop-types';
 import { formatTimeStampTimeOnly } from '../../dateFormatters';
-import { NOTIFICATION_DURATION, TITLE_DELIMITER } from '../../../settings';
+import { NOTIFICATION_DURATION } from '../../../settings';
 
 const NotificationToast = (props) => {
-  const [show, setShow] = useState(true);
   const {
     message, time, removeNotification, id, roomTitle,
   } = props;
+  const close = useCallback(() => {
+    removeNotification(id);
+  }, [id, removeNotification]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      close();
+    }, NOTIFICATION_DURATION);
+    return () => clearTimeout(timer);
+  }, [close]);
+
   const username = 'username' in message ? message.username : null;
-  let text;
-  let title;
+  const notificationMessage = {};
   switch (message.type) {
     case 'room.text':
-      text = (
+      notificationMessage.text = (
         <>
           <strong>{username}</strong> wrote to <strong>{roomTitle}</strong>
         </>
       );
-      title = `${roomTitle} ${TITLE_DELIMITER} new text`;
+      notificationMessage.color = 'info';
       break;
     case 'room.leave':
-      text = (
+      notificationMessage.text = (
         <>
           <strong>{username}</strong> finished their part in <strong>{roomTitle}</strong>
         </>
       );
-      title = `${roomTitle} ${TITLE_DELIMITER} user finished`;
+      notificationMessage.color = 'danger';
       break;
     case 'room.join':
-      text = (
+      notificationMessage.text = (
         <>
           <strong>{username}</strong> joined <strong>{roomTitle}</strong>
         </>
       );
-      title = `${roomTitle} ${TITLE_DELIMITER} user joined`;
+      notificationMessage.color = 'warning';
       break;
     case 'room.finish':
-      text = (
+      notificationMessage.text = (
         <>
           <strong>{roomTitle}</strong> is finished and ready to be read!
         </>
       );
-      title = `${roomTitle} is finished`;
+      notificationMessage.color = 'success';
       break;
     default:
-      text = `${roomTitle} has been updated`;
-      title = roomTitle;
+      notificationMessage.text = `${roomTitle} has been updated`;
+      notificationMessage.color = 'primary';
   }
   return (
-    <Toast
-      onClose={() => {
-        setShow(false);
-        removeNotification(id);
-      }}
-      show={show}
-      delay={NOTIFICATION_DURATION}
-      autohide
-    >
-      <Toast.Header>
-        <strong className="mr-auto">{title}</strong>
+    <Message color={notificationMessage.color}>
+      <Message.Header className="notification-header">
+        <strong>{roomTitle}</strong>
         <small>{formatTimeStampTimeOnly(time)}</small>
-      </Toast.Header>
-      <Toast.Body>{text}</Toast.Body>
-    </Toast>
+        <Button remove onClick={close} />
+      </Message.Header>
+      <Message.Body>{notificationMessage.text}</Message.Body>
+    </Message>
   );
 };
 

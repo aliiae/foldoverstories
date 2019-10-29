@@ -41,15 +41,15 @@ function Editor(props) {
   useEffect(() => {
     document.title = getPageTitle(roomTitle, roomIsFinished ? 'ROOM_FINISHED' : userStatus);
   }, [roomTitle, userStatus, roomIsFinished]);
+
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;
   }
-  // TwoColsContainer needs two ordered children: a side panel and main content
   return (
     <TwoColsContainer>
-      <RoomUsers roomTitle={roomTitle} />
       <Content roomTitle={roomTitle} />
+      <RoomUsers roomTitle={roomTitle} />
     </TwoColsContainer>
   );
 }

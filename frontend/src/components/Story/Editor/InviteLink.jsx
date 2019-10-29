@@ -6,7 +6,7 @@ import SvgLinkIcon from '../../UI/ShareLink/SvgLinkIcon';
 export default function InviteLink(props) {
   const { url } = props;
   return (
-    <p className="text-muted small">
+    <p className="has-text-grey p-invite-others">
       You can invite other authors by sending this link:
       {' '}
       <a

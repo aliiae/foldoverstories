@@ -1,18 +1,22 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import PropTypes from 'prop-types';
+import Button from 'react-bulma-components/lib/components/button';
 
-function SubmitButton() {
+function SubmitButton({ onSubmit }) {
   return (
     <Button
       type="submit"
-      variant="success"
-      size="sm"
-      className="shadow-button"
+      color="success"
       data-test="story-submit-button"
+      onClick={onSubmit}
     >
       Submit
     </Button>
   );
 }
+
+SubmitButton.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default React.memo(SubmitButton);

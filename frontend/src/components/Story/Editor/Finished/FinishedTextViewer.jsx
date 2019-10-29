@@ -5,6 +5,7 @@ import { readRoomTexts } from '../../../../store/actions/story';
 import ShareButtons from '../../../UI/ShareLink/ShareButtons';
 import { textsPropType, usersPropType } from '../../../commonPropTypes';
 import TextTabs from './TextTabs';
+import LoadingSpinner from '../../../UI/LoadingSpinner';
 
 function FinishedTextViewer(props) {
   const {
@@ -13,10 +14,13 @@ function FinishedTextViewer(props) {
   useEffect(() => {
     dispatchReadRoomTexts(roomTitle);
   }, [dispatchReadRoomTexts, roomTitle]);
+  if (finishedAt === null) {
+    return <LoadingSpinner />;
+  }
   if (users) {
     const usernames = users.map((user) => user.username);
     return (
-      <div className="mt-3" data-test="finished-text-viewer">
+      <div data-test="finished-text-viewer">
         <TextTabs texts={texts} usernames={usernames} finishedAt={finishedAt} />
         <ShareButtons url={window.location.href} />
       </div>

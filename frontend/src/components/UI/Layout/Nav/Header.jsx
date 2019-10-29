@@ -1,35 +1,44 @@
-import React from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-
-import StartNewStoryWrapper from '../../../Story/Editor/StartNewStoryWrapper';
+import React, { useEffect, useRef, useState } from 'react';
+import Navbar from 'react-bulma-components/lib/components/navbar';
+import Container from 'react-bulma-components/lib/components/container';
 import Logo from '../../Figure/Logo';
-import AuthButtons from './AuthButtons';
+import Menu from './Menu';
 
 function Header() {
+  const navRef = useRef(null);
+  const [show, setShow] = useState(false);
+  const toggleMenu = () => {
+    setShow(!show);
+  };
+  const onClickOutside = (e) => {
+    if (e && navRef.current.contains(e.target) && e.target.nodeName === 'DIV') {
+      return;
+    }
+    setShow(false);
+  };
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('click', onClickOutside);
+    } else {
+      document.removeEventListener('click', onClickOutside);
+    }
+    return () => {
+      document.removeEventListener('click', onClickOutside);
+    };
+  }, [show]);
+
   return (
     <header>
-      <Navbar collapseOnSelect expand="sm" bg="light" variant="light">
-        <Logo data-test="logo" />
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav>
-            <Nav.Item>
-              <LinkContainer exact to="/how-to-play">
-                <Nav.Link data-test="how-to-play-link">
-                  How to Play
-                </Nav.Link>
-              </LinkContainer>
-            </Nav.Item>
-            <Nav.Item className="ml-sm-1">
-              <StartNewStoryWrapper>
-                <Nav.Link>Start a New Story</Nav.Link>
-              </StartNewStoryWrapper>
-            </Nav.Item>
-          </Nav>
-          <AuthButtons />
-        </Navbar.Collapse>
+      <Navbar aria-label="main navigation" active={show} domRef={navRef} className="has-shadow">
+        <Container>
+          <Navbar.Brand>
+            <Navbar.Item renderAs="div" className="brand">
+              <Logo data-test="logo" />
+            </Navbar.Item>
+            <Navbar.Burger onClick={toggleMenu} />
+          </Navbar.Brand>
+          <Menu />
+        </Container>
       </Navbar>
     </header>
   );

@@ -20,7 +20,7 @@ function Example() {
         <br />
         <u>into the middle of...</u>
       </Typist>
-      <span className={`text-muted ${!visible && 'd-none'}`}> (this line will be visible)</span>
+      <span className={`has-text-grey ${!visible && 'is-hidden'}`}> (this line will be visible)</span>
     </>
   );
 }
@@ -32,7 +32,9 @@ const sections = [
     paragraphs: [
       <p key={key++}>
         <strong>Fold-over Stories</strong> is a creative game where players
-        <mark>write stories one line at a time</mark>, with only one previous line being visible to
+        {' '}
+        <mark>write stories one line at a time</mark>
+        , with only one previous line being visible to
         the next author. Each turn, a player composes a continuation of the text based on the last
         visible line, resulting in a collaborative story.
       </p>,
@@ -112,7 +114,8 @@ const sections = [
     paragraphs: [
       <p key={key++}>
         If you think that story is ready to be finished or you just got tired of it,
-        simply click the <LeaveButton aria-label="leave this story" role="img" /> button.
+        simply click
+        the <LeaveButton aria-label="leave this story" role="img" size="small" /> button.
       </p>,
       <p key={key++}>
         When every author leaves the story, or the last remaining author submits their text,

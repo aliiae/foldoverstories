@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
+import Columns from 'react-bulma-components/lib/components/columns';
 import ContentWrapper from './ContentWrapper';
 import Content from './Content';
 import AnimateLoad from '../wrappers/animateLoad';
@@ -11,15 +10,13 @@ function HowToPlay() {
     document.title = `How to Play ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
   return (
-    <div>
-      <Container className="pt-3 pb-3">
-        <Col md={8} className="m-auto">
-          <ContentWrapper>
-            <Content />
-          </ContentWrapper>
-        </Col>
-      </Container>
-    </div>
+    <Columns centered className="is-marginless">
+      <Columns.Column size={8}>
+        <ContentWrapper>
+          <Content />
+        </ContentWrapper>
+      </Columns.Column>
+    </Columns>
   );
 }
 

@@ -1,15 +1,14 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from 'react-bulma-components/lib/components/button';
 import StartNewStoryWrapper from '../StartNewStoryWrapper';
 
 export default function StartButton() {
   return (
     <StartNewStoryWrapper>
       <Button
-        variant="primary"
-        className="start-button"
-        size="lg"
-        type="button"
+        color="primary"
+        size="large"
+        rounded
       >
         Start a new story
       </Button>

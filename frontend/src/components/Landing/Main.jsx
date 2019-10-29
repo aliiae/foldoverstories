@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import Columns from 'react-bulma-components/lib/components/columns';
 import { WEBSITE_TITLE } from '../../settings';
 import RoomDashboard from './RoomDashboard/RoomDashboard';
-import WelcomeJumbotron from './WelcomeJumbotron';
+import WelcomeHero from './WelcomeHero';
 import { authPropType } from '../commonPropTypes';
 import AnimateLoad from '../wrappers/animateLoad';
-
-const AnimatedRoomDashboard = AnimateLoad(RoomDashboard);
-const AnimatedWelcome = AnimateLoad(WelcomeJumbotron);
 
 function Landing({ auth }) {
   useEffect(() => {
@@ -15,12 +13,14 @@ function Landing({ auth }) {
   }, []);
   return (
     <>
-      <div className="full-page">
-        <div className="align-center">
-          <AnimatedWelcome />
-        </div>
-        {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
-      </div>
+      <Columns centered className="is-vcentered full-page is-marginless">
+        <Columns.Column size={8} className="is-paddingless">
+          <WelcomeHero />
+          {auth && auth.isAuthenticated && (
+            <RoomDashboard />
+          )}
+        </Columns.Column>
+      </Columns>
     </>
   );
 }
@@ -32,4 +32,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps)(AnimateLoad(Landing));
