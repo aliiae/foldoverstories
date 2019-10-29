@@ -4,33 +4,32 @@ import Container from 'react-bulma-components/lib/components/container';
 import Logo from '../../Figure/Logo';
 import Menu from './Menu';
 
-
 function Header() {
-  const menuRef = useRef();
+  const navRef = useRef(null);
   const [show, setShow] = useState(false);
   const toggleMenu = () => {
     setShow(!show);
   };
   const onClickOutside = (e) => {
-    if (menuRef.current.contains(e.target)) {
+    if (e && navRef.current.contains(e.target) && e.target.nodeName === 'DIV') {
       return;
     }
     setShow(false);
   };
   useEffect(() => {
     if (show) {
-      document.addEventListener('mousedown', onClickOutside);
+      document.addEventListener('click', onClickOutside);
     } else {
-      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('click', onClickOutside);
     }
     return () => {
-      document.removeEventListener('mousedown', onClickOutside);
+      document.removeEventListener('click', onClickOutside);
     };
   }, [show]);
 
   return (
     <header>
-      <Navbar aria-label="main navigation" active={show} domRef={menuRef} className="has-shadow">
+      <Navbar aria-label="main navigation" active={show} domRef={navRef} className="has-shadow">
         <Container>
           <Navbar.Brand>
             <Navbar.Item renderAs="div" className="brand">
