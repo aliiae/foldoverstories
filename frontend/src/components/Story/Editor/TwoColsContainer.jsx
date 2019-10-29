@@ -5,16 +5,16 @@ import Columns from 'react-bulma-components/lib/components/columns';
 
 export default function TwoColsContainer({ children }) {
   return (
-    <Columns className="editor" centered>
-      <Columns.Column size={7}>
-        <Section renderAs="div">
+    <Section>
+      <Columns className="editor" centered>
+        <Columns.Column size={7}>
           {children[0]}
-        </Section>
-      </Columns.Column>
-      <Columns.Column size={3}>
-        {children[1]}
-      </Columns.Column>
-    </Columns>
+        </Columns.Column>
+        <Columns.Column size={3}>
+          {children[1]}
+        </Columns.Column>
+      </Columns>
+    </Section>
   );
 }
 

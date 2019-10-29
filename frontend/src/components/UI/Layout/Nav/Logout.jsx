@@ -17,12 +17,12 @@ function Logout({ username, dispatchLogout }) {
 
   return (
     <>
-      <Navbar.Item renderAs="div">
-        <strong className="nav-welcome-text has-text-center-touch">
+      <Navbar.Item renderAs="div" className="has-text-centered-touch">
+        <strong className="nav-welcome-text">
           {`Welcome, ${username}!`}
         </strong>
       </Navbar.Item>
-      <Navbar.Item renderAs="div" className="has-text-center-touch">
+      <Navbar.Item renderAs="div" className="has-text-centered-touch">
         <Button type="button" color="light" onClick={onClick}>Logout</Button>
       </Navbar.Item>
     </>

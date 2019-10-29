@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Navbar from 'react-bulma-components/lib/components/navbar';
+import Container from 'react-bulma-components/lib/components/container';
 import Logo from '../../Figure/Logo';
 import Menu from './Menu';
 
@@ -29,14 +30,16 @@ function Header() {
 
   return (
     <header>
-      <Navbar aria-label="main navigation" active={show} domRef={menuRef}>
-        <Navbar.Brand>
-          <Navbar.Item renderAs="div" className="brand">
-            <Logo data-test="logo" />
-          </Navbar.Item>
-          <Navbar.Burger onClick={toggleMenu} />
-        </Navbar.Brand>
-        <Menu />
+      <Navbar aria-label="main navigation" active={show} domRef={menuRef} className="has-shadow">
+        <Container>
+          <Navbar.Brand>
+            <Navbar.Item renderAs="div" className="brand">
+              <Logo data-test="logo" />
+            </Navbar.Item>
+            <Navbar.Burger onClick={toggleMenu} />
+          </Navbar.Brand>
+          <Menu />
+        </Container>
       </Navbar>
     </header>
   );

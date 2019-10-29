@@ -7,7 +7,7 @@ export default function PaperContainer({ children }) {
   return (
     <>
       <InviteLink url={currentUrl} />
-      <div className="paper">
+      <div className="paper has-shadow">
         {children}
       </div>
     </>

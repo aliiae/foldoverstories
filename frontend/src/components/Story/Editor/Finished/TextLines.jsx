@@ -1,21 +1,15 @@
 import React from 'react';
-import Table from 'react-bootstrap/Table';
+import Table from 'react-bulma-components/lib/components/table';
 import { textsPropType } from '../../../commonPropTypes';
 
 export default function TextLines({ texts }) {
   return (
-    <div className="finished-text-container paper p-2">
-      <Table className="table-sm text-viewer-table">
+    <div className="finished-text-container paper">
+      <Table className="text-viewer-table" striped={false}>
         <tbody>
           {texts.map((text) => (
             <tr key={text.username + text.id}>
-              <td
-                className="has-text-grey"
-                style={{
-                  width: '4em',
-                  border: 'none',
-                }}
-              >
+              <td className="has-text-grey td-username">
                 <p>{`${text.username}:`}</p>
               </td>
               <td style={{ border: 'none' }}>

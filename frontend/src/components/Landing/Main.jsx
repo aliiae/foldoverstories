@@ -7,20 +7,21 @@ import WelcomeHero from './WelcomeHero';
 import { authPropType } from '../commonPropTypes';
 import AnimateLoad from '../wrappers/animateLoad';
 
-const AnimatedRoomDashboard = AnimateLoad(RoomDashboard);
-const AnimatedWelcome = AnimateLoad(WelcomeHero);
-
 function Landing({ auth }) {
   useEffect(() => {
     document.title = `${WEBSITE_TITLE}`;
   }, []);
   return (
-    <Columns centered className="is-vcentered full-page">
-      <Columns.Column size={8}>
-        <AnimatedWelcome />
-        {auth && auth.isAuthenticated && <AnimatedRoomDashboard />}
-      </Columns.Column>
-    </Columns>
+    <>
+      <Columns centered className="is-vcentered full-page">
+        <Columns.Column size={8}>
+          <WelcomeHero />
+          {auth && auth.isAuthenticated && (
+            <RoomDashboard />
+          )}
+        </Columns.Column>
+      </Columns>
+    </>
   );
 }
 
@@ -31,4 +32,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps)(AnimateLoad(Landing));

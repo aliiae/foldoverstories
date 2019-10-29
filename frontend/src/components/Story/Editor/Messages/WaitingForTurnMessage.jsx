@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default function WaitingForTurnMessage({ currentTurnUsername }) {
   return (
     <>
-      <p className="lead paper-top-message">
+      <p className="paper-top-message">
         Now it&apos;s the next author
         <strong>
           {` ${currentTurnUsername}` || ''}

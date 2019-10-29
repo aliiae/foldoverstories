@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Modal from 'react-bulma-components/lib/components/modal';
+import { clearErrors } from '../../store/actions/messages';
 
-function ErrorModal({ error }) {
+function ErrorModal({ error, dispatchClearErrors }) {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('');
   useEffect(() => {
@@ -15,7 +16,10 @@ function ErrorModal({ error }) {
       setMessage('Sorry, this username is already taken. Please choose another one.');
     }
   }, [error]);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    dispatchClearErrors();
+  };
 
   return (
     <Modal show={show} onClose={handleClose} closeOnBlur>
@@ -24,6 +28,7 @@ function ErrorModal({ error }) {
           <Modal.Card.Title>Oops!</Modal.Card.Title>
         </Modal.Card.Head>
         <Modal.Card.Body>{message}</Modal.Card.Body>
+        <Modal.Card.Foot />
       </Modal.Card>
     </Modal>
   );
@@ -35,6 +40,7 @@ ErrorModal.propTypes = {
   }), PropTypes.shape({
     nonFieldErrors: PropTypes.arrayOf(PropTypes.string),
   })]),
+  dispatchClearErrors: PropTypes.func.isRequired,
 };
 ErrorModal.defaultProps = {
   error: null,
@@ -43,5 +49,7 @@ ErrorModal.defaultProps = {
 const mapStateToProps = (state) => ({
   error: state.auth.error,
 });
-
-export default connect(mapStateToProps)(ErrorModal);
+const mapDispatchToProps = {
+  dispatchClearErrors: clearErrors,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorModal);

@@ -7,18 +7,18 @@ import ErrorModal from './ErrorModal';
 
 export default function CardContainer({ children }) {
   return (
-    <Columns centered>
-      <Columns.Column size={4}>
-        <Section>
+    <Section>
+      <Columns centered>
+        <Columns.Column size={5}>
           <Card>
             <Card.Content>
               {children}
             </Card.Content>
           </Card>
-        </Section>
-      </Columns.Column>
-      <ErrorModal />
-    </Columns>
+        </Columns.Column>
+        <ErrorModal />
+      </Columns>
+    </Section>
   );
 }
 

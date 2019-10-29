@@ -10,8 +10,8 @@ export function LeaveButton(props) {
     <Button
       type="button"
       color="danger"
-      className="has-tooltip-bottom"
       data-test="story-leave-button"
+      className="has-tooltip-bottom has-tooltip-multiline"
       data-tooltip="When you leave the story, you won&apos;t be able to contribute anymore,
           but still can read the result when all the other authors finish as well"
       {...props}

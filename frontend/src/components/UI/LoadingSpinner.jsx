@@ -1,11 +1,11 @@
 import React from 'react';
 import Loader from 'react-bulma-components/lib/components/loader';
 
+const minOptions = {
+  role: 'status',
+};
+
 function LoadingSpinner(props) {
-  const minOptions = {
-    role: 'status',
-    animation: 'border',
-  };
   const options = { ...minOptions, ...props };
   return (
     <div className="spinner-container">

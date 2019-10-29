@@ -1,58 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
+import Tabs from 'react-bulma-components/lib/components/tabs';
 import TextLines from './TextLines';
 import StoryHeadline from './StoryHeadline';
 import LoadingSpinner from '../../../UI/LoadingSpinner';
 import { Emoji } from '../../Status';
 import { textsPropType } from '../../../commonPropTypes';
 
+const emptyStoryMessage = (
+  <span className="has-text-grey">
+    <Emoji emoji="🐚" label="empty seashell emoji" />
+    {' '}
+    This story is empty.
+  </span>
+);
+
+function FullText({ texts }) {
+  const isEmpty = texts.length === 0;
+  return (
+    <div>
+      <div className="finished-text-container paper">
+        <p className="full-text">
+          {isEmpty ? emptyStoryMessage : texts.map((text) => text.fullText).join(' ')}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+FullText.propTypes = { texts: textsPropType };
+FullText.defaultProps = { texts: [] };
+
+function TabsButtons({ activeKey, tabs, onClick }) {
+  const tabsHtml = [];
+  Object.entries(tabs).forEach(([tag, tab]) => {
+    tabsHtml.push((
+      <Tabs.Tab
+        active={activeKey === tag}
+        onClick={onClick}
+        tag={tag}
+        key={tag}
+      >
+        {tab.title}
+      </Tabs.Tab>
+    ));
+  });
+
+  return (
+    <Tabs type="toggle" align="right">
+      {tabsHtml}
+    </Tabs>
+  );
+}
+
+TabsButtons.propTypes = {
+  activeKey: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  tabs: PropTypes.objectOf(PropTypes.object).isRequired,
+};
+
 export default function TextTabs({ texts, usernames, finishedAt }) {
+  const [activeKey, setActiveKey] = useState('full');
+
   if (texts === null) {
     return <LoadingSpinner />;
   }
   const isEmpty = texts.length === 0;
-  const emptyStoryMessage = (
-    <span className="has-text-grey">
-      <Emoji emoji="🐚" label="empty seashell emoji" />
-      {' '}
-      This story is empty.
-    </span>
-  );
+  const tabs = {
+    full: {
+      title: 'Full Text',
+      text: <FullText texts={texts} />,
+    },
+  };
+  if (!isEmpty) {
+    tabs.lines = {
+      title: 'By Lines',
+      text: <TextLines texts={texts} />,
+    };
+  }
+
+  const toggleTabs = (e) => {
+    const tag = e.currentTarget.getAttribute('tag');
+    if (tag in tabs) {
+      setActiveKey(tag);
+    }
+  };
 
   return (
-    <Tab.Container defaultActiveKey="full">
-      <Nav variant="pills" className="flex-row justify-content-end">
-        <Nav.Item className="mr-auto">
-          <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="full" className="tab-pill" disabled={isEmpty}>Full Text</Nav.Link>
-        </Nav.Item>
-        <Nav.Item className="mb-2 mb-lg-0">
-          <Nav.Link eventKey="lines" className="tab-pill" disabled={isEmpty}>
-            By Lines
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
-      <div>
-        <Tab.Content>
-          <Tab.Pane eventKey="full">
-            <div className="finished-text-container paper p-2">
-              <p className="full-text">
-                {isEmpty && emptyStoryMessage}
-                {!isEmpty && texts.map((text) => text.fullText)
-                  .join(' ')}
-              </p>
-            </div>
-          </Tab.Pane>
-          <Tab.Pane eventKey="lines">
-            <TextLines texts={texts} />
-          </Tab.Pane>
-        </Tab.Content>
+    <>
+      <div className="tabs-panel">
+        <StoryHeadline usernames={usernames} dateISOString={finishedAt} />
+        <TabsButtons texts={texts} activeKey={activeKey} tabs={tabs} onClick={toggleTabs} />
       </div>
-    </Tab.Container>
+      {tabs[activeKey].text}
+    </>
   );
 }
 

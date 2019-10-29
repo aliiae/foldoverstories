@@ -1,4 +1,5 @@
-@import "~react-bulma-components/src/index.sass";
+@import '~react-bulma-components/src/index.sass';
+@import '~bulma-tooltip';
 @import url('https://fonts.googleapis.com/css?family=Neucha|Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Serif+Pro&display=swap');
 
@@ -22,7 +23,7 @@ $yellow: #ffed02 !default;
 $accent-bg-color: $warning;
 $accent-font-color: $black;
 
-$nav-height: 4rem;
+$nav-height: 3.25rem;
 
 @mixin color-underline() {
   text-decoration: none !important;
@@ -69,13 +70,19 @@ $nav-height: 4rem;
   width: 100vw;
 }
 
-.main-content {
-  min-height: -webkit-calc(100vh - 8rem);
-  min-height: -moz-calc(100vh - 8rem);
-  min-height: calc(100vh - 8rem);
+%full-page {
+  min-height: -webkit-calc(100vh - 6.5rem);
+  min-height: -moz-calc(100vh - 6.5rem);
+  min-height: calc(100vh - 6.5rem);
+  max-width: 100vw !important;
   display: flex;
   flex-flow: column;
+}
+
+.main-content {
   font-family: $main-font-family;
+
+  @extend %full-page;
 }
 
 .accent-bg {
@@ -84,11 +91,8 @@ $nav-height: 4rem;
 }
 
 .full-page {
-  min-height: -webkit-calc(100vh - 8rem);
-  min-height: -moz-calc(100vh - 8rem);
-  min-height: calc(100vh - 8rem);
-  display: flex;
-  flex-flow: column;
+
+  @extend %full-page;
 }
 
 .align-center {
@@ -122,11 +126,22 @@ mark, .story-title {
 footer,
 .navbar-link,
 .card,
-.illustrated-text-card {
+.illustrated-text-card,
+.hero {
 
   a {
     color: black;
     @extend %color-underline;
+  }
+}
+
+.hero {
+  max-width: 100vw !important;
+
+  .start-button {
+    &::after {
+      content: '✨';
+    }
   }
 }
 
@@ -139,17 +154,6 @@ footer {
 .editor {
   background-color: $white;
   margin-bottom: 1rem;
-}
-
-.jumbotron {
-  background-color: transparent;
-  color: $black;
-  font-family: $main-font-family;
-
-  a {
-    @extend %color-underline;
-    color: $black;
-  }
 }
 
 //.card,
@@ -170,7 +174,7 @@ footer {
 
 .text-viewer-table {
   background-color: transparent !important;
-  border-width: 0 !important;
+  border: none !important;
   border-collapse: separate;
   border-spacing: 1rem 0;
 
@@ -178,10 +182,12 @@ footer {
 
   & td {
     padding: 0;
+    border: none !important;
   }
 
   & th {
     padding: 0;
+    border: none !important;
   }
 
   p {
@@ -229,8 +235,9 @@ footer {
 }
 
 %finished-text {
-  margin: 3.1rem 1rem;
+  margin: 2rem 0;
   font-size: 1.2rem;
+  word-break: break-word;
 }
 
 .full-text {
@@ -241,31 +248,17 @@ footer {
   margin-top: .8rem;
 }
 
-//.shadow-button,
-//.nav-item button,
-//.inline-button,
-//.tab-pill.active {
-//  box-shadow: 2px 2px 0 #222 !important;
-//
-//  &:hover {
-//    box-shadow: 1px 1px 0 #222 !important;
-//  }
-//}
-
-//.start-button,
-//.card button {
-//  box-shadow: 4px 4px 0 #222;
-//
-//  &:hover {
-//    box-shadow: 2px 2px 0 #222;
-//  }
-//}
-
 .start-button {
 
-  &::before,
-  &::after {
+  &::before {
     content: '✨';
+  }
+}
+
+.question-button {
+
+  &::before {
+    content: '💡';
   }
 }
 
@@ -280,6 +273,7 @@ footer {
   width: 100%;
   line-height: 2rem;
   font-size: 1.2rem;
+  font-family: $cursive-font-family;
 }
 
 .visible-text-lead {
@@ -320,6 +314,10 @@ footer {
   font-size: 1.2rem;
   box-sizing: border-box;
   z-index: 1;
+}
+
+.paper .buttons {
+  justify-content: space-between;
 }
 
 .card {
@@ -391,13 +389,12 @@ footer {
 }
 
 .paper-top-message {
-  padding-top: .5rem;
-  padding-left: .5rem;
+  font-family: $main-font-family;
 }
 
 .paper-bottom-message {
-  padding-top: 1rem;
-  padding-left: .5rem;
+  font-family: $main-font-family;
+  margin-bottom: 2rem;
 }
 
 .full-size {
@@ -447,6 +444,7 @@ footer {
 
 .spinner-container {
   margin: auto;
+  margin-left: 50%;
   text-align: center;
 }
 
@@ -457,11 +455,19 @@ footer {
   z-index: 5;
 }
 
+.brand {
+  a {
+    color: $black;
+    text-decoration: none;
+    font-weight: 900;
+  }
+}
+
 .logo-text {
   display: flex;
   flex-flow: column;
   line-height: .9;
-  color: $black;
+  margin: 0 .2rem 0 .4rem;
 }
 
 .fade-in {
@@ -480,8 +486,82 @@ footer {
 .circle-bg {
   border-radius: 50%;
   text-align: center;
+  padding: .2rem .1rem .2rem .4rem;
+  vertical-align: middle;
 }
 
 .table-container {
   max-width: 100vw;
+}
+
+.td-username {
+  width: 4rem;
+  border: 0;
+}
+
+.tabs-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.tabs ul {
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  border-bottom-color: transparent;
+}
+
+.p-invite-others {
+  margin-bottom: 1rem;
+
+  a {
+    color: black;
+    @extend %color-underline;
+  }
+
+  button {
+    vertical-align: middle;
+  }
+}
+
+.editor-button {
+  margin-top: 1.75rem;
+}
+
+.share {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.content.is-vcentered {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.section {
+  padding: 3rem .5rem !important;
+  .section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.column {
+  max-width: 100vw !important;
+}
+
+.section.full-page {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.has-shadow {
+  box-shadow: 0 2px 2px 0 $gray-200;
 }

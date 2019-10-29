@@ -10,7 +10,7 @@ function HowToPlay() {
     document.title = `How to Play ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
   return (
-    <Columns centered>
+    <Columns centered className="is-marginless">
       <Columns.Column size={8}>
         <ContentWrapper>
           <Content />

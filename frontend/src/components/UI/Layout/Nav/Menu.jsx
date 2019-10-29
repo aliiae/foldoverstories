@@ -9,12 +9,12 @@ const Menu = () => (
     <Navbar.Container position="start">
       <Navbar.Item renderAs="div">
         <Link to="/how-to-play">
-          <Navbar.Link arrowless>How to Play</Navbar.Link>
+          <Navbar.Link arrowless className="question-button">How to Play</Navbar.Link>
         </Link>
       </Navbar.Item>
       <Navbar.Item renderAs="div">
         <StartNewStoryWrapper>
-          <Navbar.Link arrowless>Start a New Story</Navbar.Link>
+          <Navbar.Link arrowless className="start-button">Start a New Story</Navbar.Link>
         </StartNewStoryWrapper>
       </Navbar.Item>
     </Navbar.Container>

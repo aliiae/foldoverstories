@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import Button from 'react-bulma-components/lib/components/button';
 import { addUserIntoRoom } from '../../../../store/actions/story';
 
 function JoinButton(props) {
+  const history = useHistory();
   const {
     dispatchAddUserIntoRoom, roomTitle, isAuthenticated,
   } = props;
   const onClick = () => {
     if (isAuthenticated) {
       dispatchAddUserIntoRoom(roomTitle);
+      history.push(`/story/${roomTitle}`);
+    } else {
+      history.push('/login');
     }
   };
 
   return (
-    <Link
-      className="button is-warning"
-      onClick={onClick}
-      to={isAuthenticated ? `/story/${roomTitle}` : '/login'}
-    >
-      Join
-    </Link>
+    <Button.Group hasAddons={false}>
+      <Button color="warning" onClick={onClick} type="button" className="editor-button">
+        Join
+      </Button>
+    </Button.Group>
   );
 }
 

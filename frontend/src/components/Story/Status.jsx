@@ -51,6 +51,7 @@ const flagEmoji = (
     emoji={mapStatusToEmoji[STOPPED]}
     label="finished"
     title="Finished turns"
+    color="has-background-primary"
   />
 );
 const writingEmoji = (
@@ -74,6 +75,7 @@ const bookEmoji = (
     emoji={mapStatusToEmoji.ROOM_FINISHED}
     label="closed book"
     title="Story is finished!"
+    color="has-background-light"
   />
 );
 

@@ -16,7 +16,7 @@ const AnimateLoad = (WrappedComponent) => (
     render() {
       const { didMount } = this.state;
       return (
-        <div className={`fade-in ${didMount && 'visible'}`}>
+        <div className={`section fade-in full-page ${didMount && 'visible'}`}>
           <WrappedComponent {...this.props} />
         </div>
       );

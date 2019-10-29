@@ -41,6 +41,7 @@ function Editor(props) {
   useEffect(() => {
     document.title = getPageTitle(roomTitle, roomIsFinished ? 'ROOM_FINISHED' : userStatus);
   }, [roomTitle, userStatus, roomIsFinished]);
+
   const { isLoading: userIsLoading, isAuthenticated } = auth;
   if (userIsLoading || isAuthenticated === null || roomIsFinished === null || !roomTitle) {
     return <LoadingSpinner />;

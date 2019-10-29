@@ -5,26 +5,24 @@ import { formatTimeStampDateOnly } from '../../../dateFormatters';
 
 const subtitleStyle = { display: 'block' };
 
-export default function StoryHeadline({ usernames, dateISOString }) {
+function StoryHeadline({ usernames, dateISOString }) {
   const joinedUsernames = `${usernames.join(', ').replace(/, ([^,]*)$/, ' & $1')}`;
 
   return (
-    <>
-      <span className="story-headline">
-        <Heading renderAs="h2" size={4}>
-          Story by {joinedUsernames}
-        </Heading>
-        <Heading subtitle size={6}>
-          {dateISOString && (
-            <span style={subtitleStyle}>
+    <div className="story-headline">
+      <Heading renderAs="h1" size={4}>
+        Story by {joinedUsernames}
+      </Heading>
+      <Heading subtitle size={6}>
+        {dateISOString && (
+          <span style={subtitleStyle}>
             Finished on
-              {' '}
-              {formatTimeStampDateOnly(dateISOString)}
-            </span>
-          )}
-        </Heading>
-      </span>
-    </>
+            {' '}
+            {formatTimeStampDateOnly(dateISOString)}
+          </span>
+        )}
+      </Heading>
+    </div>
   );
 }
 
@@ -36,3 +34,5 @@ StoryHeadline.propTypes = {
 StoryHeadline.defaultProps = {
   dateISOString: null,
 };
+
+export default React.memo(StoryHeadline);

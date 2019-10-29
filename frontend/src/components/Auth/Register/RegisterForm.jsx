@@ -106,7 +106,7 @@ class RegisterForm extends React.Component {
               name="username"
               value={formValues.username}
               onChange={this.handleChange}
-              color={!!formErrors.username && 'danger'}
+              color={formErrors.username ? 'danger' : null}
             />
           </Control>
           <Help color="danger">
@@ -122,7 +122,7 @@ class RegisterForm extends React.Component {
               name="password"
               value={formValues.password}
               onChange={this.handleChange}
-              color={(!!formErrors.password && 'danger')
+              color={(formErrors.password ? 'danger' : null)
               || (formValues.password && !formErrors.password ? 'success' : null)}
             />
             <Help color="danger">
@@ -139,7 +139,7 @@ class RegisterForm extends React.Component {
               name="password2"
               value={formValues.password2}
               onChange={this.handleChange}
-              color={(!!formErrors.password2 && 'danger')
+              color={(formErrors.password2 ? 'danger' : null)
               || (formValues.password2 && !formErrors.password2 ? 'success' : null)}
             />
             <Help color="danger">

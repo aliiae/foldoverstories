@@ -8,7 +8,6 @@ export default function StartButton() {
       <Button
         color="primary"
         size="large"
-        className="start-button"
         rounded
       >
         Start a new story

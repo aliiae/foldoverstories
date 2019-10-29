@@ -13,6 +13,7 @@ const TextArea = React.forwardRef((props, ref) => {
         name="text"
         style={{ resize: 'none' }}
         required
+        autoFocus
         data-test="story-textarea"
       />
     </Control>
