@@ -82,6 +82,12 @@ module.exports = {
             return `npm.${packageName.replace('@', '')}`;
           },
         },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
       },
     },
   },

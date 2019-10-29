@@ -11,7 +11,9 @@ RUN apk --no-cache --virtual build-dependencies add \
 
 RUN npm install --global --unsafe-perm webpack webpack-cli webpack-dev-server
 
-COPY . /app/frontend
+COPY ./package.json /app/frontend/package.json
 RUN cd /app/frontend && npm install && apk del build-dependencies
+
+COPY . /app/frontend
 
 EXPOSE 1234

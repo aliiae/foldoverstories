@@ -14,7 +14,7 @@ function Landing({ auth }) {
   return (
     <>
       <Columns centered className="is-vcentered full-page is-marginless">
-        <Columns.Column size={8}>
+        <Columns.Column size={8} className="is-paddingless">
           <WelcomeHero />
           {auth && auth.isAuthenticated && (
             <RoomDashboard />
