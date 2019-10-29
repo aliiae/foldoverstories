@@ -6,7 +6,6 @@
 $family-sans-serif: 'Source Sans Pro', sans-serif;
 $main-font-family: $family-sans-serif;
 $cursive-font-family: 'Neucha', sans-serif;
-
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #eee !default;
@@ -23,7 +22,7 @@ $yellow: #ffed02 !default;
 $accent-bg-color: $warning;
 $accent-font-color: $black;
 
-$nav-height: 3.25rem;
+$nav-height: 3.5rem;
 
 @mixin color-underline() {
   text-decoration: none !important;
@@ -71,9 +70,9 @@ $nav-height: 3.25rem;
 }
 
 %full-page {
-  min-height: -webkit-calc(100vh - 6.5rem);
-  min-height: -moz-calc(100vh - 6.5rem);
-  min-height: calc(100vh - 6.5rem);
+  min-height: -webkit-calc(100vh - 7rem);
+  min-height: -moz-calc(100vh - 7rem);
+  min-height: calc(100vh - 7rem);
   max-width: 100vw !important;
   display: flex;
   flex-flow: column;
@@ -138,10 +137,8 @@ footer,
 .hero {
   max-width: 100vw !important;
 
-  .start-button {
-    &::after {
-      content: '✨';
-    }
+  button {
+    background-color: $primary !important;
   }
 }
 
@@ -264,7 +261,7 @@ footer {
 
 .nav-welcome-text {
 
-  &::after {
+  &::before {
     content: ' 👋';
   }
 }
@@ -479,6 +476,10 @@ footer {
   opacity: 1;
 }
 
+.navbar-menu {
+  transition: opacity .3s ease-out;
+}
+
 .Typist {
   display: inline;
 }
@@ -486,7 +487,7 @@ footer {
 .circle-bg {
   border-radius: 50%;
   text-align: center;
-  padding: .2rem .1rem .2rem .4rem;
+  padding: .2rem .1rem .3rem .4rem;
   vertical-align: middle;
 }
 
@@ -547,6 +548,7 @@ footer {
 
 .section {
   padding: 3rem .5rem !important;
+
   .section {
     padding-left: 0;
     padding-right: 0;
@@ -559,9 +561,22 @@ footer {
 
 .section.full-page {
   margin-top: 0 !important;
+  margin-bottom: 0 !important;
   padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .has-shadow {
   box-shadow: 0 2px 2px 0 $gray-200;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  .button.is-primary {
+    background-color: $primary !important;
+  }
 }

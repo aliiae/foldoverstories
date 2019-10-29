@@ -40,7 +40,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
-    modules: ['node_modules', 'src'],
+    modules: ['node_modules', './src'],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -56,6 +56,7 @@ module.exports = {
       filename: 'style.[contenthash].css',
     }),
     new WebpackMd5Hash(),
+    new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(),

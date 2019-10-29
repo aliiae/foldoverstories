@@ -13,7 +13,7 @@ function Landing({ auth }) {
   }, []);
   return (
     <>
-      <Columns centered className="is-vcentered full-page">
+      <Columns centered className="is-vcentered full-page is-marginless">
         <Columns.Column size={8}>
           <WelcomeHero />
           {auth && auth.isAuthenticated && (
