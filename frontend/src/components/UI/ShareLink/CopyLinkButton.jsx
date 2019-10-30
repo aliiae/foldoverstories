@@ -40,11 +40,13 @@ const CopyLinkButton = ({ url, children, ...props }) => {
         />
       )}
       <button
-        type="button"
-        onClick={onClickCopy}
-        className={`unstyled-button ${show ? 'has-tooltip-bottom' : ''}`}
-        data-tooltip="Copied!"
-        {...props}
+        {...{
+          type: 'button',
+          onClick: onClickCopy,
+          className: `unstyled-button ${show ? 'has-tooltip-bottom' : ''}`,
+          ...(show && { 'data-tooltip': 'Copied!' }),
+          ...props,
+        }}
       >
         {children}
       </button>
