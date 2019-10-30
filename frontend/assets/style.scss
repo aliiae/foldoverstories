@@ -139,6 +139,11 @@ footer,
 
   button {
     background-color: $primary !important;
+
+    &:focus {
+      -webkit-box-shadow: 0 0 0 0.125em rgba(235, 104, 100, 0.25) !important;
+      box-shadow: 0 0 0 0.125em rgba(235, 104, 100, 0.25) !important;
+    }
   }
 }
 
@@ -578,5 +583,10 @@ footer {
 .card {
   .button.is-primary {
     background-color: $primary !important;
+
+    &:focus {
+      -webkit-box-shadow: 0 0 0 0.125em rgba(235, 104, 100, 0.25) !important;
+      box-shadow: 0 0 0 0.125em rgba(235, 104, 100, 0.25) !important;
+    }
   }
 }
