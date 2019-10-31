@@ -18,4 +18,4 @@ docker-compose up
 ```
 
 Once built, the website will be available at
-[http://localhost:1234/].
+**http://localhost:1234/**.
