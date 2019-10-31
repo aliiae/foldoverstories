@@ -7,7 +7,7 @@ export default function TwoColsContainer({ children }) {
   return (
     <Section>
       <Columns className="editor" centered>
-        <Columns.Column size={7}>
+        <Columns.Column size={6}>
           {children[0]}
         </Columns.Column>
         <Columns.Column size={3}>

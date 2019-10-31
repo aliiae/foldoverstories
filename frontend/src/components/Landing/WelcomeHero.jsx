@@ -18,7 +18,7 @@ function WelcomeHero() {
               renderAs="p"
               subtitle
               size={5}
-              className="is-family-monospace has-text-grey"
+              className="is-family-monospace has-text-grey typist-welcome"
             >
               a creative, collaborative, storytelling game
             </Heading>

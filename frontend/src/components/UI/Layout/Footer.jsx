@@ -12,7 +12,7 @@ function Footer() {
       {' '}
       Fold-over Stories.
       {' '}
-      <a href="mailto:#">Contact</a>
+      <a href="mailto:contact@foldoverstories.com">Contact</a>
       .
     </BulmaFooter>
   );

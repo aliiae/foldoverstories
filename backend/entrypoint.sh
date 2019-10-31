@@ -17,6 +17,5 @@ python3 ./storymanager/manage.py makemigrations rooms
 python3 ./storymanager/manage.py migrate rooms
 python3 ./storymanager/manage.py makemigrations texts
 python3 ./storymanager/manage.py migrate texts
-python3 ./storymanager/manage.py loaddata ./storymanager/fixtures/data.dev.json
 
 exec "$@"

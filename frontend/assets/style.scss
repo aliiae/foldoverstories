@@ -6,6 +6,7 @@
 $family-sans-serif: 'Source Sans Pro', sans-serif;
 $main-font-family: $family-sans-serif;
 $cursive-font-family: 'Neucha', sans-serif;
+$serif-font-family: 'Source Serif Pro', serif;
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #eee !default;
@@ -23,6 +24,13 @@ $accent-bg-color: $warning;
 $accent-font-color: $black;
 
 $nav-height: 3.5rem;
+
+$screen-sm-min: 576px;
+@mixin sm {
+  @media (max-width: #{$screen-sm-min}) {
+    @content;
+  }
+}
 
 @mixin color-underline() {
   text-decoration: none !important;
@@ -147,6 +155,12 @@ footer,
   }
 }
 
+.typist-welcome {
+  @include sm {
+    min-height: 4rem;
+  }
+}
+
 footer {
   height: $nav-height;
   line-height: $nav-height;
@@ -243,6 +257,7 @@ footer {
 }
 
 .full-text {
+  font-family: $serif-font-family;
   @extend %finished-text;
 }
 
@@ -308,7 +323,7 @@ footer {
   margin: 1.3rem 0;
   max-width: 100%;
   max-height: 100%;
-  line-height: 1.5em;
+  line-height: 1.6em;
   overflow-x: hidden;
   border: 0;
   outline: 0;
