@@ -1,4 +1,5 @@
 # Fold-over Stories
+## About
 
 Fold-over Stories is a creative game where players write stories 
 one line at a time, with only one previous line being visible to the 
@@ -7,7 +8,7 @@ based on the last visible line, resulting in a collaborative story.
 
 Play the game at [https://foldoverstories.com](https://foldoverstories.com).
 
-# How to launch locally
+## How to launch locally
 
 To launch the project in dev mode, you will need [Docker](https://www.docker.com/)
 and [docker-compose](https://github.com/docker/compose).
