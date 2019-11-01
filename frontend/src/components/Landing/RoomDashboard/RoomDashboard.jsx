@@ -49,10 +49,10 @@ function RoomDashboard(props) {
             ))}
           </tbody>
         </Table>
+        {numPages > 1 && (
+          <Paginator dispatchGetRooms={dispatchGetRooms} numPages={numPages} />
+        )}
       </div>
-      {numPages > 1 && (
-        <Paginator dispatchGetRooms={dispatchGetRooms} numPages={numPages} />
-      )}
     </>
   );
 }
