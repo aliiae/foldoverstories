@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.8-alpine as base
+FROM jfloff/alpine-python:latest-slim as base
 
 # set work directory
 WORKDIR /usr/src/app
@@ -17,6 +17,9 @@ RUN apk update && \
 RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+
+# to run tests
+RUN pip install pytest
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
