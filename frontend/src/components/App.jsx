@@ -1,5 +1,4 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import {
   BrowserRouter, Route, Switch,
 } from 'react-router-dom';
@@ -7,7 +6,6 @@ import {
 import { Provider } from 'react-redux';
 
 import Header from './UI/Layout/Nav/Header';
-import HowToPlay from './About/HowToPlay';
 import NotificationToasts from './UI/Notifications/Toasts';
 import PageNotFound404 from './UI/ErrorPages/PageNotFound404';
 import Footer from './UI/Layout/Footer';
@@ -22,11 +20,13 @@ import ErrorBoundary from './UI/ErrorPages/ErrorBoundary';
 const pages = {
   editor: import(/* webpackChunkName: "editor" */'./Story/Editor/Main'),
   register: import(/* webpackChunkName: "register" */'./Auth/Register/Main'),
+  howToPlay: import(/* webpackChunkName: "howToPlay" */'./About/HowToPlay'),
 };
 const Editor = lazy(() => pages.editor);
 const Register = lazy(() => pages.register);
+const HowToPlay = lazy(() => pages.howToPlay);
 
-function App() {
+export default function App() {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
@@ -71,5 +71,3 @@ function App() {
     </Provider>
   );
 }
-
-ReactDOM.render(<App />, document.getElementById('app') || document.createElement('div'));

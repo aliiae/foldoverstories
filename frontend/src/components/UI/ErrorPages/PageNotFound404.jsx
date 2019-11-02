@@ -6,7 +6,7 @@ import { TITLE_DELIMITER, WEBSITE_TITLE } from '../../../settings';
 
 function PageNotFound404() {
   useEffect(() => {
-    document.title = `Not Found ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
+    document.title = `404 Not Found ${TITLE_DELIMITER} ${WEBSITE_TITLE}`;
   }, []);
   return (
     <Container className="error-container content is-vcentered full-page">

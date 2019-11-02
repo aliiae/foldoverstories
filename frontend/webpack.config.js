@@ -33,7 +33,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.jpe?g$|\.webmanifest$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        test: /\.jpe?g$|\.webmanifest$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.xml$|\.wav$|\.mp3$/,
         loader: 'file-loader?name=[name].[ext]',
       },
     ],
@@ -53,7 +53,8 @@ module.exports = {
       chunksSortMode: 'auto',
     }),
     new MiniCssExtractPlugin({
-      filename: 'style.[contenthash].css',
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id].[contenthash].css',
     }),
     new WebpackMd5Hash(),
     new webpack.optimize.AggressiveMergingPlugin(),
