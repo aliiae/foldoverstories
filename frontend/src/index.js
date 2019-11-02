@@ -1,6 +1,7 @@
 import './components/App';
 import '../assets/style.scss';
 
+import '../assets/favicon/favicon.ico';
 import '../assets/favicon/apple-touch-icon.png';
 import '../assets/favicon/favicon-16x16.png';
 import '../assets/favicon/favicon-32x32.png';
