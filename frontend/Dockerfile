@@ -15,7 +15,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 RUN npm install --global --unsafe-perm webpack webpack-cli webpack-dev-server
 
 COPY ./package.json /app/frontend/package.json
-RUN cd /app/frontend && npm install && apk del build-dependencies
+RUN cd /app/frontend && npm install
 
 COPY . /app/frontend
 

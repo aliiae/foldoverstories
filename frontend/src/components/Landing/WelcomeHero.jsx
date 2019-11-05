@@ -32,7 +32,7 @@ function WelcomeHero() {
             {' '}
             <Link to="/how-to-play">how to play</Link>
             {' '}
-            and start your fold-over story, by yourself or with friends!
+            and start your fold-over story!
           </Heading>
           <StartButton />
         </Container>
