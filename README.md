@@ -1,4 +1,6 @@
 # Fold-over Stories
+![](images/demo.gif)
+
 ## About
 
 Fold-over Stories is a creative game where players write stories 
