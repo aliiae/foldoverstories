@@ -1,5 +1,7 @@
 # Fold-over Stories
-![](images/demo.gif)
+<p align="center">
+  <img src="https://github.com/aliiae/foldoverstories/blob/master/images/demo.gif?raw=true" alt="Demo animation"/>
+</p>
 
 ## About
 
