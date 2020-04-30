@@ -2,7 +2,7 @@ FROM node:slim as build
 
 WORKDIR /app/frontend
 
-RUN apt-get update && apt-get install -yq g++ build-essential python make git
+RUN apt-get update && apt-get install -yq g++ build-essential python make git wget
 
 # Install latest chrome dev package for react-snap
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
