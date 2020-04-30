@@ -6,14 +6,13 @@ from django.utils import timezone
 
 from rooms.utils import random_adj_noun_pair
 from storymanager.django_types import QueryType
-from websockets.server_send import (send_channel_message, WEBSOCKET_MSG_JOIN,
-                                    WEBSOCKET_MSG_FINISH, WEBSOCKET_MSG_LEAVE)
+from websockets.server_send import (send_channel_message, WEBSOCKET_MSG_FINISH)
 
 User = get_user_model()
 
 
 def get_user_room_membership(user: User, room: 'Room') -> Optional['Membership']:
-    if user not in room.users.all():
+    if not room.has_user(user):
         return None
     return Membership.objects.select_related().get(room=room, user=user)
 
@@ -145,11 +144,6 @@ class Room(models.Model):
         new_user_membership = Membership.objects.create(room=self, user=user)
         new_user_membership.save()
         Room.calculate_current_turn_user(self.room_title, user)  # recalculate current turn user
-        send_channel_message(self.room_title, {
-            'type': WEBSOCKET_MSG_JOIN,
-            'room_title': self.room_title,
-            'username': user.username,
-        })
 
     def leave_room(self, user: User):
         """Marks the user as finished in the room."""
@@ -158,11 +152,6 @@ class Room(models.Model):
             return
         Membership.update_status(user_membership, Membership.STOPPED)
         Room.calculate_current_turn_user(self.room_title, user)
-        send_channel_message(self.room_title, {
-            'type': WEBSOCKET_MSG_LEAVE,
-            'room_title': self.room_title,
-            'username': user.username,
-        })
 
     def close(self):
         """Closes the room and corresponding memberships."""

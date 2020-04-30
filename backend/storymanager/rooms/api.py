@@ -13,6 +13,7 @@ from accounts.serializers import RoomUsersSerializer
 from rooms.models import Room, Membership
 from texts.models import Text
 from storymanager.django_types import QueryType, RequestType
+from websockets.server_send import WEBSOCKET_MSG_JOIN, send_channel_message, WEBSOCKET_MSG_LEAVE
 from .serializers import (RoomsListSerializer, RoomReadSerializer, RoomsReadOnlySerializer,
                           SingleRoomSerializer)
 
@@ -67,6 +68,11 @@ class RoomsViewSet(viewsets.ModelViewSet):
             # user has previously left the room, nothing to do
             return Response(status=status.HTTP_204_NO_CONTENT)
         room.leave_room(request.user)
+        send_channel_message(room_title, {
+            'type': WEBSOCKET_MSG_LEAVE,
+            'room_title': room_title,
+            'username': self.request.user.username,
+        })
         return Response(status=status.HTTP_200_OK)
 
 
@@ -80,6 +86,11 @@ class RoomUsersAPI(generics.GenericAPIView, ListModelMixin):
         if not request.user.is_authenticated:
             raise NotAuthenticated(detail='User needs to login first')
         room.add_user(request.user)
+        send_channel_message(room_title, {
+            'type': WEBSOCKET_MSG_JOIN,
+            'room_title': room_title,
+            'username': self.request.user.username,
+        })
         return Response(status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
