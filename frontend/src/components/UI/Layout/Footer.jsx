@@ -6,7 +6,7 @@ function Footer() {
   return (
     <BulmaFooter renderAs="footer" className="has-text-centered">
       Copyright 2019
-      {new Date().getFullYear() > 2019 && document.write(`-${new Date().getFullYear()}`)}
+      {new Date().getFullYear() > 2019 && `-${new Date().getFullYear()}`}
       {' '}
       &copy;
       {' '}
