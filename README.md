@@ -10,8 +10,6 @@ one line at a time, with only one previous line being visible to the
 next author. Each turn, a player composes a continuation of the text 
 based on the last visible line, resulting in a collaborative story.
 
-Play the game at [https://foldoverstories.com](https://foldoverstories.com).
-
 ## How to launch locally
 
 To launch the project in dev mode, you will need [Docker](https://www.docker.com/)
