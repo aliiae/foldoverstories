@@ -12,7 +12,7 @@ constantly==15.1.0
 cryptography==3.3.2
 daphne==2.3.0
 django-rest-knox==4.1.0
-django==2.2.6
+django==2.2.28
 djangorestframework-camel-case==1.1.2
 djangorestframework==3.10.3
 gunicorn==19.9.0
