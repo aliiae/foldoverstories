@@ -27,6 +27,6 @@ pyhamcrest==1.9.0
 pytz==2019.3
 six==1.12.0
 sqlparse==0.3.0
-twisted==22.4.0
+twisted==22.10.0
 txaio==18.8.1
 zope.interface==4.6.0
